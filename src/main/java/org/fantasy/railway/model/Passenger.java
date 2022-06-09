@@ -9,6 +9,7 @@ import java.util.List;
 @Builder
 public class Passenger {
 
+    String id;
     String name;
     Integer age;
     List<Concession> concessions;
