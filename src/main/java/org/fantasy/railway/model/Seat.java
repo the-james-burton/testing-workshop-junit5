@@ -9,5 +9,6 @@ public class Seat {
 
     Boolean hasTable;
     Boolean hasChargingPoint;
-
+    Boolean isWindow;
+    Boolean isAisle;
 }

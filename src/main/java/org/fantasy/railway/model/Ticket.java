@@ -13,4 +13,6 @@ public class Ticket {
     LocalTime time;
     Station from;
     Station to;
+    Double price;
+
 }

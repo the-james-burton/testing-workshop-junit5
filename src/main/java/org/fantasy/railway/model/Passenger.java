@@ -3,6 +3,7 @@ package org.fantasy.railway.model;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -11,7 +12,7 @@ public class Passenger {
 
     String id;
     String name;
-    Integer age;
+    LocalDate dateOfBirth;
     List<Concession> concessions;
 
 }

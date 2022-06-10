@@ -1,14 +1,21 @@
 package org.fantasy.railway.model;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
 import java.util.List;
 
-@Data
-@Builder
 public class Carriage {
 
+    @Getter
     List<Seat> seats;
+
+    private Carriage() {
+    }
+
+    public static Carriage ofTypeOne() {
+        Carriage me = new Carriage();
+        // TODO - create and add seats for standard format car
+        return me;
+    }
 
 }
