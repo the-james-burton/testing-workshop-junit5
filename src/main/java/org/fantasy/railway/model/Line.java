@@ -7,8 +7,9 @@ import java.util.List;
 
 @Data
 @Builder
-public class Train {
+public class Line {
 
-    List<Carriage> carriages;
-    Service service;
+    String name;
+    List<Station> stations;
+
 }
