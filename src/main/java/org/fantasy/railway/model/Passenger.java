@@ -14,5 +14,6 @@ public class Passenger {
     String name;
     LocalDate dateOfBirth;
     List<Concession> concessions;
+    List<Ticket> tickets;
 
 }
