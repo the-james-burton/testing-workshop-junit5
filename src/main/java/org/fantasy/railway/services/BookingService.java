@@ -24,7 +24,9 @@ public class BookingService {
      * @param ticket the ticket that has been purchased
      * @param service the service the ticket is to be added to
      */
-    void purchaseTicket(Ticket ticket, Service service) {
-        // TODO - add ticket to service
+    void purchaseTicket(Ticket ticket, Passenger passenger) {
+        passenger.getTickets().add(ticket);
+        ticket.getService().getTickets().add(ticket);
+        // TODO - throw if service is already too full
     }
 }

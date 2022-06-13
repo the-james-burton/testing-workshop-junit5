@@ -7,6 +7,7 @@ import org.fantasy.railway.model.Station;
 
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class NetworkService {
 
@@ -25,4 +26,14 @@ public class NetworkService {
         // TODO
     }
 
+    /**
+     *
+     * @param from the starting station of the journey
+     * @param to the end station of the journet
+     * @return a map of key=stations in correct order with value=distance to next station
+     */
+    TreeMap<Station, Integer> calculateRoute(Station from, Station to) {
+        // TODO
+        return null;
+    }
 }
