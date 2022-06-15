@@ -7,7 +7,7 @@ import lombok.Data;
  * Data structure containing a node, it's total distance from the start and its predecessor.
  *
  * @author <a href="sven@happycoders.eu">Sven Woltmann</a>
- * Simplified with Lombok, moved to inner static class to remove visibility
+ * Simplified with Lombok
  */
 @Data
 @Builder
