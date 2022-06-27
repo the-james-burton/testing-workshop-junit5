@@ -40,7 +40,21 @@ public class AccountService {
      * @param concession the concession to add to the given passenger
      */
     void addConcenssion(Passenger passenger, Concession concession) {
+        if (passenger.getConcessions().contains(concession)) {
+            throw new IllegalStateException(String.format("Passenger %s already has concession %s", passenger, concession));
+        }
         passenger.getConcessions().add(concession);
-        // TODO throw if passenger already has the given concenssion or is not eligible for it
+    }
+
+    /**
+     *
+     * @param passenger the passenger to add the concession to
+     * @param concession the concession to add to the given passenger
+     */
+    void removeConcenssion(Passenger passenger, Concession concession) {
+        if (passenger.getConcessions().contains(concession)) {
+            throw new IllegalStateException(String.format("Passenger %s does not have concession %s", passenger, concession));
+        }
+        passenger.getConcessions().remove(concession);
     }
 }

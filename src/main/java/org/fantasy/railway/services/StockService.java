@@ -13,7 +13,17 @@ public class StockService {
      * @return a newly created train of the given size
      */
     Train createTrain(TrainSize trainSize) {
-        // TODO
+        // TODO contruct the train
+        switch (trainSize) {
+            case SMALL:
+                break;
+            case MEDIUM:
+                break;
+            case LARGE:
+                break;
+            default:
+                throw new IllegalArgumentException(String.format("trains of size %s are unsupported", trainSize));
+        }
         return null;
     }
 
@@ -22,8 +32,9 @@ public class StockService {
      * @return an existing train that is not currently assigned to a service
      */
     Train findAvailableTrain(TrainSize trainSize) {
-        // TODO
-        return null;
+        return trains.stream()
+                .filter(train -> train.getService() == null)
+                .findFirst().orElseThrow(() -> new IllegalStateException(String.format("No unallocation train available of size %s", trainSize)));
     }
 
     enum TrainSize {

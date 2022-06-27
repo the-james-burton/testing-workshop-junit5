@@ -2,6 +2,7 @@ package org.fantasy.railway.model;
 
 import lombok.Getter;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class Carriage {
@@ -13,6 +14,7 @@ public class Carriage {
      * singleton - please use the 'of' methods for instantiation
      */
     private Carriage() {
+        seats = new LinkedList<>();
     }
 
     /**
@@ -20,8 +22,15 @@ public class Carriage {
      */
     public static Carriage ofTypeOne() {
         Carriage me = new Carriage();
-        // TODO - create and add seats for standard format car
+
         return me;
     }
+
+    private List<Seat> twoByTwoRow(Boolean table) {
+        List<Seat> row = new LinkedList<>();
+        // TODO implementation
+        return row;
+    }
+
 
 }

@@ -13,9 +13,9 @@ public class Ticket {
 
     Passenger passenger;
     Service service;
-    Station from;
-    Station to;
+    Journey journey;
     Seat reservation;
     Double price;
+    Boolean purchased;
 
 }
