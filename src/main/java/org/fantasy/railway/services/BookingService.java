@@ -26,6 +26,7 @@ public class BookingService {
         Journey journey = networkService.calculateRoute(from, to);
         Integer totalTime = journey.totalTime();
         Double price = totalTime * PRICE_PER_MINUTE;
+        // TODO adjust price according to passenger concessions
         return Ticket.builder()
                 .passenger(passenger)
                 .journey(journey)

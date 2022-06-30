@@ -13,6 +13,14 @@ public class TimetableService {
     List<Station> stations;
 
     /**
+     * loads a timetable from the given file
+     * @param filepath the file to load the timetable from
+     */
+    void loadServices(String filepath) {
+        // TODO load timetable from file
+    }
+
+    /**
      * @return a list of services that do not have a train
      */
     List<Service> findUnstockedServices() {
