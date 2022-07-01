@@ -1,11 +1,9 @@
 package org.fantasy.railway.services;
 
+import com.google.common.collect.Iterables;
 import com.google.common.graph.MutableValueGraph;
 import com.google.common.graph.ValueGraphBuilder;
-import org.fantasy.railway.model.Journey;
-import org.fantasy.railway.model.Line;
-import org.fantasy.railway.model.Station;
-import org.fantasy.railway.model.Stop;
+import org.fantasy.railway.model.*;
 import org.fantasy.railway.util.GraphUtils;
 
 import java.util.*;
@@ -33,10 +31,11 @@ public class NetworkService {
     }
 
     /**
+     * useful for calculating the cost of a ticket
      *
      * @param from the starting station of the journey
      * @param to the end station of the journey
-     * @return a list of stops in correct order
+     * @return a Journey with a List of stops in correct order
      */
     Journey calculateRoute(Station from, Station to) {
         List<Stop> route = new LinkedList<>();
@@ -54,12 +53,22 @@ public class NetworkService {
             Station next = stations.get(stop + 1);
             route.add(Stop.builder()
                 .station(current)
-                .minutes(network.edgeValue(current, next)
-                    .orElseThrow(() -> new IllegalStateException(String.format("Missing distance between %s and %s", current, next))))
+                .minutes(distanceBetweenAdjacent(current, next))
                 .build());
         }
 
         return Journey.builder().route(route).build();
+    }
+
+    /**
+     *
+     * @param from starting station
+     * @param to adjacent station
+     * @return the distance between the two adjacent stations
+     */
+    public Integer distanceBetweenAdjacent(Station from, Station to) {
+        return network.edgeValue(from, to)
+                .orElseThrow(() -> new IllegalStateException(String.format("Stations %s and %s are not adjacent", from, to)));
     }
 
 
