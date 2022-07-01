@@ -8,13 +8,20 @@ import java.util.List;
 
 @Data
 @Builder
-public class Service {
+public class Service implements Comparable<Service> {
 
-    LocalDateTime dateTime;
+    LocalDateTime when;
     Train train;
     Line line;
-    Station startStation;
-    Station endStation;
+    Journey journey;
     List<Ticket> tickets;
 
+    public LocalDateTime finishTime() {
+        return when.plusMinutes(journey.totalTime());
+    }
+
+    @Override
+    public int compareTo(Service that) {
+        return finishTime().compareTo(that.finishTime());
+    }
 }

@@ -9,8 +9,11 @@ import java.util.stream.IntStream;
 @Data
 public class Train {
 
+    public static final Integer MEDIUM_TRAIN_CARRIAGES = 5;
+    public static final Integer LARGE_TRAIN_CARRIAGES = 10;
+
     List<Carriage> carriages;
-    Service service;
+    List<Service> services;
 
     /**
      * singleton - please use the 'of' methods for instantiation

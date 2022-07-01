@@ -9,7 +9,6 @@ import java.util.List;
 @Builder
 public class Journey {
     List<Stop> route;
-    Ticket ticket;
 
     /**
      *
@@ -20,8 +19,8 @@ public class Journey {
             throw new IllegalStateException("route is null but should be a list");
         }
         return route.stream()
-                .map(stop -> stop.getMinutes())
-                .reduce(0, (a, b) -> a + b);
+                .map(Stop::getMinutes)
+                .reduce(0, Integer::sum);
     }
 
 }
