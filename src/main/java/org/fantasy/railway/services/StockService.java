@@ -27,7 +27,8 @@ public class StockService {
      * @return an existing train that is not currently assigned to a service
      */
     Train findAvailableTrain(Service service, Integer minimumCarriages) {
-        Optional.ofNullable(service.getTrain()).orElseThrow(() -> new IllegalStateException(String.format("service %s already has a train assigned.")));
+        Optional.ofNullable(service.getTrain()).orElseThrow(() ->
+                new IllegalStateException(String.format("service %s already has a train assigned.", service)));
 
         Optional<Train> firstUnallocatedTrain = trains.stream()
                 .filter(train -> train.getServices() == null)
@@ -41,10 +42,11 @@ public class StockService {
         Optional<Train> firstAvailableTrain = trains.stream()
                 .filter(train -> train.getServices() != null)
                 .filter(train -> train.getCarriages().size() >= minimumCarriages)
-                .filter(train -> isTrainAvailableAtTime(train, service.getWhen()))
+                .filter(train -> isTrainAvailableAtTime(train, service.getStartTime()))
                 .findFirst();
 
-        return firstAvailableTrain.orElseThrow(() -> new IllegalStateException(String.format("No unallocated train available with at least %s carriages", minimumCarriages)));
+        return firstAvailableTrain.orElseThrow(() ->
+                new IllegalStateException(String.format("No unallocated train available with at least %s carriages", minimumCarriages)));
 
     }
 

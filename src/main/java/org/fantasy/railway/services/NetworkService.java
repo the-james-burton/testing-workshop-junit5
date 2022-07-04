@@ -42,6 +42,10 @@ public class NetworkService {
 
         List<Station> stations = GraphUtils.findShortestPath(network, from, to);
 
+        if (stations == null || stations.size() == 0) {
+            throw new IllegalArgumentException(String.format("No route from %s to %s", from, to));
+        }
+
         // ths first station will have value of zero since it is the start...
         route.add(Stop.builder()
                 .station(stations.get(0))
@@ -60,12 +64,13 @@ public class NetworkService {
         return Journey.builder().route(route).build();
     }
 
-    /**
-     *
-     * @param from starting station
-     * @param to adjacent station
-     * @return the distance between the two adjacent stations
-     */
+
+        /**
+         *
+         * @param from starting station
+         * @param to adjacent station
+         * @return the distance between the two adjacent stations
+         */
     public Integer distanceBetweenAdjacent(Station from, Station to) {
         return network.edgeValue(from, to)
                 .orElseThrow(() -> new IllegalStateException(String.format("Stations %s and %s are not adjacent", from, to)));

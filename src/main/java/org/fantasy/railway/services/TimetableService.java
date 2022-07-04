@@ -1,10 +1,9 @@
 package org.fantasy.railway.services;
 
 import com.google.common.graph.Network;
-import org.fantasy.railway.model.Service;
-import org.fantasy.railway.model.Station;
-import org.fantasy.railway.model.Train;
+import org.fantasy.railway.model.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,20 +24,33 @@ public class TimetableService {
         // TODO load timetable from file
     }
 
+    Service findSuitableService(Ticket ticket) {
+        return services.stream()
+                .filter(service -> service.getStartTime().isBefore(ticket.getService().getStartTime()))
+                .filter(service -> service.getStartTime().toLocalDate().isEqual(ticket.getService().getStartTime().toLocalDate()))
+                .filter(service -> service.getJourney().getRoute().containsAll(ticket.getJourney().getRoute()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(String.format("unable to find a suitable service for ")));
+    }
+
     /**
      * bootstrap method to assign trains to services
      */
     void assignStockToServices() {
         findUnstockedServices().stream()
-                .forEach(service -> service.setTrain(findStockForService(service)));
+                .forEach(service -> service.setTrain(findTrainForService(service)));
     }
 
-    Train findStockForService(Service service) {
-        Integer distance = networkService.calculateRoute(service).totalTime();
+    /**
+     *
+     * @param service the service to find a train for
+     * @return a train suitable for the given service
+     */
+    Train findTrainForService(Service service) {
         Integer minimumCarriages = Train.MEDIUM_TRAIN_CARRIAGES;
-        if (distance > MAX_DISTANCE_FOR_SMALL) {
+        if (service.getJourney().totalTime() > MAX_DISTANCE_FOR_SMALL) {
             minimumCarriages = Train.MEDIUM_TRAIN_CARRIAGES;
-        } else if (distance > MAX_DISTANCE_FOR_MEDIUM) {
+        } else if (service.getJourney().totalTime() > MAX_DISTANCE_FOR_MEDIUM) {
             minimumCarriages = Train.LARGE_TRAIN_CARRIAGES;
         }
         Train train = stockService.findAvailableTrain(service, minimumCarriages);
