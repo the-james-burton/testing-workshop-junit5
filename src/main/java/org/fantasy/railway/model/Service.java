@@ -10,14 +10,14 @@ import java.util.List;
 @Builder
 public class Service implements Comparable<Service> {
 
-    LocalDateTime when;
+    LocalDateTime startTime;
     Train train;
     Line line;
     Journey journey;
-    List<Ticket> tickets;
+    List<Ticket> reservations;
 
     public LocalDateTime finishTime() {
-        return when.plusMinutes(journey.totalTime());
+        return startTime.plusMinutes(journey.totalTime());
     }
 
     @Override
