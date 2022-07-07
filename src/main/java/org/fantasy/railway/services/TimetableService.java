@@ -1,6 +1,7 @@
 package org.fantasy.railway.services;
 
 import com.google.common.graph.Network;
+import lombok.Setter;
 import org.fantasy.railway.model.*;
 
 import java.time.LocalDateTime;
@@ -11,10 +12,15 @@ public class TimetableService {
 
     public static final Integer MAX_DISTANCE_FOR_SMALL = 20;
     public static final Integer MAX_DISTANCE_FOR_MEDIUM = 20;
+
+    @Setter
     StockService stockService;
+
+    @Setter
     NetworkService networkService;
     List<Service> services;
     List<Station> stations;
+
 
     /**
      * loads a timetable from the given file
@@ -30,7 +36,7 @@ public class TimetableService {
                 .filter(service -> service.getStartTime().toLocalDate().isEqual(ticket.getService().getStartTime().toLocalDate()))
                 .filter(service -> service.getJourney().getRoute().containsAll(ticket.getJourney().getRoute()))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(String.format("unable to find a suitable service for ")));
+                .orElseThrow(() -> new IllegalArgumentException(String.format("unable to find a suitable service for %s", ticket)));
     }
 
     /**

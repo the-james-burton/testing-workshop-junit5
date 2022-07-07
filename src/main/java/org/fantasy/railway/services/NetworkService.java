@@ -13,7 +13,7 @@ public class NetworkService {
     MutableValueGraph<Station, Integer> network;
     List<Line> lines;
 
-    private NetworkService() {
+    public NetworkService() {
         network = ValueGraphBuilder.undirected().build();
     }
 

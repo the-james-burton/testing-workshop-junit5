@@ -1,5 +1,6 @@
 package org.fantasy.railway.services;
 
+import lombok.Setter;
 import org.fantasy.railway.model.*;
 
 import java.time.LocalDateTime;
@@ -10,6 +11,7 @@ public class BookingService {
 
     private static final Double PRICE_PER_MINUTE = 0.5d;
 
+    @Setter
     NetworkService network;
 
     TimetableService timetable;
@@ -57,7 +59,7 @@ public class BookingService {
                 .filter(seat -> seat.isAvailableAt(when))
                 .findAny()
                 .orElseThrow(() ->
-                        new IllegalArgumentException(String.format("Service %s has not available seat with preferences", service, preferences)));
+                        new IllegalArgumentException(String.format("Service %s has not available seat with preferences %s", service, preferences)));
         ticket.setReservation(suitableSeat);
         service.getReservations().add(ticket);
         return ticket;
