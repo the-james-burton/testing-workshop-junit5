@@ -1,11 +1,13 @@
 package org.fantasy.railway.services;
 
+import com.google.common.collect.Comparators;
 import lombok.Getter;
 import org.fantasy.railway.model.Concession;
 import org.fantasy.railway.model.Passenger;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,6 +20,25 @@ public class AccountService {
         passengers = new ArrayList<>();
     }
 
+
+    private Integer nextPassengerId() {
+        return passengers.stream()
+                .max(Comparator.comparing(Passenger::getId))
+                .map(Passenger::getId)
+                .get() + 1;
+    }
+
+    /**
+     *
+     * @param id the id of the Passenger to get
+     * @return the Passenger with the given id
+     */
+    public Passenger getPassengerById(Integer id) {
+        return passengers.stream()
+                .filter(passenger -> id.equals(passenger.getId()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(String.format("No passenger with id $s", id)));
+    }
     /**
      *
      * @param name the name of the new passenger
@@ -25,7 +46,7 @@ public class AccountService {
      */
     public void addPassenger(String name, LocalDate dateOfBirth) {
         Passenger passenger = Passenger.builder()
-                .id(UUID.randomUUID().toString())
+                .id(nextPassengerId())
                 .name(name)
                 .dateOfBirth(dateOfBirth)
                 .build();

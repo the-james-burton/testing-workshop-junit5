@@ -3,6 +3,7 @@ package org.fantasy.railway.services;
 import com.google.common.collect.Iterables;
 import com.google.common.graph.MutableValueGraph;
 import com.google.common.graph.ValueGraphBuilder;
+import lombok.Getter;
 import org.fantasy.railway.model.*;
 import org.fantasy.railway.util.GraphUtils;
 
@@ -11,23 +12,37 @@ import java.util.*;
 public class NetworkService {
 
     MutableValueGraph<Station, Integer> network;
-    List<Line> lines;
+
+    @Getter
+    List<Station> stations;
 
     public NetworkService() {
         network = ValueGraphBuilder.undirected().build();
     }
 
     /**
+     *
+     * @param stationName the string to find a Station for
+     * @return Station for the given input string
+     */
+    public Station stationFromString(String stationName) {
+        return stations.stream()
+                .filter(station -> stationName.equals(station.getName()))
+                .findAny()
+                .orElseThrow(() -> new IllegalArgumentException(String.format("Station %s does not exist in the network", stationName)));
+    }
+
+    /**
      * @param station     the station to add to the network
      * @param connections key=station to link to, value=distance in minutes
      */
-    void addStation(Station station, Line line, Map<Station, Integer> connections) {
+    void addStation(Station station, Map<Station, Integer> connections) {
+        stations.add(station);
         network.addNode(station);
         connections.keySet()
                 .forEach(s -> network.addNode(s));
         connections
                 .forEach((connection, distance) -> network.putEdgeValue(station, connection, distance));
-        line.getStations().add(station);
     }
 
     /**
@@ -39,7 +54,6 @@ public class NetworkService {
      */
     Journey calculateRoute(Station from, Station to) {
         List<Stop> route = new LinkedList<>();
-
         List<Station> stations = GraphUtils.findShortestPath(network, from, to);
 
         if (stations == null || stations.size() == 0) {

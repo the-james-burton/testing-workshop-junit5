@@ -44,23 +44,7 @@ public class TimetableService {
      */
     void assignStockToServices() {
         findUnstockedServices().stream()
-                .forEach(service -> service.setTrain(findTrainForService(service)));
-    }
-
-    /**
-     *
-     * @param service the service to find a train for
-     * @return a train suitable for the given service
-     */
-    Train findTrainForService(Service service) {
-        Integer minimumCarriages = Train.MEDIUM_TRAIN_CARRIAGES;
-        if (service.getJourney().totalTime() > MAX_DISTANCE_FOR_SMALL) {
-            minimumCarriages = Train.MEDIUM_TRAIN_CARRIAGES;
-        } else if (service.getJourney().totalTime() > MAX_DISTANCE_FOR_MEDIUM) {
-            minimumCarriages = Train.LARGE_TRAIN_CARRIAGES;
-        }
-        Train train = stockService.findAvailableTrain(service, minimumCarriages);
-        return train;
+                .forEach(service -> service.setTrain(stockService.findAvailableTrain(service)));
     }
 
     /**

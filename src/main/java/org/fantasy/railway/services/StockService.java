@@ -26,13 +26,13 @@ public class StockService {
      * @param minimumCarriages
      * @return an existing train that is not currently assigned to a service
      */
-    Train findAvailableTrain(Service service, Integer minimumCarriages) {
+    Train findAvailableTrain(Service service) {
         Optional.ofNullable(service.getTrain()).orElseThrow(() ->
                 new IllegalStateException(String.format("service %s already has a train assigned.", service)));
 
         Optional<Train> firstUnallocatedTrain = trains.stream()
                 .filter(train -> train.getServices() == null)
-                .filter(train -> train.getCarriages().size() >= minimumCarriages)
+                .filter(train -> train.getType().maxDistance >= service.getJourney().totalTime())
                 .findFirst();
 
         if (firstUnallocatedTrain.isPresent()) {
@@ -41,12 +41,12 @@ public class StockService {
 
         Optional<Train> firstAvailableTrain = trains.stream()
                 .filter(train -> train.getServices() != null)
-                .filter(train -> train.getCarriages().size() >= minimumCarriages)
+                .filter(train -> train.getType().maxDistance >= service.getJourney().totalTime())
                 .filter(train -> isTrainAvailableAtTime(train, service.getStartTime()))
                 .findFirst();
 
         return firstAvailableTrain.orElseThrow(() ->
-                new IllegalStateException(String.format("No unallocated train available with at least %s carriages", minimumCarriages)));
+                new IllegalStateException("No train available suitable for the service"));
 
     }
 
@@ -80,26 +80,10 @@ public class StockService {
 
     /**
      * creates and adds a new train from unallocated stock
-     * @param size the size of the train
+     * @param type the type of the train needed
      */
-    private void addStockFromDepot(TrainSize size) {
-        switch(size) {
-            case LARGE:
-                trains.add(Train.ofSizeLarge());
-                break;
-            case MEDIUM:
-                trains.add(Train.ofSizeMedium());
-                break;
-            case SMALL:
-                throw new IllegalArgumentException("Small size trains are not supported");
-        }
-    }
-
-    /**
-     * an indicator of the size of a train
-     */
-    enum TrainSize {
-        LARGE, MEDIUM, SMALL
+    private void addStockFromDepot(Train.Type type) {
+        trains.add(Train.ofType(type));
     }
 
 }

@@ -1,10 +1,12 @@
 package org.fantasy.railway.services;
 
+import lombok.Getter;
 import lombok.Setter;
 import org.fantasy.railway.model.*;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Comparator;
 import java.util.List;
 
 public class BookingService {
@@ -15,7 +17,28 @@ public class BookingService {
     NetworkService network;
 
     TimetableService timetable;
+
+    @Getter
     List<Ticket> tickets;
+
+    private Integer nextTicketId() {
+        return tickets.stream()
+                .max(Comparator.comparing(Ticket::getId))
+                .map(Ticket::getId)
+                .get() + 1;
+    }
+
+    /**
+     *
+     * @param id the id of the Ticket to get
+     * @return the Ticket with the given id
+     */
+    public Ticket getTicketById(Integer id) {
+        return tickets.stream()
+                .filter(ticket -> id.equals(ticket.getId()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(String.format("No ticket with id $s", id)));
+    }
 
     /**
      * calculates the route and returns a ticket containing the price, ready to be purchased
@@ -25,7 +48,7 @@ public class BookingService {
      * @param passenger the passenger the ticket is to be valid for
      * @return
      */
-    public Ticket ticketQuote(Station from, Station to, LocalTime when, Passenger passenger) {
+    public Ticket ticketQuote(Station from, Station to, LocalDateTime when, Passenger passenger) {
         // TODO throw exception if route does not exist
         Journey journey = network.calculateRoute(from, to);
 
@@ -35,12 +58,16 @@ public class BookingService {
 
         Integer totalTime = journey.totalTime();
         Double price = totalTime * PRICE_PER_MINUTE * passenger.totalDiscount(when);
-        return Ticket.builder()
+        Ticket ticket = Ticket.builder()
                 .passenger(passenger)
                 .journey(journey)
                 .price(price)
                 .purchased(false)
                 .build();
+
+        tickets.add(ticket);
+        return ticket;
+
     }
 
     /**
@@ -70,9 +97,11 @@ public class BookingService {
      * @param ticket the ticket that has been purchased
      * @param passenger the passenger purchasing the ticket
      */
-    void purchaseTicket(Ticket ticket, Passenger passenger) {
+    public void purchaseTicket(Ticket ticket, Passenger passenger) {
+        ticket.setPurchased(true);
         passenger.getTickets().add(ticket);
         ticket.getService().getReservations().add(ticket);
         // TODO - throw if service is already too full
     }
+
 }
