@@ -22,6 +22,9 @@ public class BookingService {
     List<Ticket> tickets;
 
     private Integer nextTicketId() {
+        if (tickets.size() ==0) {
+            return 1;
+        }
         return tickets.stream()
                 .max(Comparator.comparing(Ticket::getId))
                 .map(Ticket::getId)

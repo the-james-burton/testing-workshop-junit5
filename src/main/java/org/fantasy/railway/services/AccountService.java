@@ -22,6 +22,9 @@ public class AccountService {
 
 
     private Integer nextPassengerId() {
+        if (passengers.size() == 0) {
+            return 1;
+        }
         return passengers.stream()
                 .max(Comparator.comparing(Passenger::getId))
                 .map(Passenger::getId)
