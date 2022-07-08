@@ -11,6 +11,9 @@ import java.util.Objects;
 @Builder
 public class Seat {
 
+    Train train;
+    Carriage carriage;
+
     Boolean table;
     Boolean window;
     Boolean aisle;

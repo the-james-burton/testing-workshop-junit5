@@ -12,7 +12,6 @@ public class Service implements Comparable<Service> {
 
     LocalDateTime startTime;
     Train train;
-    Line line;
     Journey journey;
     List<Ticket> reservations;
 

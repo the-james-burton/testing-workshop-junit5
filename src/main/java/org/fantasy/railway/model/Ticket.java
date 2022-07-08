@@ -11,6 +11,7 @@ import java.time.LocalTime;
 @Builder
 public class Ticket {
 
+    Integer id;
     Passenger passenger;
     Service service;
     Journey journey;

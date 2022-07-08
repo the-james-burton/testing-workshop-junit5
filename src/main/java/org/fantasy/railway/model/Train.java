@@ -9,8 +9,23 @@ import java.util.stream.IntStream;
 @Data
 public class Train {
 
-    public static final Integer MEDIUM_TRAIN_CARRIAGES = 5;
-    public static final Integer LARGE_TRAIN_CARRIAGES = 10;
+    public enum Type {
+        SMALL(2, Carriage.Type.ONE, 30),
+        MEDIUM(5, Carriage.Type.ONE, 60),
+        LARGE(10, Carriage.Type.ONE, 120);
+
+        public final Integer carriges;
+        public final Carriage.Type carraigeType;
+        public final Integer maxDistance;
+
+        Type(Integer carriages, Carriage.Type carriageType, Integer maxDistance) {
+            this.carriges = carriages;
+            this.carraigeType = carriageType;
+            this.maxDistance = maxDistance;
+        }
+    }
+
+    Type type;
 
     List<Carriage> carriages;
     List<Service> services;
@@ -18,26 +33,22 @@ public class Train {
     /**
      * singleton - please use the 'of' methods for instantiation
      */
-    private Train() {
-        carriages = new LinkedList<>();
+    private Train(Type type) {
+        this.type = type;
+        this.carriages = new LinkedList<>();
     }
 
     /**
-     * @return a newly created train of a large size
+     * @return a newly created train of the given type
      */
-    public static Train ofSizeLarge() {
-        Train me = new Train();
-        IntStream.of(10).forEach( i ->
-                me.carriages.add(Carriage.ofTypeOne())
+    public static Train ofType(Type type) {
+        Train train = new Train(type);
+        IntStream.of(type.carriges).forEach( i ->
+                train.carriages.add(Carriage.ofType(type.carraigeType))
         );
-        return null;
-    }
-
-    public static Train ofSizeMedium() {
-        Train me = new Train();
-        IntStream.of(5).forEach( i ->
-                me.carriages.add(Carriage.ofTypeOne())
-        );
+        train.carriages.stream()
+                .flatMap(carriages -> carriages.getSeats().stream())
+                .forEach(seat -> seat.setTrain(train));
         return null;
     }
 

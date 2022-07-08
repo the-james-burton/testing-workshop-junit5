@@ -18,29 +18,45 @@ public class Carriage {
         seats = new LinkedList<>();
     }
 
+    public enum Type {
+        ONE, TWO, THREE;
+    }
+
     /**
-     * @return a new ly created carriage of type 1
+     *
+     * @param type the type of carraige to create
+     * @return a newly created carriage of the given type
      */
-    public static Carriage ofTypeOne() {
-        Carriage me = new Carriage();
+    public static Carriage ofType(Carriage.Type type) {
+        switch (type) {
+            case ONE:
+                return ofTypeOne();
+        }
+        throw new IllegalArgumentException(String.format("Carriage of type %s not supported", type));
+    }
+
+    private static Carriage ofTypeOne() {
+        Carriage carriage = new Carriage();
         // six rows facing forwards
         IntStream.of(6).forEach(i ->
-            me.seats.addAll(twoAndTwoRow(false, true))
+            carriage.seats.addAll(twoAndTwoRow(false, true))
         );
         // table row
-        me.getSeats().addAll(twoAndTwoRow(true, true));
-        me.getSeats().addAll(twoAndTwoRow(true, false));
+        carriage.getSeats().addAll(twoAndTwoRow(true, true));
+        carriage.getSeats().addAll(twoAndTwoRow(true, false));
         // backwards and forwards row
-        me.getSeats().addAll(twoAndTwoRow(false, false));
-        me.getSeats().addAll(twoAndTwoRow(false, true));
+        carriage.getSeats().addAll(twoAndTwoRow(false, false));
+        carriage.getSeats().addAll(twoAndTwoRow(false, true));
         // table row
-        me.getSeats().addAll(twoAndTwoRow(true, true));
-        me.getSeats().addAll(twoAndTwoRow(true, false));
+        carriage.getSeats().addAll(twoAndTwoRow(true, true));
+        carriage.getSeats().addAll(twoAndTwoRow(true, false));
         // six rows facing backwards
         IntStream.of(6).forEach(i ->
-                me.seats.addAll(twoAndTwoRow(false, false))
+                carriage.seats.addAll(twoAndTwoRow(false, false))
         );
-        return me;
+        carriage.seats.stream()
+                .forEach(seat -> seat.setCarriage(carriage));
+        return carriage;
     }
 
     private static List<Seat> twoAndTwoRow(Boolean hasTable, Boolean isFacingForwards) {

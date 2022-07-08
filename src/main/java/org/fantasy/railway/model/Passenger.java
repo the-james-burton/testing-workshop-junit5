@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
 @Builder
 public class Passenger {
 
-    String id;
+    Integer id;
     String name;
     LocalDate dateOfBirth;
     List<Concession> concessions;
@@ -22,10 +23,10 @@ public class Passenger {
      * @param when time of day to calculate concessions for
      * @return the total discount amount (will not be greater than 1.0)
      */
-    public Double totalDiscount(LocalTime when) {
+    public Double totalDiscount(LocalDateTime when) {
         Double discount = concessions.stream()
-                .filter(concession -> concession.getEarliestTime().isBefore(when))
-                .filter(concession -> concession.getLatestTime().isAfter(when))
+                .filter(concession -> concession.getEarliestTime().isBefore(when.toLocalTime()))
+                .filter(concession -> concession.getLatestTime().isAfter(when.toLocalTime()))
                 .map(Concession::getDiscount)
                 .reduce(0.0d, Double::sum);
 
