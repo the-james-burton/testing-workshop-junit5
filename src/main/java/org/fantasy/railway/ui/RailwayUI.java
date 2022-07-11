@@ -50,6 +50,8 @@ public class RailwayUI extends BaseUI {
         out.println("1. Passenger accounts");
         out.println("2. Ticket booking");
         out.println("3. Network Management");
+        out.println("4. Rolling Stock");
+        out.println("5. Timetabling");
         out.println("X. ");
         out.print("Option: ");
         String option = scanner.next();
@@ -59,6 +61,15 @@ public class RailwayUI extends BaseUI {
                 return option;
             case "2":
                 bookingUI.displayMenu(scanner);
+                return option;
+            case "3":
+                networkUI.displayMenu(scanner);
+                return option;
+            case "4":
+                stockUI.displayMenu(scanner);
+                return option;
+            case "5":
+                timetableUI.displayMenu(scanner);
                 return option;
             default:
                 out.println("Invalid option, please re-enter.");
