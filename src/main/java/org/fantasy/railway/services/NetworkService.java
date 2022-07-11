@@ -1,6 +1,5 @@
 package org.fantasy.railway.services;
 
-import com.google.common.collect.Iterables;
 import com.google.common.graph.MutableValueGraph;
 import com.google.common.graph.ValueGraphBuilder;
 import lombok.Getter;
@@ -11,6 +10,7 @@ import java.util.*;
 
 public class NetworkService {
 
+    BookingService bookings;
     MutableValueGraph<Station, Integer> network;
 
     @Getter
@@ -36,13 +36,31 @@ public class NetworkService {
      * @param station     the station to add to the network
      * @param connections key=station to link to, value=distance in minutes
      */
-    void addStation(Station station, Map<Station, Integer> connections) {
+    public void addStation(Station station, Map<Station, Integer> connections) {
         stations.add(station);
         network.addNode(station);
         connections.keySet()
                 .forEach(s -> network.addNode(s));
         connections
                 .forEach((connection, distance) -> network.putEdgeValue(station, connection, distance));
+    }
+
+    /**
+     *
+     * @param station the station to remove from the network
+     */
+    public void removeStation(Station station) {
+        // do not remove the station from the network if there are any tickets that stop at it...
+        bookings.getTickets().stream()
+                .flatMap(ticket -> ticket.getJourney().getRoute().stream())
+                .map(Stop::getStation)
+                .filter(stop -> stop.getName().equals(station.getName()))
+                .findAny()
+                .ifPresent(stop -> {
+                    throw new IllegalArgumentException(String.format("There is a ticket sold that has a journey stopping at %s", station));
+                });
+
+        network.removeNode(station);
     }
 
     /**
@@ -54,21 +72,21 @@ public class NetworkService {
      */
     Journey calculateRoute(Station from, Station to) {
         List<Stop> route = new LinkedList<>();
-        List<Station> stations = GraphUtils.findShortestPath(network, from, to);
+        List<Station> shortestPath = GraphUtils.findShortestPath(network, from, to);
 
-        if (stations == null || stations.size() == 0) {
+        if (shortestPath == null || shortestPath.size() == 0) {
             throw new IllegalArgumentException(String.format("No route from %s to %s", from, to));
         }
 
         // ths first station will have value of zero since it is the start...
         route.add(Stop.builder()
-                .station(stations.get(0))
+                .station(shortestPath.get(0))
                 .minutes(0)
                 .build());
 
-        for (int stop = 1; stations.size() - 1 > stop; stop++) {
-            Station current = stations.get(stop);
-            Station next = stations.get(stop + 1);
+        for (int stop = 1; shortestPath.size() - 1 > stop; stop++) {
+            Station current = shortestPath.get(stop);
+            Station next = shortestPath.get(stop + 1);
             route.add(Stop.builder()
                 .station(current)
                 .minutes(distanceBetweenAdjacent(current, next))
@@ -90,6 +108,9 @@ public class NetworkService {
                 .orElseThrow(() -> new IllegalStateException(String.format("Stations %s and %s are not adjacent", from, to)));
     }
 
-
+    public String networkToString() {
+        // TODO this almost certainly will not actually be useful...
+        return network.toString();
+    }
 
 }
