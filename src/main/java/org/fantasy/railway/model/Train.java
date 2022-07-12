@@ -1,13 +1,13 @@
 package org.fantasy.railway.model;
 
-import lombok.Data;
+import lombok.Getter;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-@Data
-public class Train {
+@Getter
+public class Train extends Identified {
 
     public enum Type {
         SMALL(2, Carriage.Type.ONE, 30),
@@ -33,7 +33,8 @@ public class Train {
     /**
      * singleton - please use the 'of' methods for instantiation
      */
-    private Train(Type type) {
+    private Train(Integer id, Type type) {
+        super(id);
         this.type = type;
         this.carriages = new LinkedList<>();
     }
@@ -41,8 +42,8 @@ public class Train {
     /**
      * @return a newly created train of the given type
      */
-    public static Train ofType(Type type) {
-        Train train = new Train(type);
+    public static Train ofType(Integer id, Type type) {
+        Train train = new Train(id, type);
         IntStream.of(type.carriges).forEach( i ->
                 train.carriages.add(Carriage.ofType(type.carraigeType))
         );
@@ -50,6 +51,16 @@ public class Train {
                 .flatMap(carriages -> carriages.getSeats().stream())
                 .forEach(seat -> seat.setTrain(train));
         return null;
+    }
+
+    /**
+     *
+     * @param type String value of s m l
+     * @return a train of the given size
+     */
+    public static Train ofType(Integer id, String type) {
+        Train.Type trainType = Train.Type.valueOf(type);
+        return ofType(id, trainType);
     }
 
 }
