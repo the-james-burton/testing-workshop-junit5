@@ -11,7 +11,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
-public class AccountService {
+public class AccountService extends BaseService<Passenger> {
 
     @Getter
     List<Passenger> passengers;
@@ -20,28 +20,11 @@ public class AccountService {
         passengers = new ArrayList<>();
     }
 
-
-    private Integer nextPassengerId() {
-        if (passengers.size() == 0) {
-            return 1;
-        }
-        return passengers.stream()
-                .max(Comparator.comparing(Passenger::getId))
-                .map(Passenger::getId)
-                .get() + 1;
+    @Override
+    List<Passenger> getItems() {
+        return passengers;
     }
 
-    /**
-     *
-     * @param id the id of the Passenger to get
-     * @return the Passenger with the given id
-     */
-    public Passenger getPassengerById(Integer id) {
-        return passengers.stream()
-                .filter(passenger -> id.equals(passenger.getId()))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(String.format("No passenger with id $s", id)));
-    }
     /**
      *
      * @param name the name of the new passenger
@@ -49,7 +32,7 @@ public class AccountService {
      */
     public void addPassenger(String name, LocalDate dateOfBirth) {
         Passenger passenger = Passenger.builder()
-                .id(nextPassengerId())
+                .id(nextId())
                 .name(name)
                 .dateOfBirth(dateOfBirth)
                 .build();
@@ -88,4 +71,5 @@ public class AccountService {
         }
         passenger.getConcessions().remove(concession);
     }
+
 }

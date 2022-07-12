@@ -1,6 +1,7 @@
 package org.fantasy.railway.services;
 
 import com.google.common.collect.Iterables;
+import lombok.Getter;
 import org.fantasy.railway.model.Service;
 import org.fantasy.railway.model.Train;
 
@@ -9,10 +10,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class StockService {
+public class StockService extends BaseService {
 
+    @Getter
     List<Train> trains;
 
+    @Override
+    List<Train> getItems() {
+        return trains;
+    }
 
     /**
      * loads stock from the given file
@@ -82,8 +88,15 @@ public class StockService {
      * creates and adds a new train from unallocated stock
      * @param type the type of the train needed
      */
-    private void addStockFromDepot(Train.Type type) {
-        trains.add(Train.ofType(type));
+    public void addStockFromDepot(Train.Type type) {
+        trains.add(Train.ofType(nextId(), type));
+    }
+
+    /**
+     * creates and adds a new train from unallocated stock
+     * @param trainID the type of the train needed
+     */
+    public void decommissionTrain(Integer trainID) {
     }
 
 }
