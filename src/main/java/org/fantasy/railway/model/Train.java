@@ -14,13 +14,13 @@ public class Train extends Identified {
         MEDIUM(5, Carriage.Type.ONE, 60),
         LARGE(10, Carriage.Type.ONE, 120);
 
-        public final Integer carriges;
-        public final Carriage.Type carraigeType;
+        public final Integer carriages;
+        public final Carriage.Type carriageType;
         public final Integer maxDistance;
 
         Type(Integer carriages, Carriage.Type carriageType, Integer maxDistance) {
-            this.carriges = carriages;
-            this.carraigeType = carriageType;
+            this.carriages = carriages;
+            this.carriageType = carriageType;
             this.maxDistance = maxDistance;
         }
     }
@@ -44,8 +44,8 @@ public class Train extends Identified {
      */
     public static Train ofType(Integer id, Type type) {
         Train train = new Train(id, type);
-        IntStream.of(type.carriges).forEach( i ->
-                train.carriages.add(Carriage.ofType(type.carraigeType))
+        IntStream.of(type.carriages).forEach(i ->
+                train.carriages.add(Carriage.ofType(type.carriageType))
         );
         train.carriages.stream()
                 .flatMap(carriages -> carriages.getSeats().stream())
