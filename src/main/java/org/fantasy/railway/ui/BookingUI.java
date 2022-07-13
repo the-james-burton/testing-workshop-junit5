@@ -66,7 +66,7 @@ public class BookingUI extends BaseUI {
         scanner.nextLine();
         out.println("\nPlease enter details:");
         out.print("  Ticket ID: ");
-        Ticket ticket = system.getBookings().getTicketById(scanner.nextInt());
+        Ticket ticket = system.getBookings().getById(scanner.nextInt());
         out.print("  When (yyy-mm-ddThh:mm:ss ");
         LocalDateTime when = LocalDateTime.parse(scanner.nextLine());
         out.print("  Must have table?: ");
@@ -87,7 +87,7 @@ public class BookingUI extends BaseUI {
 
         system.getBookings().addReservation(ticket, when, preferences);
         out.println("New reservation added to ticket.");
-        out.println(String.format("Ticket: %s\n\n", ticket));
+        out.println(String.format("Ticket: %s%n%n", ticket));
 
     }
 
@@ -95,7 +95,7 @@ public class BookingUI extends BaseUI {
         scanner.nextLine();
         out.println("\nPlease enter details:");
         out.print("  Ticket ID: ");
-        Ticket ticket = system.getBookings().getTicketById(scanner.nextInt());
+        Ticket ticket = system.getBookings().getById(scanner.nextInt());
         out.print("  Passenger ID: ");
         Passenger passenger = system.getAccounts().getById(scanner.nextInt());
         out.print("  Have you taken payment Y/N: ");

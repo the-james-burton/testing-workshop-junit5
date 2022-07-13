@@ -1,7 +1,6 @@
 package org.fantasy.railway;
 
 import lombok.Data;
-import org.checkerframework.checker.units.qual.A;
 import org.fantasy.railway.services.*;
 
 @Data
@@ -10,15 +9,15 @@ public class RailwaySystem {
     private AccountService accounts;
     private BookingService bookings;
     private NetworkService network;
-    private StockService stock;
+    private StockServiceImpl stock;
     private TimetableService timetable;
 
     public void initialize() {
-        accounts = new AccountService();
-        bookings = new BookingService();
-        network = new NetworkService();
-        stock = new StockService();
-        timetable = new TimetableService();
+        accounts = new AccountServiceImpl();
+        bookings = new BookingServiceImpl();
+        network = new NetworkServiceImpl();
+        stock = new StockServiceImpl();
+        timetable = new TimetableServiceImpl();
 
         bookings.setNetwork(network);
         timetable.setNetworkService(network);
