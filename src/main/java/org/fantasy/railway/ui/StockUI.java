@@ -12,7 +12,7 @@ public class StockUI extends BaseUI {
         out.println("\nPlease select an option:");
         out.println("1. View all rolling stock");
         out.println("2. Add new train");
-        out.println("3. Remove train");
+        out.println("3. Decommission train");
         out.println("X. ");
         out.print("Option: ");
         String option = scanner.next();
@@ -52,6 +52,16 @@ public class StockUI extends BaseUI {
     }
 
     private void removeTrain(Scanner scanner) {
-        
+        scanner.nextLine();
+        out.print("\nPlease enter train Id to decommission: ");
+        out.println(Train.Type.values());
+        Integer trainId = scanner.nextInt();
+        try {
+            system.getStock().decommissionTrain(trainId);
+        } catch (RuntimeException e) {
+            out.println(String.format("ERROR: %s ", e.getMessage()));
+            return;
+        }
+        out.println(String.format("Train %s decommissioned.%n%n", trainId));
     }
 }
