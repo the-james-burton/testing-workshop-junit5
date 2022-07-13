@@ -64,17 +64,17 @@ public class NetworkService {
     }
 
     /**
-     * useful for calculating the cost of a ticket
+     * useful for calculating the cost of a ticket and defining a new service
      *
      * @param from the starting station of the journey
      * @param to the end station of the journey
      * @return a Journey with a List of stops in correct order
      */
-    Journey calculateRoute(Station from, Station to) {
+    public Journey calculateRoute(Station from, Station to) {
         List<Stop> route = new LinkedList<>();
         List<Station> shortestPath = GraphUtils.findShortestPath(network, from, to);
 
-        if (shortestPath == null || shortestPath.size() == 0) {
+        if (shortestPath.isEmpty()) {
             throw new IllegalArgumentException(String.format("No route from %s to %s", from, to));
         }
 

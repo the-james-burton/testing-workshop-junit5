@@ -1,15 +1,12 @@
 package org.fantasy.railway.services;
 
-import com.google.common.collect.Comparators;
 import lombok.Getter;
 import org.fantasy.railway.model.Concession;
 import org.fantasy.railway.model.Passenger;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.UUID;
 
 public class AccountService extends BaseService<Passenger> {
 
@@ -66,7 +63,7 @@ public class AccountService extends BaseService<Passenger> {
      * @param concession the concession to add to the given passenger
      */
     public void removeConcenssion(Passenger passenger, Concession concession) {
-        if (passenger.getConcessions().contains(concession)) {
+        if (!passenger.getConcessions().contains(concession)) {
             throw new IllegalStateException(String.format("Passenger %s does not have concession %s", passenger, concession));
         }
         passenger.getConcessions().remove(concession);

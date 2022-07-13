@@ -1,6 +1,5 @@
 package org.fantasy.railway.services;
 
-import com.google.common.collect.Iterables;
 import lombok.Getter;
 import org.fantasy.railway.model.Service;
 import org.fantasy.railway.model.Train;
@@ -8,9 +7,8 @@ import org.fantasy.railway.model.Train;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-public class StockService extends BaseService {
+public class StockService extends BaseService<Train> {
 
     @Getter
     List<Train> trains;
@@ -33,8 +31,9 @@ public class StockService extends BaseService {
      * @return an existing train that is not currently assigned to a service
      */
     Train findAvailableTrain(Service service) {
-        Optional.ofNullable(service.getTrain()).ifPresent(train ->
-                new IllegalStateException(String.format("service %s already has train %s assigned.", service, train)));
+        Optional.ofNullable(service.getTrain()).ifPresent(train -> {
+                    throw new IllegalStateException(String.format("service %s already has train %s assigned.", service, train));
+        });
 
         Optional<Train> firstUnallocatedTrain = trains.stream()
                 .filter(train -> train.getServices() == null)
@@ -72,16 +71,12 @@ public class StockService extends BaseService {
 
         LocalDateTime whenTrainIsFree = services.stream()
                 .sorted()
-                .skip(services.size() - 1)
-                .map(service -> service.finishTime())
+                .skip(services.size() - 1L)
+                .map(Service::getFinishTime)
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException(String.format("train %s is never free!", train)));
 
-        if (whenTrainIsFree.isAfter(whenNeeded)) {
-            return true;
-        }
-
-        return false;
+        return whenTrainIsFree.isBefore(whenNeeded);
     }
 
     /**
@@ -93,10 +88,21 @@ public class StockService extends BaseService {
     }
 
     /**
-     * creates and adds a new train from unallocated stock
-     * @param trainID the type of the train needed
+     * removes a train from the stock list
+     * @param trainId the Id of the train needed
      */
-    public void decommissionTrain(Integer trainID) {
+    public void decommissionTrain(Integer trainId) {
+        Train train = getById(trainId);
+
+        // is the train booked onto services?
+        train.getServices().stream()
+                .filter(service -> service.getFinishTime().isAfter(LocalDateTime.now()))
+                .findFirst()
+                .ifPresent(service -> {
+                    throw new IllegalArgumentException(String.format("Train %s is currently running on service %s", trainId, service));
+                });
+
+        trains.remove(train);
     }
 
 }
