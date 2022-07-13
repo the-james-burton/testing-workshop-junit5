@@ -44,8 +44,6 @@ public class Seat {
         return reservations.stream()
                 .map(Ticket::getService)
                 .filter(service -> service.getStartTime().isBefore(when))
-                .filter(service -> service.finishTime().isAfter(when))
-                .findAny()
-                .isPresent();
+                .anyMatch(service -> service.getFinishTime().isAfter(when));
     }
 }
