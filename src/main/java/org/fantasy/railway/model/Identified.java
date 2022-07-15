@@ -1,10 +1,10 @@
 package org.fantasy.railway.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
-@Getter
-@AllArgsConstructor
+@Data
+@SuperBuilder
 public abstract class Identified {
 
     Integer id;

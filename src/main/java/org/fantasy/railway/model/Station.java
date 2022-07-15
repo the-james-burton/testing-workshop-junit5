@@ -1,13 +1,12 @@
 package org.fantasy.railway.model;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
+import lombok.experimental.SuperBuilder;
 
 @Data
+@SuperBuilder
 @EqualsAndHashCode(callSuper = false)
-@Builder
 public class Station extends Identified {
 
     String name;

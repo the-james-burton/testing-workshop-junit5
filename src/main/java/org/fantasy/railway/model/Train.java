@@ -1,12 +1,15 @@
 package org.fantasy.railway.model;
 
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.SuperBuilder;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-@Getter
+@Data
+@SuperBuilder
+@EqualsAndHashCode(callSuper = false)
 public class Train extends Identified {
 
     public enum Type {
@@ -31,19 +34,13 @@ public class Train extends Identified {
     List<Service> services;
 
     /**
-     * singleton - please use the 'of' methods for instantiation
-     */
-    private Train(Integer id, Type type) {
-        super(id);
-        this.type = type;
-        this.carriages = new LinkedList<>();
-    }
-
-    /**
      * @return a newly created train of the given type
      */
     public static Train ofType(Integer id, Type type) {
-        Train train = new Train(id, type);
+        Train train = Train.builder()
+                .id(id)
+                .type(type)
+                .build();
         IntStream.of(type.carriages).forEach(i ->
                 train.carriages.add(Carriage.ofType(type.carriageType))
         );

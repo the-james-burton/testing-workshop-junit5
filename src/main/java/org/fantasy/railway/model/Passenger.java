@@ -1,26 +1,23 @@
 package org.fantasy.railway.model;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter
+@Data
+@SuperBuilder
+@EqualsAndHashCode(callSuper = false)
 public class Passenger extends Identified {
 
     String name;
     LocalDate dateOfBirth;
     List<Concession> concessions;
-    List<Ticket> tickets;
 
-    @Builder
-    private Passenger(Integer id, String name, LocalDate dateOfBirth) {
-        super(id);
-        this.name = name;
-        this.dateOfBirth = dateOfBirth;
-    }
+    List<Ticket> tickets;
 
     /**
      *
