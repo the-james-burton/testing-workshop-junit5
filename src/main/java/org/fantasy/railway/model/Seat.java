@@ -46,4 +46,10 @@ public class Seat {
                 .filter(service -> service.getStartTime().isBefore(when))
                 .anyMatch(service -> service.getFinishTime().isAfter(when));
     }
+
+    public Boolean isBookedFor(Service service) {
+        return reservations.stream()
+                .map(Ticket::getService)
+                .anyMatch(s -> s.equals(service));
+    }
 }

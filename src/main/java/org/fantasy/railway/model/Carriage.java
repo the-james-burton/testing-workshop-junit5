@@ -1,7 +1,9 @@
 package org.fantasy.railway.model;
 
+import lombok.Builder;
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -9,7 +11,8 @@ import java.util.stream.IntStream;
 public class Carriage {
 
     @Getter
-    List<Seat> seats;
+    @Builder.Default
+    List<Seat> seats = new ArrayList<>();
 
     /**
      * singleton - please use the 'of' methods for instantiation
@@ -19,7 +22,7 @@ public class Carriage {
     }
 
     public enum Type {
-        ONE, TWO, THREE;
+        ONE, TWO, THREE
     }
 
     /**
@@ -31,6 +34,8 @@ public class Carriage {
         switch (type) {
             case ONE:
                 return ofTypeOne();
+            case TWO:
+            case THREE:
         }
         throw new IllegalArgumentException(String.format("Carriage of type %s not supported", type));
     }
@@ -54,7 +59,7 @@ public class Carriage {
         IntStream.of(6).forEach(i ->
                 carriage.seats.addAll(twoAndTwoRow(false, false))
         );
-        carriage.seats.stream()
+        carriage.seats
                 .forEach(seat -> seat.setCarriage(carriage));
         return carriage;
     }

@@ -1,23 +1,30 @@
 package org.fantasy.railway.model;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @SuperBuilder
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = false)
 public class Passenger extends Identified {
 
     String name;
     LocalDate dateOfBirth;
-    List<Concession> concessions;
 
-    List<Ticket> tickets;
+    @Builder.Default
+    List<Concession> concessions = new ArrayList<>();
+
+    @Builder.Default
+    List<Ticket> tickets = new ArrayList<>();
 
     /**
      *
