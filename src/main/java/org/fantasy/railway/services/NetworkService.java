@@ -1,8 +1,9 @@
 package org.fantasy.railway.services;
 
-import org.fantasy.railway.model.*;
+import org.fantasy.railway.model.Journey;
+import org.fantasy.railway.model.Station;
 
-import java.util.*;
+import java.util.Map;
 
 public interface NetworkService {
 

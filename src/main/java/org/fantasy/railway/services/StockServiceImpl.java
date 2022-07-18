@@ -80,23 +80,24 @@ public class StockServiceImpl extends BaseService<Train> implements StockService
     }
 
     @Override
-    public void addStockFromDepot(Train.Type type) {
-        trains.add(Train.ofType(nextId(), type));
+    public Train addStockFromDepot(Train.Type type) {
+        Train train = Train.ofType(nextId(), type);
+        trains.add(train);
+        return train;
     }
 
     @Override
-    public void decommissionTrain(Integer trainId) {
-        Train train = getById(trainId);
-
+    public Train decommissionTrain(Train train) {
         // is the train booked onto services?
         train.getServices().stream()
                 .filter(service -> service.getFinishTime().isAfter(LocalDateTime.now()))
                 .findFirst()
                 .ifPresent(service -> {
-                    throw new IllegalArgumentException(String.format("Train %s is currently running on service %s", trainId, service));
+                    throw new IllegalArgumentException(String.format("Train %s is currently running on service %s", train, service));
                 });
 
         trains.remove(train);
+        return train;
     }
 
 }

@@ -1,11 +1,11 @@
 package org.fantasy.railway.services;
 
 import org.fantasy.railway.model.Journey;
-import org.fantasy.railway.model.Passenger;
 import org.fantasy.railway.model.Service;
 import org.fantasy.railway.model.Train;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface TimetableService {
     /**
@@ -24,11 +24,23 @@ public interface TimetableService {
      */
     void schedule(Train train, Service service);
 
-    java.util.List<Service> getServices();
+    /**
+     *
+     * @return a List of all services
+     */
+    List<Service> getServices();
 
     void setStockService(StockServiceImpl stockService);
 
     void setNetworkService(NetworkService networkService);
+
+    /**
+     * Remove the given train from the given service
+     *
+     * @param train the train to add to the given service
+     * @param service the service to add the train to
+     */
+    void removeTrainFromService(Train train, Service service);
 
     /**
      *
@@ -36,4 +48,11 @@ public interface TimetableService {
      * @return the Service with the given id
      */
     Service getById(Integer id);
+
+    /**
+     *
+     * @param service the service that we are checking
+     * @return
+     */
+    Boolean isServiceFullyBooked(Service service);
 }

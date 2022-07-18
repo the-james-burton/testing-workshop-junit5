@@ -1,5 +1,6 @@
 package org.fantasy.railway.services;
 
+import com.google.common.base.Preconditions;
 import lombok.Getter;
 import lombok.Setter;
 import org.fantasy.railway.model.*;
@@ -59,13 +60,8 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
         service.setTrain(train);
     }
 
-    /**
-     * Remove the given train from the given service
-     *
-     * @param train the train to add to the given service
-     * @param service the service to add the train to
-     */
-    void removeTrainFromService(Train train, Service service) {
+    @Override
+   public void removeTrainFromService(Train train, Service service) {
         if (!service.getTrain().equals(train)) {
             throw new IllegalStateException(String.format("Train %s is not assigned to service %s", train, service));
         }
@@ -78,6 +74,7 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
                 .filter(service -> service.getStartTime().isBefore(ticket.getService().getStartTime()))
                 .filter(service -> service.getStartTime().toLocalDate().isEqual(ticket.getService().getStartTime().toLocalDate()))
                 .filter(service -> service.getJourney().getRoute().containsAll(ticket.getJourney().getRoute()))
+                .filter(service -> !isServiceFullyBooked(service))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(String.format("unable to find a suitable service for %s", ticket)));
     }
@@ -99,6 +96,14 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public Boolean isServiceFullyBooked(Service service) {
+        Preconditions.checkArgument(service.getTrain() == null,
+            "Service %s is not assigned a train.", service);
 
+        return service.getTrain().getCarriages().stream()
+                .flatMap(carriage -> carriage.getSeats().stream())
+                .noneMatch(seat -> !seat.isBookedFor(service));
+    }
 
 }

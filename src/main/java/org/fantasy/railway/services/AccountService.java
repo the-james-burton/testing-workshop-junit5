@@ -10,8 +10,9 @@ public interface AccountService {
     /**
      * @param name        the name of the new passenger
      * @param dateOfBirth when the new passenger was born
+     * @return
      */
-    void addPassenger(String name, LocalDate dateOfBirth);
+    Passenger addPassenger(String name, LocalDate dateOfBirth);
 
     /**
      * @param passenger the passenger to remove from the system
@@ -22,13 +23,13 @@ public interface AccountService {
      * @param passenger  the passenger to add the concession to
      * @param concession the concession to add to the given passenger
      */
-    void addConcenssion(Passenger passenger, Concession concession);
+    void addConcession(Passenger passenger, Concession concession);
 
     /**
      * @param passenger  the passenger to add the concession to
      * @param concession the concession to add to the given passenger
      */
-    void removeConcenssion(Passenger passenger, Concession concession);
+    void removeConcession(Passenger passenger, Concession concession);
 
     /**
      *

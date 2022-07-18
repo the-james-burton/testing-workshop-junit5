@@ -1,5 +1,6 @@
 package org.fantasy.railway.services;
 
+import com.google.common.base.Preconditions;
 import lombok.Getter;
 import lombok.Setter;
 import org.fantasy.railway.model.*;
@@ -22,12 +23,10 @@ public class BookingServiceImpl extends BaseService<Ticket> implements BookingSe
 
     @Override
     public Ticket ticketQuote(Station from, Station to, LocalDateTime when, Passenger passenger) {
-        // TODO throw exception if route does not exist
         Journey journey = network.calculateRoute(from, to);
 
-        if (journey.getRoute().isEmpty()) {
-            throw new IllegalArgumentException(String.format("No travel possible from %s to %s", from, to));
-        }
+        Preconditions.checkArgument(journey.getRoute().isEmpty(),
+                "No travel possible from %s to %s", from, to);
 
         Integer totalTime = journey.totalTime();
         Double price = totalTime * PRICE_PER_MINUTE * passenger.totalDiscount(when);
@@ -61,10 +60,14 @@ public class BookingServiceImpl extends BaseService<Ticket> implements BookingSe
 
     @Override
     public void purchaseTicket(Ticket ticket, Passenger passenger) {
+        Preconditions.checkArgument(ticket.getService() != null,
+                "Ticket %s is not yet assigned to a service", ticket);
+        Preconditions.checkArgument(timetable.isServiceFullyBooked(ticket.getService()),
+                "Service %s is fully booked", ticket.getService());
+
         ticket.setPurchased(true);
         passenger.getTickets().add(ticket);
         ticket.getService().getReservations().add(ticket);
-        // TODO - throw if service is already too full
     }
 
     @Override

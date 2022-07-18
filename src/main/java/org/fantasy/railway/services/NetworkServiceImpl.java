@@ -1,5 +1,6 @@
 package org.fantasy.railway.services;
 
+import com.google.common.base.Preconditions;
 import com.google.common.graph.MutableValueGraph;
 import com.google.common.graph.ValueGraphBuilder;
 import lombok.Getter;
@@ -78,9 +79,8 @@ public class NetworkServiceImpl extends BaseService<Station> implements NetworkS
         List<Stop> route = new LinkedList<>();
         List<Station> shortestPath = GraphUtils.findShortestPath(network, from, to);
 
-        if (shortestPath.isEmpty()) {
-            throw new IllegalArgumentException(String.format("No route from %s to %s", from, to));
-        }
+        Preconditions.checkArgument(shortestPath.isEmpty(),
+            "No route from %s to %s", from, to);
 
         // ths first station will have value of zero since it is the start...
         route.add(Stop.builder()

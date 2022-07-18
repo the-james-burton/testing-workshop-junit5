@@ -9,15 +9,17 @@ public interface StockService {
      * creates and adds a new train from unallocated stock
      *
      * @param type the type of the train needed
+     * @return the train that was added
      */
-    void addStockFromDepot(Train.Type type);
+    Train addStockFromDepot(Train.Type type);
 
     /**
      * removes a train from the stock list
      *
-     * @param trainId the Id of the train needed
+     * @param train the Id of the train needed
+     * @return the train that was removed
      */
-    void decommissionTrain(Integer trainId);
+    Train decommissionTrain(Train train);
 
     /**
      *

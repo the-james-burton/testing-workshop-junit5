@@ -16,7 +16,7 @@ public interface BookingService {
      * @param from      the station at the start of the journey
      * @param to        the station at the end of the journey
      * @param passenger the passenger the ticket is to be valid for
-     * @return          a ticket for the requested journey
+     * @return a ticket for the requested journey
      */
     Ticket ticketQuote(Station from, Station to, LocalDateTime when, Passenger passenger);
 
@@ -35,7 +35,6 @@ public interface BookingService {
     void purchaseTicket(Ticket ticket, Passenger passenger);
 
     /**
-     *
      * @return a List of all tickets
      */
     List<Ticket> getTickets();
@@ -43,7 +42,6 @@ public interface BookingService {
     void setNetwork(NetworkService network);
 
     /**
-     *
      * @param id the id of the Ticket to lookup
      * @return the Ticket with the given id
      */
