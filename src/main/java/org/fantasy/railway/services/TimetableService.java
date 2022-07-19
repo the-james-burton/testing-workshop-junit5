@@ -6,15 +6,26 @@ import org.fantasy.railway.model.Train;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Queue;
 
 public interface TimetableService {
+
     /**
      * creates a new service starting at the given time for the given journey
      *
      * @param startTime when the new service will start
      * @param journey   the route taken by the service
+     * @return the service that was created
      */
-    void createNewService(LocalDateTime startTime, Journey journey);
+    Service createNewService(LocalDateTime startTime, Journey journey);
+
+    /**
+     * creates a new service from the given inputs
+     *
+     * @param inputs the inputs to use (datetime (yyy-mm-ddThh:mm:ss), start station, end station)
+     * @return the service that was created
+     */
+    Service createNewService(Queue<String> inputs);
 
     /**
      * Assigns the given train to the given service
@@ -52,7 +63,7 @@ public interface TimetableService {
     /**
      *
      * @param service the service that we are checking
-     * @return
+     * @return true if the service is fully booked
      */
     Boolean isServiceFullyBooked(Service service);
 }

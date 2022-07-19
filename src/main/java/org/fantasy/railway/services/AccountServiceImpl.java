@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 public class AccountServiceImpl extends BaseService<Passenger> implements AccountService {
 
@@ -33,6 +34,13 @@ public class AccountServiceImpl extends BaseService<Passenger> implements Accoun
                 .build();
         passengers.add(passenger);
         return passenger;
+    }
+
+    @Override
+    public Passenger addPassenger(Queue<String> inputs) {
+        return addPassenger(
+                inputs.poll(),
+                LocalDate.parse(inputs.poll()));
     }
 
     @Override

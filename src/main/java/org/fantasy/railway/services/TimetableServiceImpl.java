@@ -7,6 +7,7 @@ import org.fantasy.railway.model.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Queue;
 import java.util.stream.Collectors;
 
 public class TimetableServiceImpl extends BaseService<Service> implements TimetableService {
@@ -37,7 +38,7 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
     }
 
     @Override
-    public void createNewService(LocalDateTime startTime, Journey journey) {
+    public Service createNewService(LocalDateTime startTime, Journey journey) {
         Stop first = journey.getRoute().get(0);
         services.stream()
                 .filter(service -> service.getStartTime().isEqual(startTime))
@@ -53,6 +54,17 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
                 .build();
 
         services.add(service);
+        return service;
+    }
+
+    @Override
+    public Service createNewService(Queue<String> inputs) {
+        LocalDateTime startTime = LocalDateTime.parse(inputs.poll());
+        Station start = networkService.stationFromString(inputs.poll());
+        Station finish = networkService.stationFromString(inputs.poll());
+        Journey journey = networkService.calculateRoute(start, finish);
+
+        return createNewService(startTime, journey);
     }
 
     @Override
@@ -61,7 +73,7 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
     }
 
     @Override
-   public void removeTrainFromService(Train train, Service service) {
+    public void removeTrainFromService(Train train, Service service) {
         if (!service.getTrain().equals(train)) {
             throw new IllegalStateException(String.format("Train %s is not assigned to service %s", train, service));
         }
@@ -103,7 +115,7 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
 
         return service.getTrain().getCarriages().stream()
                 .flatMap(carriage -> carriage.getSeats().stream())
-                .noneMatch(seat -> !seat.isBookedFor(service));
+                .allMatch(seat -> seat.isBookedFor(service));
     }
 
 }

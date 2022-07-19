@@ -4,6 +4,7 @@ import org.fantasy.railway.model.Journey;
 import org.fantasy.railway.model.Station;
 
 import java.util.Map;
+import java.util.Queue;
 
 public interface NetworkService {
 
@@ -15,10 +16,24 @@ public interface NetworkService {
     Station stationFromString(String stationName);
 
     /**
+     *
+     * @param name the name of the new station
+     * @return the new station
+     */
+    Station newStation(String name);
+
+    /**
      * @param station     the station to add to the network
      * @param connections key=station to link to, value=distance in minutes
+     * @return the station that was added
      */
-    void addStation(Station station, Map<Station, Integer> connections);
+    Station addConnections(Station station, Map<Station, Integer> connections);
+
+    /**
+     * @param inputs the inputs to use (station name,[connection,distance]...)
+     * @return the station that was added
+     */
+    Station addStation(Queue<String> inputs);
 
     /**
      *

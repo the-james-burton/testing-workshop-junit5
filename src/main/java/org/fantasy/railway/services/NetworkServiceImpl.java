@@ -9,9 +9,7 @@ import org.fantasy.railway.model.Station;
 import org.fantasy.railway.model.Stop;
 import org.fantasy.railway.util.GraphUtils;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class NetworkServiceImpl extends BaseService<Station> implements NetworkService {
 
@@ -37,17 +35,42 @@ public class NetworkServiceImpl extends BaseService<Station> implements NetworkS
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Station %s does not exist in the network", stationName)));
     }
 
-    /**
-     * @param station     the station to add to the network
-     * @param connections key=station to link to, value=distance in minutes
-     */
-    public void addStation(Station station, Map<Station, Integer> connections) {
+    @Override
+    public Station newStation(String name) {
+        Station station = Station.builder()
+                        .name(name)
+                        .build();
+        stations.add(station);
+        return station;
+    }
+
+    @Override
+    public Station addConnections(Station station, Map<Station, Integer> connections) {
+        Preconditions.checkArgument(!stations.contains(station),
+            "Station %s does not exist in the network", station);
         stations.add(station);
         network.addNode(station);
         connections.keySet()
                 .forEach(s -> network.addNode(s));
         connections
                 .forEach((connection, distance) -> network.putEdgeValue(station, connection, distance));
+        return station;
+    }
+
+    @Override
+    public Station addStation(Queue<String> inputs) {
+        Preconditions.checkArgument(inputs.size() > 2);
+
+        Station station = stationFromString(inputs.poll());
+        Map<Station, Integer> connections = new HashMap<>();
+
+        while (!inputs.isEmpty()) {
+            connections.put(
+                    stationFromString(inputs.poll()),
+                    Integer.parseInt(inputs.poll()));
+        }
+        return addConnections(station, connections);
+
     }
 
     /**
