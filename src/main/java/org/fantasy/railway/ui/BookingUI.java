@@ -22,25 +22,27 @@ public class BookingUI extends BaseUI {
         String option = scanner.next();
         switch (option) {
             case "1":
-                listAllTickets(scanner);
-                return option;
+                listAllTickets();
+                break;
             case "2":
                 getTicketQuote(scanner);
-                return option;
+                break;
             case "3":
                 reserveSeat(scanner);
-                return option;
+                break;
             case "4":
                 purchaseTicket(scanner);
-                return option;
+                break;
             default:
                 out.println("Invalid option, please re-enter.");
-                return option;
+                break;
         }
+        return option;
     }
 
 
-    private void listAllTickets(Scanner scanner) {
+    private void listAllTickets() {
+        out.println(" ALl Tickets: ");
         out.println(system.getBookings().getTickets());
     }
 
@@ -57,9 +59,7 @@ public class BookingUI extends BaseUI {
         Passenger passenger = system.getAccounts().getById(scanner.nextInt());
 
         Ticket ticket = system.getBookings().ticketQuote(from, to, when, passenger);
-
-        out.println("New ticket quoted.\n\n");
-        out.print(ticket);
+        out.format("New ticket quoted: %s%n%n", ticket);
     }
 
     private void reserveSeat(Scanner scanner) {
@@ -87,7 +87,7 @@ public class BookingUI extends BaseUI {
 
         system.getBookings().addReservation(ticket, when, preferences);
         out.println("New reservation added to ticket.");
-        out.println(String.format("Ticket: %s%n%n", ticket));
+        out.format("Ticket: %s%n%n", ticket);
 
     }
 
@@ -98,10 +98,11 @@ public class BookingUI extends BaseUI {
         Ticket ticket = system.getBookings().getById(scanner.nextInt());
         out.print("  Passenger ID: ");
         Passenger passenger = system.getAccounts().getById(scanner.nextInt());
+
         out.print("  Have you taken payment Y/N: ");
         if (scanner.nextBoolean()) {
             system.getBookings().purchaseTicket(ticket, passenger);
-            out.println("Ticket purchased.");
+            out.format("Ticket %s purchased.", ticket);
         }
         out.println("Purchase cancelled");
 

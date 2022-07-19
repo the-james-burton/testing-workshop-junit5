@@ -1,10 +1,12 @@
 package org.fantasy.railway.ui;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Scanner;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class RailwayUI extends BaseUI {
 
     AccountUI accountUI;
@@ -40,7 +42,12 @@ public class RailwayUI extends BaseUI {
         out.println("Welcome to the Fantasy Railway System!\n\n");
         String lastOption = "";
         while (!lastOption.equalsIgnoreCase("x")) {
-            lastOption = displayMenu(scanner);
+            try {
+                lastOption = displayMenu(scanner);
+            } catch (RuntimeException e) {
+                out.format("ERROR : %s", e.getMessage());
+                e.printStackTrace(out);
+            }
         }
         out.println("\nExiting System...\n");
     }
@@ -58,23 +65,24 @@ public class RailwayUI extends BaseUI {
         switch (option) {
             case "1":
                 accountUI.displayMenu(scanner);
-                return option;
+                break;
             case "2":
                 bookingUI.displayMenu(scanner);
-                return option;
+                break;
             case "3":
                 networkUI.displayMenu(scanner);
-                return option;
+                break;
             case "4":
                 stockUI.displayMenu(scanner);
-                return option;
+                break;
             case "5":
                 timetableUI.displayMenu(scanner);
-                return option;
+                break;
             default:
                 out.println("Invalid option, please re-enter.");
-                return option;
+                break;
         }
+        return option;
     }
 
 

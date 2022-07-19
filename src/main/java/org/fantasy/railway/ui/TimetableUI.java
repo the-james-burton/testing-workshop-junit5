@@ -1,12 +1,13 @@
 package org.fantasy.railway.ui;
 
 import org.fantasy.railway.model.Journey;
+import org.fantasy.railway.model.Service;
 import org.fantasy.railway.model.Station;
 import org.fantasy.railway.model.Train;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 
 public class TimetableUI extends BaseUI {
@@ -23,65 +24,67 @@ public class TimetableUI extends BaseUI {
         String option = scanner.next();
         switch (option) {
             case "1":
-                listServices(scanner);
-                return option;
+                listServices();
+                break;
             case "2":
                 addNewService(scanner);
-                return option;
+                break;
             case "3":
                 scheduleTrainToService(scanner);
-                return option;
+                break;
             case "4":
-                removeStation(scanner);
-                return option;
+                removeTrainFromService(scanner);
+                break;
             default:
                 out.println("Invalid option, please re-enter.");
-                return option;
+                break;
         }
+        return option;
     }
 
-    private void listServices(Scanner scanner) {
+    private void listServices() {
         out.println("Services:");
         out.println(system.getTimetable().getServices());
     }
 
     private void addNewService(Scanner scanner) {
         scanner.nextLine();
+        Queue<String> inputs = new LinkedList<>();
+
         out.println("\nPlease define new service: ");
         out.print(" Start time (yyy-mm-ddThh:mm:ss): ");
-        LocalDateTime startTime = LocalDateTime.parse(scanner.nextLine());
+        inputs.add(scanner.nextLine());
         out.print(" Starting station: ");
-        Station start = system.getNetwork().stationFromString(scanner.nextLine());
+        inputs.add(scanner.nextLine());
         out.print(" Finishing station: ");
-        Station finish = system.getNetwork().stationFromString(scanner.nextLine());
-        try {
-            Journey journey = system.getNetwork().calculateRoute(start, finish);
-            system.getTimetable().createNewService(startTime, journey);
-        } catch (RuntimeException e) {
-            out.println(String.format("ERROR: %s ", e.getMessage()));
-            return;
-        }
+        inputs.add(scanner.nextLine());
+
+        system.getTimetable().createNewService(inputs);
         out.println("New service added.\n\n");
     }
 
     private void scheduleTrainToService(Scanner scanner) {
         scanner.nextLine();
         out.print("\nPlease enter train Id: ");
-        out.println(Train.Type.values());
-        out.print("\nPlease enter service Id to assign train to: ");
-        out.println(Train.Type.values());
         Integer trainId = scanner.nextInt();
-        try {
-            system.getStock().decommissionTrain(trainId);
-        } catch (RuntimeException e) {
-            out.println(String.format("ERROR: %s ", e.getMessage()));
-            return;
-        }
-        out.println(String.format("Train %s decommissioned.%n%n", trainId));
+        out.print("\nPlease enter service Id to assign train to: ");
+        Integer serviceId = scanner.nextInt();
+        Train train = system.getStock().getById(trainId);
+        Service service = system.getTimetable().getById(serviceId);
 
+        system.getTimetable().schedule(train, service);
+        out.format("Train %s scheduled to service %s%n%n", train, service);
     }
 
-    private void removeStation(Scanner scanner) {
+    private void removeTrainFromService(Scanner scanner) {
+        out.print("\nPlease enter train Id: ");
+        Integer trainId = scanner.nextInt();
+        out.print("\nPlease enter service Id to remove train from: ");
+        Integer serviceId = scanner.nextInt();
+        Train train = system.getStock().getById(trainId);
+        Service service = system.getTimetable().getById(serviceId);
 
+        system.getTimetable().removeTrainFromService(train, service);
+        out.format("Train %s removed from service %s%n%n", train, service);
     }
 }

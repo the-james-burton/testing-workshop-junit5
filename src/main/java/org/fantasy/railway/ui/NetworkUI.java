@@ -2,10 +2,7 @@ package org.fantasy.railway.ui;
 
 import org.fantasy.railway.model.Station;
 
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class NetworkUI extends BaseUI {
 
@@ -20,49 +17,42 @@ public class NetworkUI extends BaseUI {
         String option = scanner.next();
         switch (option) {
             case "1":
-                viewNetwork(scanner);
-                return option;
+                viewNetwork();
+                break;
             case "2":
                 addNewStation(scanner);
-                return option;
+                break;
             case "3":
                 removeStation(scanner);
-                return option;
+                break;
             default:
                 out.println("Invalid option, please re-enter.");
-                return option;
+                break;
         }
+        return option;
     }
 
-    private void viewNetwork(Scanner scanner) {
+    private void viewNetwork() {
         out.println(system.getNetwork().networkToString());
     }
 
     private void addNewStation(Scanner scanner) {
         scanner.nextLine();
+        Queue<String> inputs = new LinkedList<>();
+
         out.println("\nPlease enter station details:");
         out.print("  Station Name: ");
-        Station station = system.getNetwork().stationFromString(scanner.nextLine());
-        out.print("  Add connected stations ");
-        Map<Station, Integer> connections = new HashMap<>();
-        out.print("   Enter connected station name: ");
-        String input = scanner.nextLine();
-        while (!"q".equals(input)) {
-            out.print("   Enter connected station distance: ");
-            Station connection = system.getNetwork().stationFromString(scanner.nextLine());
-            Integer distance = scanner.nextInt();
-            connections.put(connection, distance);
+        inputs.add(scanner.nextLine());
+        out.print("  Add connections? (y/n)");
+        while (!"y".equalsIgnoreCase(scanner.nextLine())) {
             out.print("   Enter connected station name: ");
-            input = scanner.nextLine();
+            inputs.add(scanner.nextLine());
+            out.print("   Enter connected station distance: ");
+            inputs.add(scanner.nextLine());
+            out.print("  Add another connection? (y/n)");
         }
-        try {
-            system.getNetwork().addStation(station, connections);
-        } catch (RuntimeException e) {
-            out.println(String.format("ERROR: %s ", e.getMessage()));
-            return;
-        }
-        out.println("New station added.\n\n");
-        out.println(String.format("%s, %s", station, connections));
+        Station station = system.getNetwork().addStation(inputs);
+        out.format("New station added: %s%n%n", station);
 
     }
 
@@ -70,13 +60,9 @@ public class NetworkUI extends BaseUI {
         scanner.nextLine();
         out.println("\nPlease enter station to remove from the network: ");
         Station station = system.getNetwork().stationFromString(scanner.nextLine());
-        try {
-            system.getNetwork().removeStation(station);
-        } catch (RuntimeException e) {
-            out.println(String.format("ERROR: %s ", e.getMessage()));
-            return;
-        }
-        out.println(String.format("Station %s removed.%n%n", station.getName()));
+
+        system.getNetwork().removeStation(station);
+        out.format("Station %s removed.%n%n", station.getName());
 
     }
 

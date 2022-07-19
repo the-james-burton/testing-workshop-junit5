@@ -1,8 +1,8 @@
 package org.fantasy.railway.ui;
 
-import org.fantasy.railway.model.Station;
 import org.fantasy.railway.model.Train;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class StockUI extends BaseUI {
@@ -18,50 +18,44 @@ public class StockUI extends BaseUI {
         String option = scanner.next();
         switch (option) {
             case "1":
-                viewStock(scanner);
-                return option;
+                viewStock();
+                break;
             case "2":
                 addNewTrain(scanner);
-                return option;
+                break;
             case "3":
                 removeTrain(scanner);
-                return option;
+                break;
             default:
                 out.println("Invalid option, please re-enter.");
-                return option;
+                break;
         }
+        return option;
     }
 
-    private void viewStock(Scanner scanner) {
+    private void viewStock() {
+        out.println("All rolling stock:");
         out.println(system.getStock().getTrains());
     }
 
     private void addNewTrain(Scanner scanner) {
         scanner.nextLine();
         out.print("\nPlease enter type of train to add to the stock: ");
-        out.println(Train.Type.values());
+        out.println(Arrays.toString(Train.Type.values()));
         String type = scanner.next();
-        try {
-            Train.Type trainType = Train.Type.valueOf(type);
-            system.getStock().addStockFromDepot(trainType);
-        } catch (RuntimeException e) {
-            out.println(String.format("ERROR: %s ", e.getMessage()));
-            return;
-        }
-        out.println(String.format("Train of type %s added.%n%n", type));
+        Train.Type trainType = Train.Type.valueOf(type);
+
+        Train train = system.getStock().addStockFromDepot(trainType);
+        out.format("New train added from depot: %s%n%n", train);
     }
 
     private void removeTrain(Scanner scanner) {
         scanner.nextLine();
         out.print("\nPlease enter train Id to decommission: ");
         out.println(Train.Type.values());
-        Integer trainId = scanner.nextInt();
-        try {
-            system.getStock().decommissionTrain(trainId);
-        } catch (RuntimeException e) {
-            out.println(String.format("ERROR: %s ", e.getMessage()));
-            return;
-        }
-        out.println(String.format("Train %s decommissioned.%n%n", trainId));
+        Train train = system.getStock().getById(scanner.nextInt());
+
+        system.getStock().decommissionTrain(train);
+        out.format("Train decommissioned: %s%n%n", train);
     }
 }
