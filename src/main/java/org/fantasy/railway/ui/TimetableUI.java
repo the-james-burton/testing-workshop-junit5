@@ -1,11 +1,8 @@
 package org.fantasy.railway.ui;
 
-import org.fantasy.railway.model.Journey;
 import org.fantasy.railway.model.Service;
-import org.fantasy.railway.model.Station;
 import org.fantasy.railway.model.Train;
 
-import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;

@@ -3,7 +3,9 @@ package org.fantasy.railway.util;
 import com.google.common.base.Preconditions;
 
 import java.io.InputStream;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
 
 public class RailwayUtils {
 
@@ -14,7 +16,6 @@ public class RailwayUtils {
     }
 
     /**
-     *
      * @param filename name of the file in the classpath to parse
      * @return a queue of queues of string, representing parsed rows
      */
@@ -25,7 +26,7 @@ public class RailwayUtils {
 
         Queue<Queue<String>> records = new LinkedList<>();
         try (Scanner scanner = new Scanner(filestream)) {
-        while(scanner.hasNextLine()) {
+            while (scanner.hasNextLine()) {
                 records.add(parseLine(scanner.nextLine()));
             }
         }

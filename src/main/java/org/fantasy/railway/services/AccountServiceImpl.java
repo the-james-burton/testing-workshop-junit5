@@ -46,9 +46,9 @@ public class AccountServiceImpl extends BaseService<Passenger> implements Accoun
     @Override
     public void removePassenger(Passenger passenger) {
         passenger.getTickets().stream()
-                        .filter(ticket -> ticket.getService().getFinishTime().isAfter(LocalDateTime.now()))
-                        .findFirst()
-                        .ifPresent(ticket -> {
+                .filter(ticket -> ticket.getService().getFinishTime().isAfter(LocalDateTime.now()))
+                .findFirst()
+                .ifPresent(ticket -> {
                     throw new IllegalArgumentException(String.format("Passenger holds future ticket %s", ticket));
                 });
         passengers.remove(passenger);
@@ -65,7 +65,7 @@ public class AccountServiceImpl extends BaseService<Passenger> implements Accoun
     @Override
     public void removeConcession(Passenger passenger, Concession concession) {
         Preconditions.checkArgument(!passenger.getConcessions().contains(concession),
-            "Passenger %s does not have concession %s", passenger, concession);
+                "Passenger %s does not have concession %s", passenger, concession);
 
         passenger.getConcessions().remove(concession);
     }

@@ -21,12 +21,7 @@ public class Carriage {
         seats = new LinkedList<>();
     }
 
-    public enum Type {
-        ONE, TWO, THREE
-    }
-
     /**
-     *
      * @param type the type of carraige to create
      * @return a newly created carriage of the given type
      */
@@ -44,7 +39,7 @@ public class Carriage {
         Carriage carriage = new Carriage();
         // six rows facing forwards
         IntStream.of(6).forEach(i ->
-            carriage.seats.addAll(twoAndTwoRow(false, true))
+                carriage.seats.addAll(twoAndTwoRow(false, true))
         );
         // table row
         carriage.getSeats().addAll(twoAndTwoRow(true, true));
@@ -71,6 +66,10 @@ public class Carriage {
         row.add(Seat.builder().window(false).aisle(true).table(hasTable).facingForwards(isFacingForwards).build());
         row.add(Seat.builder().window(true).aisle(false).table(hasTable).facingForwards(isFacingForwards).build());
         return row;
+    }
+
+    public enum Type {
+        ONE, TWO, THREE
     }
 
 

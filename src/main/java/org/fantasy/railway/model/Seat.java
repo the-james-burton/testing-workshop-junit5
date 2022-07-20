@@ -36,7 +36,6 @@ public class Seat {
     }
 
     /**
-     *
      * @param when to check if the seat is available
      * @return true if the seat is available (has no reservation) at the given datetime
      */

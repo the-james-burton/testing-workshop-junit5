@@ -20,6 +20,7 @@ public class StockServiceImpl extends BaseService<Train> implements StockService
 
     /**
      * loads stock from the given file
+     *
      * @param filepath the file to load the stock from
      */
     void loadStock(String filepath) {
@@ -32,7 +33,7 @@ public class StockServiceImpl extends BaseService<Train> implements StockService
      */
     Train findAvailableTrain(Service service) {
         Optional.ofNullable(service.getTrain()).ifPresent(train -> {
-                    throw new IllegalStateException(String.format("service %s already has train %s assigned.", service, train));
+            throw new IllegalStateException(String.format("service %s already has train %s assigned.", service, train));
         });
 
         Optional<Train> firstUnallocatedTrain = trains.stream()
@@ -56,8 +57,7 @@ public class StockServiceImpl extends BaseService<Train> implements StockService
     }
 
     /**
-     *
-     * @param train the train to check if available
+     * @param train      the train to check if available
      * @param whenNeeded the time that the train needs to be free at
      * @return true if the train is available at the needed time
      */

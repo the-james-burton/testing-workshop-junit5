@@ -10,17 +10,13 @@ public abstract class BaseService<T extends Identified> {
     abstract List<T> getItems();
 
     Integer nextId() {
-        if (getItems().size() == 0) {
-            return 1;
-        }
         return getItems().stream()
                 .max(Comparator.comparing(T::getId))
                 .map(T::getId)
-                .get() + 1;
+                .orElse(0) + 1;
     }
 
     /**
-     *
      * @param id the id of the item to get
      * @return the item with the given id
      */

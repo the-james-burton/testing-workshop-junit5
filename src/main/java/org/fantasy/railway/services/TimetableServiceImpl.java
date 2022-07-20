@@ -31,6 +31,7 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
 
     /**
      * loads a timetable from the given file
+     *
      * @param filepath the file to load the timetable from
      */
     void loadServices(String filepath) {
@@ -111,7 +112,7 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
     @Override
     public Boolean isServiceFullyBooked(Service service) {
         Preconditions.checkArgument(service.getTrain() == null,
-            "Service %s is not assigned a train.", service);
+                "Service %s is not assigned a train.", service);
 
         return service.getTrain().getCarriages().stream()
                 .flatMap(carriage -> carriage.getSeats().stream())

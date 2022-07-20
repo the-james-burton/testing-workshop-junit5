@@ -2,7 +2,9 @@ package org.fantasy.railway.ui;
 
 import org.fantasy.railway.model.Station;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
 
 public class NetworkUI extends BaseUI {
 

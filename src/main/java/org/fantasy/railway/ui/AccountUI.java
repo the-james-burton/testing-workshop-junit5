@@ -5,8 +5,9 @@ import lombok.EqualsAndHashCode;
 import org.fantasy.railway.model.Passenger;
 import org.fantasy.railway.util.RailwayUtils;
 
-import java.time.LocalDate;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -67,6 +68,7 @@ public class AccountUI extends BaseUI {
 
         RailwayUtils.parseFile(filename).stream()
                 .forEach(row -> system.getAccounts().addPassenger(row));
+        out.format("Passenger file %s successfully loaded");
     }
 
     private void removePassenger(Scanner scanner) {

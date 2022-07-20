@@ -39,13 +39,11 @@ public interface AccountService {
     void removeConcession(Passenger passenger, Concession concession);
 
     /**
-     *
      * @return a List of all passengers
      */
     List<Passenger> getPassengers();
 
     /**
-     *
      * @param id the id of the Passenger to lookup
      * @return the Passenger with the given id
      */

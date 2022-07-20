@@ -14,7 +14,6 @@ public class Journey {
     List<Stop> route = new ArrayList<>();
 
     /**
-     *
      * @return the total time take for this journey
      */
     public Integer totalTime() {

@@ -24,7 +24,6 @@ public class NetworkServiceImpl extends BaseService<Station> implements NetworkS
     }
 
     /**
-     *
      * @param stationName the string to find a Station for
      * @return Station for the given input string
      */
@@ -38,8 +37,8 @@ public class NetworkServiceImpl extends BaseService<Station> implements NetworkS
     @Override
     public Station newStation(String name) {
         Station station = Station.builder()
-                        .name(name)
-                        .build();
+                .name(name)
+                .build();
         stations.add(station);
         return station;
     }
@@ -47,7 +46,7 @@ public class NetworkServiceImpl extends BaseService<Station> implements NetworkS
     @Override
     public Station addConnections(Station station, Map<Station, Integer> connections) {
         Preconditions.checkArgument(!stations.contains(station),
-            "Station %s does not exist in the network", station);
+                "Station %s does not exist in the network", station);
         stations.add(station);
         network.addNode(station);
         connections.keySet()
@@ -74,7 +73,6 @@ public class NetworkServiceImpl extends BaseService<Station> implements NetworkS
     }
 
     /**
-     *
      * @param station the station to remove from the network
      */
     public void removeStation(Station station) {
@@ -95,7 +93,7 @@ public class NetworkServiceImpl extends BaseService<Station> implements NetworkS
      * useful for calculating the cost of a ticket and defining a new service
      *
      * @param from the starting station of the journey
-     * @param to the end station of the journey
+     * @param to   the end station of the journey
      * @return a Journey with a List of stops in correct order
      */
     public Journey calculateRoute(Station from, Station to) {
@@ -103,7 +101,7 @@ public class NetworkServiceImpl extends BaseService<Station> implements NetworkS
         List<Station> shortestPath = GraphUtils.findShortestPath(network, from, to);
 
         Preconditions.checkArgument(shortestPath.isEmpty(),
-            "No route from %s to %s", from, to);
+                "No route from %s to %s", from, to);
 
         // ths first station will have value of zero since it is the start...
         route.add(Stop.builder()
@@ -115,21 +113,20 @@ public class NetworkServiceImpl extends BaseService<Station> implements NetworkS
             Station current = shortestPath.get(stop);
             Station next = shortestPath.get(stop + 1);
             route.add(Stop.builder()
-                .station(current)
-                .minutes(distanceBetweenAdjacent(current, next))
-                .build());
+                    .station(current)
+                    .minutes(distanceBetweenAdjacent(current, next))
+                    .build());
         }
 
         return Journey.builder().route(route).build();
     }
 
 
-        /**
-         *
-         * @param from starting station
-         * @param to adjacent station
-         * @return the distance between the two adjacent stations
-         */
+    /**
+     * @param from starting station
+     * @param to   adjacent station
+     * @return the distance between the two adjacent stations
+     */
     public Integer distanceBetweenAdjacent(Station from, Station to) {
         return network.edgeValue(from, to)
                 .orElseThrow(() -> new IllegalStateException(String.format("Stations %s and %s are not adjacent", from, to)));

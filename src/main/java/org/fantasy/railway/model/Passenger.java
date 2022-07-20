@@ -27,7 +27,6 @@ public class Passenger extends Identified {
     List<Ticket> tickets = new ArrayList<>();
 
     /**
-     *
      * @param when time of day to calculate concessions for
      * @return the total discount amount (will not be greater than 1.0)
      */

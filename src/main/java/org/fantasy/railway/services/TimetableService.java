@@ -36,7 +36,6 @@ public interface TimetableService {
     void schedule(Train train, Service service);
 
     /**
-     *
      * @return a List of all services
      */
     List<Service> getServices();
@@ -48,20 +47,18 @@ public interface TimetableService {
     /**
      * Remove the given train from the given service
      *
-     * @param train the train to add to the given service
+     * @param train   the train to add to the given service
      * @param service the service to add the train to
      */
     void removeTrainFromService(Train train, Service service);
 
     /**
-     *
      * @param id the id of the Service to lookup
      * @return the Service with the given id
      */
     Service getById(Integer id);
 
     /**
-     *
      * @param service the service that we are checking
      * @return true if the service is fully booked
      */

@@ -2,6 +2,7 @@ package org.fantasy.railway.ui;
 
 import lombok.Data;
 import org.fantasy.railway.RailwaySystem;
+
 import java.io.PrintStream;
 import java.util.Scanner;
 

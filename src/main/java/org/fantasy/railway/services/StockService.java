@@ -22,13 +22,11 @@ public interface StockService {
     Train decommissionTrain(Train train);
 
     /**
-     *
      * @return a list of all trains
      */
     List<Train> getTrains();
 
     /**
-     *
      * @param id the id of the Train to lookup
      * @return the Train with the given id
      */
