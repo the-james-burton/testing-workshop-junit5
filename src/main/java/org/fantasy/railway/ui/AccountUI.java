@@ -66,9 +66,8 @@ public class AccountUI extends BaseUI {
         out.println("\nPlease enter filename:");
         String filename = scanner.nextLine();
 
-        RailwayUtils.parseFile(filename).stream()
-                .forEach(row -> system.getAccounts().addPassenger(row));
-        out.format("Passenger file %s successfully loaded");
+        system.getAccounts().loadPassengers(filename);
+        out.format("Passenger file %s successfully loaded", filename);
     }
 
     private void removePassenger(Scanner scanner) {

@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
+import java.util.function.Predicate;
 
 public class RailwayUtils {
 
@@ -27,18 +28,28 @@ public class RailwayUtils {
         Queue<Queue<String>> records = new LinkedList<>();
         try (Scanner scanner = new Scanner(filestream)) {
             while (scanner.hasNextLine()) {
-                records.add(parseLine(scanner.nextLine()));
+                Queue<String> row = parseLine(scanner.nextLine());
+                if (row.isEmpty()) {
+                    continue;
+                }
+                records.add(row);
             }
         }
         return records;
     }
+
+    static Predicate<String> comment = row -> (row.isEmpty() || row.startsWith("#"));
 
     private static Queue<String> parseLine(String line) {
         Queue<String> values = new LinkedList<>();
         try (Scanner parser = new Scanner(line)) {
             parser.useDelimiter(",");
             while (parser.hasNext()) {
-                values.add(parser.next());
+                String input = parser.next();
+                if (comment.test(input)) {
+                    break;
+                }
+                values.add(input);
             }
         }
         return values;

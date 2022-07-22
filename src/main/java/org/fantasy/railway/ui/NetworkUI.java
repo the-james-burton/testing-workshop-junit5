@@ -1,6 +1,7 @@
 package org.fantasy.railway.ui;
 
 import org.fantasy.railway.model.Station;
+import org.fantasy.railway.util.RailwayUtils;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -13,7 +14,8 @@ public class NetworkUI extends BaseUI {
         out.println("\nPlease select an option:");
         out.println("1. View network");
         out.println("2. Add new station");
-        out.println("3. Remove station");
+        out.println("3. Load network from file");
+        out.println("4. Remove station");
         out.println("X. ");
         out.print("Option: ");
         String option = scanner.next();
@@ -25,6 +27,9 @@ public class NetworkUI extends BaseUI {
                 addNewStation(scanner);
                 break;
             case "3":
+                loadNetwork(scanner);
+                break;
+            case "4":
                 removeStation(scanner);
                 break;
             default:
@@ -58,10 +63,19 @@ public class NetworkUI extends BaseUI {
 
     }
 
+    private void loadNetwork(Scanner scanner) {
+        scanner.nextLine();
+        out.println("\nPlease enter filename:");
+        String filename = scanner.nextLine();
+
+        system.getNetwork().loadNetwork(filename);
+        out.format("Network file %s successfully loaded", filename);
+    }
+
     private void removeStation(Scanner scanner) {
         scanner.nextLine();
         out.println("\nPlease enter station to remove from the network: ");
-        Station station = system.getNetwork().stationFromString(scanner.nextLine());
+        Station station = system.getNetwork().getStationOrThrow(scanner.nextLine());
 
         system.getNetwork().removeStation(station);
         out.format("Station %s removed.%n%n", station.getName());

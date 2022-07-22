@@ -15,7 +15,8 @@ public class TimetableUI extends BaseUI {
         out.println("1. List services");
         out.println("2. Add new service");
         out.println("3. Schedule train to service");
-        out.println("4. Remove train from service");
+        out.println("4. Auto schedule");
+        out.println("5. Remove train from service");
         out.println("X. ");
         out.print("Option: ");
         String option = scanner.next();
@@ -30,6 +31,9 @@ public class TimetableUI extends BaseUI {
                 scheduleTrainToService(scanner);
                 break;
             case "4":
+                autoSchedule(scanner);
+                break;
+            case "5":
                 removeTrainFromService(scanner);
                 break;
             default:
@@ -71,6 +75,12 @@ public class TimetableUI extends BaseUI {
 
         system.getTimetable().schedule(train, service);
         out.format("Train %s scheduled to service %s%n%n", train, service);
+    }
+
+    private void autoSchedule(Scanner scanner) {
+        system.getTimetable().autoSchedule();
+        out.format("trains: %s", system.getStock().getTrains());
+        out.format("services: %s", system.getTimetable().getServices());
     }
 
     private void removeTrainFromService(Scanner scanner) {

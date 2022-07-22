@@ -22,6 +22,14 @@ public class RailwaySystem {
         bookings.setNetwork(network);
         timetable.setNetworkService(network);
         timetable.setStockService(stock);
+
+        bootstrap();
     }
+
+    private void bootstrap() {
+        accounts.loadPassengers("passengers.csv");
+        network.loadNetwork("network.csv");
+    }
+
 
 }

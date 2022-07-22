@@ -50,9 +50,9 @@ public class BookingUI extends BaseUI {
         scanner.nextLine();
         out.println("\nPlease enter details:");
         out.print("  Station from: ");
-        Station from = system.getNetwork().stationFromString(scanner.nextLine());
+        Station from = system.getNetwork().getStationOrThrow(scanner.nextLine());
         out.print("  Station to: ");
-        Station to = system.getNetwork().stationFromString(scanner.nextLine());
+        Station to = system.getNetwork().getStationOrThrow(scanner.nextLine());
         out.print("  When (yyy-mm-ddThh:mm:ss ");
         LocalDateTime when = LocalDateTime.parse(scanner.nextLine());
         out.print("  Passenger ID: ");
@@ -78,14 +78,7 @@ public class BookingUI extends BaseUI {
         out.print("  Must face forwards?: ");
         Boolean facingForwards = scanner.next().equalsIgnoreCase("y");
 
-        Seat preferences = Seat.builder()
-                .table(table)
-                .aisle(aisle)
-                .window(window)
-                .facingForwards(facingForwards)
-                .build();
-
-        system.getBookings().addReservation(ticket, when, preferences);
+        system.getBookings().addReservation(ticket, when);
         out.println("New reservation added to ticket.");
         out.format("Ticket: %s%n%n", ticket);
 
