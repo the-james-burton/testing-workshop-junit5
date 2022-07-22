@@ -1,0 +1,43 @@
+# line one
+Wolfpond,Wintersummer,4
+Wintersummer,Foxcastle,3
+Foxcastle,Dorvale,5
+Dorvale,Rivergate,5
+Rivergate,Eastland,4
+Eastland,Bluesnow,6
+Bluesnow,Coldland,8
+Coldland,Foxcliff,5
+Foxcliff,Lakebridge,5
+Lakebridge,Meadowmarsh,6
+Meadowmarsh,Appleport,6
+Appleport,Icemerrow,9
+Icemerrow,Snowham,5
+
+# line 2
+Rayview,Whitevale,5
+Whitevale,Edgehollow,6
+Edgehollow,Summermead,5
+Summermead,Eastland,6
+Eastland,Linness,7
+Linness,Newnesse,5
+Newnesse,Brightkeep,4
+Brightkeep,Westland,5
+Westland,Wellwall,4
+Wellwall,Edgemeadow,6
+Edgemeadow,Dormoor,5
+Dormoor,Eastfield,7
+
+# line 3
+Silverhill,Ironcastle,6
+Ironcastle,Whitewynne,5
+Whitewynne,Violetmaple,4
+Violetmaple,Beechnesse,5
+Beechnesse,Swynlake,8
+Swynlake,Eastland,6
+Byvale,Shadowlyn,6
+Shadowlyn,Pryhaven,8
+Pryhaven,Westland,5
+Westland,Crystalport,3
+Crystalport,Eriview,4
+Eriview,Blackmeadow,6
+
