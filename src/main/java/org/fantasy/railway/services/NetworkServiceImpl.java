@@ -3,51 +3,56 @@ package org.fantasy.railway.services;
 import com.google.common.base.Preconditions;
 import com.google.common.graph.MutableValueGraph;
 import com.google.common.graph.ValueGraphBuilder;
-import lombok.Getter;
 import org.fantasy.railway.model.Journey;
 import org.fantasy.railway.model.Station;
 import org.fantasy.railway.model.Stop;
 import org.fantasy.railway.util.GraphUtils;
+import org.fantasy.railway.util.RailwayUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class NetworkServiceImpl extends BaseService<Station> implements NetworkService {
 
     BookingService bookings;
     MutableValueGraph<Station, Integer> network;
 
-    @Getter
-    List<Station> stations;
 
     public NetworkServiceImpl() {
         network = ValueGraphBuilder.undirected().build();
     }
 
     /**
-     * @param stationName the string to find a Station for
+     * @param name the string to find a Station for
      * @return Station for the given input string
      */
-    public Station stationFromString(String stationName) {
-        return stations.stream()
-                .filter(station -> stationName.equals(station.getName()))
-                .findAny()
-                .orElseThrow(() -> new IllegalArgumentException(String.format("Station %s does not exist in the network", stationName)));
+    public Optional<Station> getStation(String name) {
+        return network.asGraph().nodes().stream()
+                .filter(station -> name.equals(station.getName()))
+                .findAny();
     }
 
     @Override
-    public Station newStation(String name) {
-        Station station = Station.builder()
-                .name(name)
-                .build();
-        stations.add(station);
-        return station;
+    public Station getOrCreateStation(String name) {
+        return getStation(name).orElseGet(() -> {
+            Station station = Station.builder()
+                    .name(name)
+                    .build();
+            network.addNode(station);
+            return station;
+        });
+    }
+
+    @Override
+    public Station getStationOrThrow(String name) {
+        return getStation(name).orElseThrow(() ->
+                new IllegalArgumentException(String.format("Station %s does not exist in the network", name)));
     }
 
     @Override
     public Station addConnections(Station station, Map<Station, Integer> connections) {
-        Preconditions.checkArgument(!stations.contains(station),
+        Preconditions.checkArgument(network.asGraph().nodes().contains(station),
                 "Station %s does not exist in the network", station);
-        stations.add(station);
         network.addNode(station);
         connections.keySet()
                 .forEach(s -> network.addNode(s));
@@ -59,17 +64,24 @@ public class NetworkServiceImpl extends BaseService<Station> implements NetworkS
     @Override
     public Station addStation(Queue<String> inputs) {
         Preconditions.checkArgument(inputs.size() > 2);
+        Preconditions.checkArgument(inputs.size() % 2 > 0);
 
-        Station station = stationFromString(inputs.poll());
+        Station station = getOrCreateStation(inputs.poll());
         Map<Station, Integer> connections = new HashMap<>();
 
         while (!inputs.isEmpty()) {
             connections.put(
-                    stationFromString(inputs.poll()),
+                    getOrCreateStation(inputs.poll()),
                     Integer.parseInt(inputs.poll()));
         }
         return addConnections(station, connections);
 
+    }
+
+    @Override
+    public void loadNetwork(String filename) {
+        RailwayUtils.parseFile(filename).stream()
+                .forEach(row -> addStation(row));
     }
 
     /**
@@ -100,7 +112,7 @@ public class NetworkServiceImpl extends BaseService<Station> implements NetworkS
         List<Stop> route = new LinkedList<>();
         List<Station> shortestPath = GraphUtils.findShortestPath(network, from, to);
 
-        Preconditions.checkArgument(shortestPath.isEmpty(),
+        Preconditions.checkArgument(!shortestPath.isEmpty(),
                 "No route from %s to %s", from, to);
 
         // ths first station will have value of zero since it is the start...
@@ -139,6 +151,6 @@ public class NetworkServiceImpl extends BaseService<Station> implements NetworkS
 
     @Override
     List<Station> getItems() {
-        return stations;
+        return network.asGraph().nodes().stream().collect(Collectors.toList());
     }
 }

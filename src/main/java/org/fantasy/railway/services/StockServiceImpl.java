@@ -7,6 +7,7 @@ import org.fantasy.railway.model.Train;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 public class StockServiceImpl extends BaseService<Train> implements StockService {
 
@@ -38,7 +39,6 @@ public class StockServiceImpl extends BaseService<Train> implements StockService
 
         Optional<Train> firstUnallocatedTrain = trains.stream()
                 .filter(train -> train.getServices() == null)
-                .filter(train -> train.getType().maxDistance >= service.getJourney().totalTime())
                 .findFirst();
 
         if (firstUnallocatedTrain.isPresent()) {
@@ -47,7 +47,6 @@ public class StockServiceImpl extends BaseService<Train> implements StockService
 
         Optional<Train> firstAvailableTrain = trains.stream()
                 .filter(train -> train.getServices() != null)
-                .filter(train -> train.getType().maxDistance >= service.getJourney().totalTime())
                 .filter(train -> isTrainAvailableAtTime(train, service.getStartTime()))
                 .findFirst();
 
@@ -80,9 +79,20 @@ public class StockServiceImpl extends BaseService<Train> implements StockService
     }
 
     @Override
-    public Train addStockFromDepot(Train.Type type) {
-        Train train = Train.ofType(nextId(), type);
+    public Train addStockFromDepot(Integer numberOfCarriages) {
+        Train train = Train.ofSize(nextId(), numberOfCarriages);
         trains.add(train);
+        return train;
+    }
+
+    @Override
+    public Train withdrawTrain(Train train) {
+        train.getServices().stream()
+                .filter(service -> service.getFinishTime().isAfter(LocalDateTime.now()))
+                .forEach(service -> {
+                    service.setTrain(null);
+                    train.getServices().remove(service);
+                });
         return train;
     }
 
@@ -94,8 +104,7 @@ public class StockServiceImpl extends BaseService<Train> implements StockService
                 .findFirst()
                 .ifPresent(service -> {
                     throw new IllegalArgumentException(String.format("Train %s is currently running on service %s", train, service));
-                });
-
+                 });
         trains.remove(train);
         return train;
     }

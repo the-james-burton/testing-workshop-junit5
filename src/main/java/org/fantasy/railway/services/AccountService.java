@@ -22,6 +22,11 @@ public interface AccountService {
     Passenger addPassenger(Queue<String> inputs);
 
     /**
+     * @param filename the filename to load
+     */
+    void loadPassengers(String filename);
+
+    /**
      * @param passenger the passenger to remove from the system
      */
     void removePassenger(Passenger passenger);

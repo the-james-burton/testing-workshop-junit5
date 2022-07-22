@@ -4,6 +4,7 @@ import org.fantasy.railway.model.Journey;
 import org.fantasy.railway.model.Station;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.Queue;
 
 public interface NetworkService {
@@ -12,13 +13,19 @@ public interface NetworkService {
      * @param stationName the string to find a Station for
      * @return Station for the given input string
      */
-    Station stationFromString(String stationName);
+    Optional<Station> getStation(String name);
 
     /**
      * @param name the name of the new station
      * @return the new station
      */
-    Station newStation(String name);
+    Station getOrCreateStation(String name);
+
+    /**
+     * @param name the name of the new station
+     * @return the new station
+     */
+    Station getStationOrThrow(String name);
 
     /**
      * @param station     the station to add to the network
@@ -32,6 +39,11 @@ public interface NetworkService {
      * @return the station that was added
      */
     Station addStation(Queue<String> inputs);
+
+    /**
+     * @param filename the filename to load
+     */
+    void loadNetwork(String filename);
 
     /**
      * @param station the station to remove from the network

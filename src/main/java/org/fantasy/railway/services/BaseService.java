@@ -1,6 +1,7 @@
 package org.fantasy.railway.services;
 
 import org.fantasy.railway.model.Identified;
+import org.fantasy.railway.model.Train;
 
 import java.util.Comparator;
 import java.util.List;

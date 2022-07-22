@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.fantasy.railway.model.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -19,17 +20,17 @@ public class BookingServiceImpl extends BaseService<Ticket> implements BookingSe
     TimetableServiceImpl timetable;
 
     @Getter
-    List<Ticket> tickets;
+    List<Ticket> tickets = new ArrayList<>();
 
     @Override
     public Ticket ticketQuote(Station from, Station to, LocalDateTime when, Passenger passenger) {
         Journey journey = network.calculateRoute(from, to);
 
-        Preconditions.checkArgument(journey.getRoute().isEmpty(),
+        Preconditions.checkArgument(!journey.getRoute().isEmpty(),
                 "No travel possible from %s to %s", from, to);
 
         Integer totalTime = journey.totalTime();
-        Double price = totalTime * PRICE_PER_MINUTE * passenger.totalDiscount(when);
+        Double price = totalTime * PRICE_PER_MINUTE * (1.0d - passenger.totalDiscount(when));
         Ticket ticket = Ticket.builder()
                 .passenger(passenger)
                 .journey(journey)
@@ -43,18 +44,20 @@ public class BookingServiceImpl extends BaseService<Ticket> implements BookingSe
     }
 
     @Override
-    public Ticket addReservation(Ticket ticket, LocalDateTime when, Seat preferences) {
+    public Ticket addReservation(Ticket ticket, LocalDateTime when) {
         Service service = timetable.findSuitableService(ticket);
-        Seat suitableSeat = service.getTrain().getCarriages().stream()
+        Seat seat = service.getTrain().getCarriages().stream()
                 .map(Carriage::getSeats)
                 .flatMap(Collection::stream)
-                .filter(seat -> seat.isSuitableFor(preferences))
-                .filter(seat -> seat.isAvailableAt(when))
+                .filter(s -> s.isAvailableAt(when))
                 .findAny()
                 .orElseThrow(() ->
-                        new IllegalArgumentException(String.format("Service %s has not available seat with preferences %s", service, preferences)));
-        ticket.setReservation(suitableSeat);
+                        new IllegalArgumentException(String.format("Service %s has no available seat", service)));
+
+        ticket.setReservation(seat);
         service.getReservations().add(ticket);
+        ticket.setService(service);
+
         return ticket;
     }
 

@@ -59,6 +59,11 @@ public interface TimetableService {
     Service getById(Integer id);
 
     /**
+     *
+     */
+    void autoSchedule();
+
+    /**
      * @param service the service that we are checking
      * @return true if the service is fully booked
      */

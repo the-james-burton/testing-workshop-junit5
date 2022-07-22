@@ -23,10 +23,9 @@ public interface BookingService {
     /**
      * @param ticket      the ticket to add a reservation for
      * @param when        the time to book
-     * @param preferences seating preferences
      * @return the ticket with the reservation added
      */
-    Ticket addReservation(Ticket ticket, LocalDateTime when, Seat preferences);
+    Ticket addReservation(Ticket ticket, LocalDateTime when);
 
     /**
      * @param ticket    the ticket that has been purchased

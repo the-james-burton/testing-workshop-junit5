@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import lombok.Getter;
 import org.fantasy.railway.model.Concession;
 import org.fantasy.railway.model.Passenger;
+import org.fantasy.railway.util.RailwayUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -41,6 +42,12 @@ public class AccountServiceImpl extends BaseService<Passenger> implements Accoun
         return addPassenger(
                 inputs.poll(),
                 LocalDate.parse(inputs.poll()));
+    }
+
+    @Override
+    public void loadPassengers(String filename) {
+        RailwayUtils.parseFile(filename).stream()
+                .forEach(row -> addPassenger(row));
     }
 
     @Override

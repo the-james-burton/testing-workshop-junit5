@@ -6,8 +6,10 @@ import lombok.Setter;
 import org.fantasy.railway.model.*;
 
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 public class TimetableServiceImpl extends BaseService<Service> implements TimetableService {
@@ -23,6 +25,31 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
 
     @Getter
     List<Service> services;
+
+    ScheduledExecutorService dispatcher = Executors.newSingleThreadScheduledExecutor();
+
+    Callable<Queue<String>> dispatched = () -> {
+        Queue<String> result = new LinkedList<>();
+        return services.stream()
+                .filter(service -> service.getStartTime().isBefore(LocalDateTime.now()))
+                .filter(service -> service.getFinishTime().isAfter(LocalDateTime.now()))
+                .map(service ->
+                    Dispatching.builder()
+                            .service(service)
+                            .stop(service.getJourney().getCumulativeTimeRoute().stream()
+                                .filter(stop -> service.getFinishTime().plusMinutes(stop.getMinutes()).isAfter(LocalDateTime.now()))
+                                .findFirst()
+                                .orElse(Stop.builder().build()))
+                            .build())
+                .map(dispatching -> String.format("Service %s next stop %s",
+                        dispatching.getService(), dispatching.getStop()))
+                .collect(Collectors.toCollection(LinkedList::new));
+    };
+
+
+    public TimetableServiceImpl() {
+        Future<Queue<String>> result = dispatcher.schedule(dispatched, 1, TimeUnit.MINUTES);
+    }
 
     @Override
     List<Service> getItems() {
@@ -41,6 +68,8 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
     @Override
     public Service createNewService(LocalDateTime startTime, Journey journey) {
         Stop first = journey.getRoute().get(0);
+
+        // does a service already exist?
         services.stream()
                 .filter(service -> service.getStartTime().isEqual(startTime))
                 .filter(service -> service.getJourney().getRoute().get(0).equals(first))
@@ -49,8 +78,16 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
                     throw new IllegalArgumentException(String.format("There is already a service starting from %s at %s", first, startTime));
                 });
 
+        first.setWhen(startTime);
+
+        // add the timetable to the journey...
+        for (Integer x = 1; x < journey.getRoute().size(); x++) {
+            Stop previous = journey.getRoute().get(x - 1);
+            Stop current = journey.getRoute().get(x);
+            current.setWhen(previous.getWhen().plusMinutes(current.getMinutes()));
+        }
+
         Service service = Service.builder()
-                .startTime(startTime)
                 .journey(journey)
                 .build();
 
@@ -61,8 +98,8 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
     @Override
     public Service createNewService(Queue<String> inputs) {
         LocalDateTime startTime = LocalDateTime.parse(inputs.poll());
-        Station start = networkService.stationFromString(inputs.poll());
-        Station finish = networkService.stationFromString(inputs.poll());
+        Station start = networkService.getStationOrThrow(inputs.poll());
+        Station finish = networkService.getStationOrThrow(inputs.poll());
         Journey journey = networkService.calculateRoute(start, finish);
 
         return createNewService(startTime, journey);
@@ -93,9 +130,10 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
     }
 
     /**
-     * bootstrap method to assign trains to services
+     * automatically assign trains to services
      */
-    void assignStockToServices() {
+    @Override
+    public void autoSchedule() {
         findUnstockedServices()
                 .forEach(service -> service.setTrain(stockService.findAvailableTrain(service)));
     }
