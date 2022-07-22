@@ -11,29 +11,7 @@ import java.util.Objects;
 @Builder
 public class Seat {
 
-    Train train;
-    Carriage carriage;
-
-    Boolean table;
-    Boolean window;
-    Boolean aisle;
-    Boolean facingForwards;
     List<Ticket> reservations;
-
-    /**
-     * Useful when reserving a seat
-     * If the given Seat object has null properties, they are not considered
-     *
-     * @param seat preferences to establish if this seat is acceptable
-     * @return true if the seat matches the given seat preferences
-     */
-    public Boolean isSuitableFor(Seat seat) {
-        Objects.requireNonNull(seat, "seat preferences cannot be null");
-        return (seat.table == null || Objects.equals(table, seat.table))
-                && (seat.window == null || Objects.equals(window, seat.window))
-                && (seat.aisle == null || Objects.equals(aisle, seat.aisle))
-                && (seat.facingForwards == null || Objects.equals(facingForwards, seat.facingForwards));
-    }
 
     /**
      * @param when to check if the seat is available

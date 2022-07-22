@@ -14,7 +14,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 public class Service extends Identified implements Comparable<Service> {
 
-    LocalDateTime startTime;
     Train train;
     Journey journey;
 
@@ -22,11 +21,15 @@ public class Service extends Identified implements Comparable<Service> {
     List<Ticket> reservations = new ArrayList<>();
 
     public LocalDateTime getFinishTime() {
-        return startTime.plusMinutes(journey.totalTime());
+        return getStartTime().plusMinutes(journey.totalTime());
     }
 
     @Override
     public int compareTo(Service that) {
         return getFinishTime().compareTo(that.getFinishTime());
+    }
+
+    public LocalDateTime getStartTime() {
+        return journey.getRoute().get(0).getWhen();
     }
 }
