@@ -34,12 +34,14 @@ public class BookingServiceImpl extends BaseService<Ticket> implements BookingSe
                 "No travel possible from %s to %s", from, to);
 
         Integer totalTime = RailwayUtils.totalTime(route);
+        Double discount = 1.0d - passenger.totalDiscount(when);
 
-        Double price = totalTime * PRICE_PER_MINUTE * (1.0d - passenger.totalDiscount(when));
+        Double price = totalTime * PRICE_PER_MINUTE * discount;
         Ticket ticket = Ticket.builder()
                 .passenger(passenger)
                 .from(from)
                 .to(to)
+                .validOn(when.toLocalDate())
                 .price(price)
                 .build();
 

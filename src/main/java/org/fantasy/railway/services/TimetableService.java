@@ -3,20 +3,19 @@ package org.fantasy.railway.services;
 import org.fantasy.railway.model.Service;
 import org.fantasy.railway.model.Stop;
 
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Queue;
 
 public interface TimetableService {
 
     /**
-     * creates a new service starting at the given time for the given journey
+     * creates new services with the given frequency starting at the given time for the given journey
      *
-     * @param startTime when the new service will start
+     * @param frequency how often the service will run (minutes)
      * @param route     the route taken by the service
      * @return the service that was created
      */
-    Service createNewService(LocalTime startTime, List<Stop> route);
+    List<Service> createNewServices(Integer frequency, List<Stop> route);
 
     /**
      * creates a new service from the given inputs
@@ -24,7 +23,17 @@ public interface TimetableService {
      * @param inputs the inputs to use (datetime (yyy-mm-ddThh:mm:ss), start station, end station)
      * @return the service that was created
      */
-    Service createNewService(Queue<String> inputs);
+    List<Service> createNewServices(Queue<String> inputs);
+
+    /**
+     * @param filename the filename to load
+     */
+    void loadServices(String filename);
+
+    /**
+     * @param service the id of the service to cancel
+     */
+    void cancelService(Integer service);
 
     /**
      * @return a List of all services
@@ -33,6 +42,10 @@ public interface TimetableService {
 
     void setNetworkService(NetworkService networkService);
 
+    /**
+     * @return services that have dispatched
+     */
+    Queue<Stop> getDispatched();
 
     /**
      * @param id the id of the Service to lookup

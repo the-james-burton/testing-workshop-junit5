@@ -19,7 +19,6 @@ public interface BookingService {
      */
     Ticket purchaseTicket(Station from, Station to, LocalDateTime when, Passenger passenger);
 
-
     /**
      * @return a List of all tickets
      */

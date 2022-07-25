@@ -109,19 +109,19 @@ public class NetworkServiceImpl extends BaseService<Station> implements NetworkS
         Preconditions.checkArgument(!shortestPath.isEmpty(),
                 "No route from %s to %s", from, to);
 
-        // ths first station will have value of zero since it is the start...
-        route.add(Stop.builder()
-                .station(shortestPath.get(0))
-                .when(LocalTime.parse("00:00:00"))
-                .build());
+        // initialize the route...
+        shortestPath
+                .forEach(station -> route.add(Stop.builder()
+                        .station(station)
+                        .build()));
 
-        for (int stop = 1; shortestPath.size() - 1 > stop; stop++) {
-            Station previous = shortestPath.get(stop - 1);
-            Station current = shortestPath.get(stop);
-            route.add(Stop.builder()
-                    .station(current)
-                    .when(route.get(stop).getWhen().plusMinutes(distanceBetweenAdjacent(previous, current)))
-                    .build());
+        //
+        for (int stop = 1; route.size() - 1 > stop; stop++) {
+            Stop previous = route.get(stop - 1);
+            Stop current = route.get(stop);
+            current.setWhen(previous.getWhen().plusMinutes(
+                    distanceBetweenAdjacent(previous.getStation(), current.getStation())
+            ));
         }
 
         return route;
@@ -138,8 +138,8 @@ public class NetworkServiceImpl extends BaseService<Station> implements NetworkS
                 .orElseThrow(() -> new IllegalStateException(String.format("Stations %s and %s are not adjacent", from, to)));
     }
 
+    @Override
     public String networkToString() {
-        // TODO this almost certainly will not actually be useful...
         return network.toString();
     }
 

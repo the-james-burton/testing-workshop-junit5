@@ -47,14 +47,14 @@ public class AccountServiceImpl extends BaseService<Passenger> implements Accoun
 
     @Override
     public void loadPassengers(String filename) {
-        RailwayUtils.parseFile(filename).stream()
+        RailwayUtils.parseFile(filename)
                 .forEach(this::addPassenger);
     }
 
     @Override
     public void removePassenger(Passenger passenger) {
         passenger.getTickets().stream()
-                .filter(ticket -> ticket.getService().getFinishTime().isAfter(LocalTime.now()))
+                .filter(ticket -> ticket.getValidOn().isAfter(LocalDate.now()))
                 .findFirst()
                 .ifPresent(ticket -> {
                     throw new IllegalArgumentException(String.format("Passenger holds future ticket %s", ticket));
