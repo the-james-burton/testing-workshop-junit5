@@ -1,27 +1,29 @@
 package org.fantasy.railway.model;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
+import org.fantasy.railway.util.RailwayUtils;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Data
 @SuperBuilder
 @EqualsAndHashCode(callSuper = false)
 public class Service extends Identified implements Comparable<Service> {
 
-    Train train;
-    Journey journey;
+    List<Stop> route;
 
-    @Builder.Default
-    List<Ticket> reservations = new ArrayList<>();
+    public LocalTime getStartTime() {
+        return route.get(0).getWhen();
+    }
 
-    public LocalDateTime getFinishTime() {
-        return getStartTime().plusMinutes(journey.totalTime());
+    public LocalTime getFinishTime() {
+        return route.get(route.size()-1).getWhen();
     }
 
     @Override
@@ -29,7 +31,4 @@ public class Service extends Identified implements Comparable<Service> {
         return getFinishTime().compareTo(that.getFinishTime());
     }
 
-    public LocalDateTime getStartTime() {
-        return journey.getRoute().get(0).getWhen();
-    }
 }
