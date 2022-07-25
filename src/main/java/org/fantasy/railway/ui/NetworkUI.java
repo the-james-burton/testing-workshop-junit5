@@ -1,7 +1,6 @@
 package org.fantasy.railway.ui;
 
 import org.fantasy.railway.model.Station;
-import org.fantasy.railway.util.RailwayUtils;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -40,7 +39,11 @@ public class NetworkUI extends BaseUI {
     }
 
     private void viewNetwork() {
-        out.println(system.getNetwork().networkToString());
+        out.println(system.getNetwork().toString()
+                .replace(", nodes:", "\n, nodes:")
+                .replace(", edges:", "\n, edges:")
+                .replace(", [Station", "\n, [Station")
+        );
     }
 
     private void addNewStation(Scanner scanner) {

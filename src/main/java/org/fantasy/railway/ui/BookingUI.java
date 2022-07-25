@@ -12,14 +12,14 @@ public class BookingUI extends BaseUI {
 
     String displayMenu(Scanner scanner) {
         out.println("\nPlease select an option:");
-        out.println("1. List all tickets");
+        out.println("1. View tickets");
         out.println("2. Purchase a ticket");
         out.println("X. ");
         out.print("Option: ");
         String option = scanner.next();
         switch (option) {
             case "1":
-                listAllTickets();
+                viewTickets();
                 break;
             case "2":
                 purchaseTicket(scanner);
@@ -31,10 +31,12 @@ public class BookingUI extends BaseUI {
         return option;
     }
 
-    private void listAllTickets() {
-        out.println(" ALl Tickets: ");
-        out.println(system.getBookings().getTickets());
+    private void viewTickets() {
+        out.println(" All Tickets: ");
+        out.println(system.getBookings().getTickets()
+                .toString().replace("Ticket", "\nTicket"));
     }
+
     private void purchaseTicket(Scanner scanner) {
         scanner.nextLine();
         out.println("\nPlease enter details:");

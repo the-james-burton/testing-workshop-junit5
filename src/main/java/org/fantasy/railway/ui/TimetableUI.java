@@ -1,6 +1,10 @@
 package org.fantasy.railway.ui;
 
+import org.fantasy.railway.model.Service;
+import org.fantasy.railway.model.Stop;
+
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.Scanner;
 
@@ -10,7 +14,8 @@ public class TimetableUI extends BaseUI {
     String displayMenu(Scanner scanner) {
         out.println("\nPlease select an option:");
         out.println("1. List services");
-        out.println("2. Add new service");
+        out.println("2. Show dispatched services");
+        out.println("3. Add new service");
         out.println("X. ");
         out.print("Option: ");
         String option = scanner.next();
@@ -19,6 +24,9 @@ public class TimetableUI extends BaseUI {
                 listServices();
                 break;
             case "2":
+                showDispatchedServices();
+                break;
+            case "3":
                 addNewService(scanner);
                 break;
             default:
@@ -30,7 +38,20 @@ public class TimetableUI extends BaseUI {
 
     private void listServices() {
         out.println("Services:");
-        out.println(system.getTimetable().getServices());
+        out.println(system.getTimetable().getServices()
+                .toString().replace("Service", "\nService"));
+    }
+
+    private void showDispatchedServices() {
+        out.println("Dispatched:");
+        Queue<Stop> dispatched = system.getTimetable().getDispatched();
+        while (!dispatched.isEmpty()) {
+            Stop stop = dispatched.poll();
+            out.format("%s has departed from stop %s at %s",
+                    stop.getService().getName(),
+                    stop.getStation(),
+                    stop.getWhen());
+        }
     }
 
     private void addNewService(Scanner scanner) {
@@ -38,15 +59,15 @@ public class TimetableUI extends BaseUI {
         Queue<String> inputs = new LinkedList<>();
 
         out.println("\nPlease define new service: ");
-        out.print(" Start time (yyy-mm-ddThh:mm:ss): ");
+        out.print(" Frequency (minutes): ");
         inputs.add(scanner.nextLine());
         out.print(" Starting station: ");
         inputs.add(scanner.nextLine());
         out.print(" Finishing station: ");
         inputs.add(scanner.nextLine());
 
-        system.getTimetable().createNewService(inputs);
-        out.println("New service added.\n\n");
+        List<Service> services = system.getTimetable().createNewServices(inputs);
+        out.format("New services added: %s%n%n", services);
     }
 
 }

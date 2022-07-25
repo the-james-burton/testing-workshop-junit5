@@ -3,7 +3,6 @@ package org.fantasy.railway.ui;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.fantasy.railway.model.Passenger;
-import org.fantasy.railway.util.RailwayUtils;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -15,7 +14,7 @@ public class AccountUI extends BaseUI {
 
     String displayMenu(Scanner scanner) {
         out.println("\nPlease select an option:");
-        out.println("1. View passenger accounts");
+        out.println("1. View passengers");
         out.println("2. Add new passenger");
         out.println("3. Load passenger list from file");
         out.println("4. Remove passenger");
@@ -43,8 +42,9 @@ public class AccountUI extends BaseUI {
     }
 
     private void viewPassengers() {
-        out.println("Passenger list:");
-        out.println(system.getAccounts().getPassengers());
+        out.println(" All Passengers:");
+        out.println(system.getAccounts().getPassengers()
+                .toString().replace("Passenger", "\nPassenger"));
     }
 
     private void addNewPassenger(Scanner scanner) {
