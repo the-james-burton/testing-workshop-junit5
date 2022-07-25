@@ -12,7 +12,6 @@ public class RailwayUI extends BaseUI {
     AccountUI accountUI;
     BookingUI bookingUI;
     NetworkUI networkUI;
-    StockUI stockUI;
     TimetableUI timetableUI;
 
     public void initialize() {
@@ -27,10 +26,6 @@ public class RailwayUI extends BaseUI {
         networkUI = new NetworkUI();
         networkUI.setOut(this.out);
         networkUI.setSystem(this.system);
-
-        stockUI = new StockUI();
-        stockUI.setOut(this.out);
-        stockUI.setSystem(this.system);
 
         timetableUI = new TimetableUI();
         timetableUI.setOut(this.out);
@@ -57,8 +52,7 @@ public class RailwayUI extends BaseUI {
         out.println("1. Passenger accounts");
         out.println("2. Ticket booking");
         out.println("3. Network Management");
-        out.println("4. Rolling Stock");
-        out.println("5. Timetabling");
+        out.println("4. Timetabling");
         out.println("X. ");
         out.print("Option: ");
         String option = scanner.next();
@@ -73,9 +67,6 @@ public class RailwayUI extends BaseUI {
                 networkUI.displayMenu(scanner);
                 break;
             case "4":
-                stockUI.displayMenu(scanner);
-                break;
-            case "5":
                 timetableUI.displayMenu(scanner);
                 break;
             default:

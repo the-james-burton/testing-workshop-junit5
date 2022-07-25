@@ -1,9 +1,12 @@
 package org.fantasy.railway.util;
 
 import com.google.common.base.Preconditions;
+import org.fantasy.railway.model.Stop;
 
 import java.io.InputStream;
+import java.time.temporal.ChronoUnit;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.Scanner;
 import java.util.function.Predicate;
@@ -54,4 +57,14 @@ public class RailwayUtils {
         }
         return values;
     }
+
+    /**
+     * @return the total time take for this journey
+     */
+    public static Integer totalTime(List<Stop> route) {
+        return new Long(
+                route.get(0).getWhen().until(route.get(route.size() - 1).getWhen(), ChronoUnit.MINUTES)
+        ).intValue();
+    }
+
 }
