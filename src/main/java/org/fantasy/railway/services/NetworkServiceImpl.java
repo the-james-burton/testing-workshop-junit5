@@ -3,18 +3,18 @@ package org.fantasy.railway.services;
 import com.google.common.base.Preconditions;
 import com.google.common.graph.MutableValueGraph;
 import com.google.common.graph.ValueGraphBuilder;
-import org.fantasy.railway.model.Journey;
 import org.fantasy.railway.model.Station;
 import org.fantasy.railway.model.Stop;
 import org.fantasy.railway.util.GraphUtils;
 import org.fantasy.railway.util.RailwayUtils;
 
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class NetworkServiceImpl extends BaseService<Station> implements NetworkService {
 
-    BookingService bookings;
+    TimetableService timetable;
     MutableValueGraph<Station, Integer> network;
 
 
@@ -33,7 +33,7 @@ public class NetworkServiceImpl extends BaseService<Station> implements NetworkS
     }
 
     @Override
-    public Station getOrCreateStation(String name) {
+    public Station getStationOrCreate(String name) {
         return getStation(name).orElseGet(() -> {
             Station station = Station.builder()
                     .name(name)
@@ -66,12 +66,12 @@ public class NetworkServiceImpl extends BaseService<Station> implements NetworkS
         Preconditions.checkArgument(inputs.size() > 2);
         Preconditions.checkArgument(inputs.size() % 2 > 0);
 
-        Station station = getOrCreateStation(inputs.poll());
+        Station station = getStationOrCreate(inputs.poll());
         Map<Station, Integer> connections = new HashMap<>();
 
         while (!inputs.isEmpty()) {
             connections.put(
-                    getOrCreateStation(inputs.poll()),
+                    getStationOrCreate(inputs.poll()),
                     Integer.parseInt(inputs.poll()));
         }
         return addConnections(station, connections);
@@ -80,35 +80,29 @@ public class NetworkServiceImpl extends BaseService<Station> implements NetworkS
 
     @Override
     public void loadNetwork(String filename) {
-        RailwayUtils.parseFile(filename).stream()
-                .forEach(row -> addStation(row));
+        RailwayUtils.parseFile(filename)
+                .forEach(this::addStation);
     }
 
     /**
      * @param station the station to remove from the network
      */
     public void removeStation(Station station) {
-        // do not remove the station from the network if there are any tickets that stop at it...
-        bookings.getTickets().stream()
-                .flatMap(ticket -> ticket.getJourney().getRoute().stream())
+        // do not remove the station from the network if there are any services that stop at it...
+        timetable.getServices().stream()
+                .filter(service -> service.getFinishTime().isAfter(LocalTime.now()))
+                .flatMap(service -> service.getRoute().stream())
                 .map(Stop::getStation)
                 .filter(stop -> stop.getName().equals(station.getName()))
                 .findAny()
                 .ifPresent(stop -> {
-                    throw new IllegalArgumentException(String.format("There is a ticket sold that has a journey stopping at %s", station));
+                    throw new IllegalArgumentException(String.format("There is a service that stops at %s", station));
                 });
 
         network.removeNode(station);
     }
 
-    /**
-     * useful for calculating the cost of a ticket and defining a new service
-     *
-     * @param from the starting station of the journey
-     * @param to   the end station of the journey
-     * @return a Journey with a List of stops in correct order
-     */
-    public Journey calculateRoute(Station from, Station to) {
+    public List<Stop> calculateRoute(Station from, Station to) {
         List<Stop> route = new LinkedList<>();
         List<Station> shortestPath = GraphUtils.findShortestPath(network, from, to);
 
@@ -118,19 +112,19 @@ public class NetworkServiceImpl extends BaseService<Station> implements NetworkS
         // ths first station will have value of zero since it is the start...
         route.add(Stop.builder()
                 .station(shortestPath.get(0))
-                .minutes(0)
+                .when(LocalTime.parse("00:00:00"))
                 .build());
 
         for (int stop = 1; shortestPath.size() - 1 > stop; stop++) {
+            Station previous = shortestPath.get(stop - 1);
             Station current = shortestPath.get(stop);
-            Station next = shortestPath.get(stop + 1);
             route.add(Stop.builder()
                     .station(current)
-                    .minutes(distanceBetweenAdjacent(current, next))
+                    .when(route.get(stop).getWhen().plusMinutes(distanceBetweenAdjacent(previous, current)))
                     .build());
         }
 
-        return Journey.builder().route(route).build();
+        return route;
     }
 
 

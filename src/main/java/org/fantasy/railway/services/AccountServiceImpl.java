@@ -8,6 +8,7 @@ import org.fantasy.railway.util.RailwayUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
@@ -47,13 +48,13 @@ public class AccountServiceImpl extends BaseService<Passenger> implements Accoun
     @Override
     public void loadPassengers(String filename) {
         RailwayUtils.parseFile(filename).stream()
-                .forEach(row -> addPassenger(row));
+                .forEach(this::addPassenger);
     }
 
     @Override
     public void removePassenger(Passenger passenger) {
         passenger.getTickets().stream()
-                .filter(ticket -> ticket.getService().getFinishTime().isAfter(LocalDateTime.now()))
+                .filter(ticket -> ticket.getService().getFinishTime().isAfter(LocalTime.now()))
                 .findFirst()
                 .ifPresent(ticket -> {
                     throw new IllegalArgumentException(String.format("Passenger holds future ticket %s", ticket));

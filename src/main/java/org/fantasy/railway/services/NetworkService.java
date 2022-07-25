@@ -1,8 +1,9 @@
 package org.fantasy.railway.services;
 
-import org.fantasy.railway.model.Journey;
 import org.fantasy.railway.model.Station;
+import org.fantasy.railway.model.Stop;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Queue;
@@ -10,7 +11,7 @@ import java.util.Queue;
 public interface NetworkService {
 
     /**
-     * @param stationName the string to find a Station for
+     * @param name the string to find a Station for
      * @return Station for the given input string
      */
     Optional<Station> getStation(String name);
@@ -19,7 +20,7 @@ public interface NetworkService {
      * @param name the name of the new station
      * @return the new station
      */
-    Station getOrCreateStation(String name);
+    Station getStationOrCreate(String name);
 
     /**
      * @param name the name of the new station
@@ -57,7 +58,7 @@ public interface NetworkService {
      * @param to   the end station of the journey
      * @return a Journey with a List of stops in correct order
      */
-    Journey calculateRoute(Station from, Station to);
+    List<Stop> calculateRoute(Station from, Station to);
 
 
     /**

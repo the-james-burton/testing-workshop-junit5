@@ -1,7 +1,6 @@
 package org.fantasy.railway.services;
 
 import org.fantasy.railway.model.Passenger;
-import org.fantasy.railway.model.Seat;
 import org.fantasy.railway.model.Station;
 import org.fantasy.railway.model.Ticket;
 
@@ -18,20 +17,8 @@ public interface BookingService {
      * @param passenger the passenger the ticket is to be valid for
      * @return a ticket for the requested journey
      */
-    Ticket ticketQuote(Station from, Station to, LocalDateTime when, Passenger passenger);
+    Ticket purchaseTicket(Station from, Station to, LocalDateTime when, Passenger passenger);
 
-    /**
-     * @param ticket      the ticket to add a reservation for
-     * @param when        the time to book
-     * @return the ticket with the reservation added
-     */
-    Ticket addReservation(Ticket ticket, LocalDateTime when);
-
-    /**
-     * @param ticket    the ticket that has been purchased
-     * @param passenger the passenger purchasing the ticket
-     */
-    void purchaseTicket(Ticket ticket, Passenger passenger);
 
     /**
      * @return a List of all tickets
