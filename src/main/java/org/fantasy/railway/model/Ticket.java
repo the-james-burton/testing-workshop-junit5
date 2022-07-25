@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 
-import java.util.List;
+import java.time.LocalDate;
 
 @Data
 @SuperBuilder
@@ -14,7 +14,7 @@ public class Ticket extends Identified {
     Passenger passenger;
     Station from;
     Station to;
-    Service service;
+    LocalDate validOn;
     Double price;
 
 }
