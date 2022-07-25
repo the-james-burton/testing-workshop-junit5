@@ -26,6 +26,7 @@ public class RailwaySystem {
     private void bootstrap() {
         accounts.loadPassengers("passengers.csv");
         network.loadNetwork("network.csv");
+        timetable.loadServices("services.csv");
     }
 
 
