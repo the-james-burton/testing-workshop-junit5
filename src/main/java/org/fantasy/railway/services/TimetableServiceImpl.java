@@ -68,11 +68,11 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
 
     private void dispatch() {
         // TODO remove this
-        System.out.println("dispatching..."); // TODO remove this
+        System.out.print("dispatching... "); // TODO remove this
 
         for (Service service : services) {
             Queue<Stop> route = service.getRoute();
-            if (route.isEmpty()) break;
+            if (route.isEmpty()) continue;
             do {
                 Stop current = route.peek();
                 if (current.getWhen().isAfter(LocalTime.now())) break;
@@ -136,6 +136,8 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
                 .id(nextId())
                 .route(new LinkedList<>(cloned))
                 .build();
+
+        service.setName(service.getCurrentName());
 
         service.getRoute()
                 .forEach(stop -> stop.setService(service));

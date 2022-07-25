@@ -47,9 +47,9 @@ public class TimetableUI extends BaseUI {
         Queue<Stop> dispatched = system.getTimetable().getDispatched();
         while (!dispatched.isEmpty()) {
             Stop stop = dispatched.poll();
-            out.format("%s has departed from stop %s at %s",
+            out.format("%s has departed from %s at %s%n",
                     stop.getService().getName(),
-                    stop.getStation(),
+                    stop.getStation().getName(),
                     stop.getWhen());
         }
     }
