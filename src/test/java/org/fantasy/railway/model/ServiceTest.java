@@ -55,6 +55,11 @@ class ServiceTest {
     }
 
     @Test
+    void shouldHaveEmptyRouteOnCreation() {
+        assertThat(emptyService.getRoute()).isNotNull();
+        assertThat(emptyService.getRoute()).isEmpty();
+    }
+    @Test
     void shouldReturnStartTime() {
         LocalTime expected = first.getWhen();
         LocalTime actual = serviceWithRoute.getStartTime();
