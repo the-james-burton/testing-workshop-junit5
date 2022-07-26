@@ -11,23 +11,19 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PassengerTest {
 
-    Passenger child;
     Passenger youngPerson;
     Passenger adult;
     Passenger pensioner;
 
     @BeforeEach
     void setup() {
-        child = Passenger.builder().id(1).name("Alice")
-                .dateOfBirth(Now.localDate().minusYears(4))
-                .build();
-        youngPerson = Passenger.builder().id(1).name("Alice")
+        youngPerson = Passenger.builder().id(2).name("Alice")
                 .dateOfBirth(Now.localDate().minusYears(17))
                 .build();
-        adult = Passenger.builder().id(1).name("Alice")
+        adult = Passenger.builder().id(3).name("Alice")
                 .dateOfBirth(Now.localDate().minusYears(35))
                 .build();
-        pensioner = Passenger.builder().id(1).name("Alice")
+        pensioner = Passenger.builder().id(4).name("Alice")
                 .dateOfBirth(Now.localDate().minusYears(72))
                 .build();
     }
@@ -40,12 +36,26 @@ class PassengerTest {
     }
 
     @Test
-    void shouldNotAddConcessionIfNotPresentAndPassengerDoesNotQualify() {
+    void shouldNotAddConcessionIfPassengerDoesNotQualify() {
         Exception exception = assertThrows(IllegalArgumentException.class, () ->
-            child.addConcession(Concession.YOUNG_PERSONS_RAILCARD)
+                adult.addConcession(Concession.YOUNG_PERSONS_RAILCARD)
         );
 
-        String expected = "Passenger 1 does not qualify for concession YOUNG_PERSONS_RAILCARD";
+        String expected = "Passenger 3 does not qualify for concession YOUNG_PERSONS_RAILCARD";
+        String actual = exception.getMessage();
+
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void shouldNotAddConcessionIfPresent() {
+        pensioner.addConcession(Concession.PENSIONER_DISCOUNT);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                pensioner.addConcession(Concession.PENSIONER_DISCOUNT)
+        );
+
+        String expected = "Passenger 4 already has concession PENSIONER_DISCOUNT";
         String actual = exception.getMessage();
 
         assertThat(actual).isEqualTo(expected);
@@ -67,7 +77,7 @@ class PassengerTest {
         Exception exception = assertThrows(IllegalArgumentException.class, () ->
             youngPerson.removeConcession(Concession.PENSIONER_DISCOUNT)
         );
-        String expected = "Passenger 1 does not have concession PENSIONER_DISCOUNT";
+        String expected = "Passenger 2 does not have concession PENSIONER_DISCOUNT";
         String actual = exception.getMessage();
 
         assertThat(actual).isEqualTo(expected);

@@ -4,7 +4,7 @@ import org.fantasy.railway.model.Passenger;
 import org.fantasy.railway.model.Station;
 import org.fantasy.railway.model.Ticket;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class BookingUI extends BaseUI {
@@ -44,8 +44,8 @@ public class BookingUI extends BaseUI {
         Station from = system.getNetwork().getStationOrThrow(scanner.nextLine());
         out.print("  Station to: ");
         Station to = system.getNetwork().getStationOrThrow(scanner.nextLine());
-        out.print("  When (yyy-mm-ddThh:mm:ss ");
-        LocalDateTime when = LocalDateTime.parse(scanner.nextLine());
+        out.print("  When (yyy-mm-dd): ");
+        LocalDate when = LocalDate.parse(scanner.nextLine());
         out.print("  Passenger ID: ");
         Passenger passenger = system.getAccounts().getById(scanner.nextInt());
 

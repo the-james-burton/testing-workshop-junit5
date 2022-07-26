@@ -1,5 +1,7 @@
 package org.fantasy.railway.model;
 
+import net.bytebuddy.ClassFileVersion;
+import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

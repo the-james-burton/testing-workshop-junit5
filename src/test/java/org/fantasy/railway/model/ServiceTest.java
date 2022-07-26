@@ -100,7 +100,7 @@ class ServiceTest {
     }
 
     @Test
-    void shouldReturnCompletedMessageForCurrentNameIfNoRoute() {
+    void shouldReturnCompletedMessageForCurrentNameIfEmptyRoute() {
         String actual = emptyService.getCurrentName();
         String expected = "This service has completed its journey";
 
