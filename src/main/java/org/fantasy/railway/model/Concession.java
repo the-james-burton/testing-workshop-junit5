@@ -11,19 +11,14 @@ public enum Concession {
 
     YOUNG_PERSONS_RAILCARD(
             13, 25,
-            LocalTime.parse("09:30:00"),
-            LocalTime.parse("16:30"),
             0.2d),
     PENSIONER_DISCOUNT(
             65, 125,
-            LocalTime.parse("09:30:00"),
-            LocalTime.parse("23:59:59"),
-            0.2d);
+            0.4d);
 
-    private final Integer minimumAge;
-    private final Integer maximumAge;
-    private final LocalTime earliestTime;
-    private final LocalTime latestTime;
-    private final Double discount;
+    public final Integer minimumAge;
+    public final Integer maximumAge;
+    public final Double discount;
+
 
 }

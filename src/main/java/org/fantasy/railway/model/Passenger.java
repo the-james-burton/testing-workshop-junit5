@@ -1,15 +1,16 @@
 package org.fantasy.railway.model;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import com.google.common.base.Preconditions;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.fantasy.railway.util.Now;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 @Data
 @SuperBuilder
@@ -17,26 +18,47 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 public class Passenger extends Identified {
 
-    String name;
-    LocalDate dateOfBirth;
+    private String name;
+    private LocalDate dateOfBirth;
 
     @Builder.Default
-    List<Concession> concessions = new ArrayList<>();
+    private List<Concession> concessions = new ArrayList<>();
 
     @Builder.Default
-    List<Ticket> tickets = new ArrayList<>();
+    private List<Ticket> tickets = new ArrayList<>();
+
 
     /**
-     * @param when time of day to calculate concessions for
      * @return the total discount amount (will not be greater than 1.0)
      */
-    public Double totalDiscount(LocalDateTime when) {
+    public Double totalDiscount() {
         Double discount = concessions.stream()
-                .filter(concession -> concession.getEarliestTime().isBefore(when.toLocalTime()))
-                .filter(concession -> concession.getLatestTime().isAfter(when.toLocalTime()))
                 .map(Concession::getDiscount)
                 .reduce(0.0d, Double::sum);
 
         return Math.min(1.0d, discount);
     }
+
+    public void addConcession(Concession concession) {
+        Preconditions.checkArgument(!concessions.contains(concession),
+                "Passenger %s already has concession %s", id, concession);
+
+        Predicate<Concession> tooYoung = c -> dateOfBirth.plusYears(c.getMinimumAge()).isAfter(Now.localDate());
+        Predicate<Concession> tooOld = c -> dateOfBirth.plusYears(c.getMaximumAge()).isBefore(Now.localDate());
+
+        Preconditions.checkArgument(!tooYoung.or(tooOld).test(concession),
+                "Passenger %s does not qualify for concession %s", id, concession);
+
+        concessions.add(concession);
+
+    }
+
+    public void removeConcession(Concession concession) {
+        Preconditions.checkArgument(concessions.contains(concession),
+                "Passenger %s does not have concession %s", id, concession);
+
+        concessions.remove(concession);
+    }
+
+
 }

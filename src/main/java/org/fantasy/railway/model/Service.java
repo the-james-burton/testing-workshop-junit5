@@ -1,12 +1,11 @@
 package org.fantasy.railway.model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalTime;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.Queue;
 
 @Data
@@ -14,7 +13,9 @@ import java.util.Queue;
 @EqualsAndHashCode(callSuper = false)
 public class Service extends Identified implements Comparable<Service> {
 
-    Queue<Stop> route;
+    @Builder.Default
+    Queue<Stop> route = new LinkedList<>();
+
     String name;
 
     public LocalTime getStartTime() {
@@ -27,7 +28,7 @@ public class Service extends Identified implements Comparable<Service> {
 
     public LocalTime getFinishTime() {
         return route.stream()
-                .max(Comparator.reverseOrder())
+                .max(Comparator.naturalOrder())
                 .orElseThrow(() ->
                         new IllegalStateException("No route defined for this service"))
                 .getWhen();
@@ -38,6 +39,7 @@ public class Service extends Identified implements Comparable<Service> {
         return getFinishTime().compareTo(that.getFinishTime());
     }
 
+
     public String getCurrentName() {
         if (route.isEmpty())
             return "This service has completed its journey";
@@ -45,13 +47,10 @@ public class Service extends Identified implements Comparable<Service> {
         return String.format("The %s from %s to %s",
                 getStartTime(),
                 route.stream()
-                        .findFirst().orElseThrow(() ->
-                                new IllegalArgumentException("Service has no route defined"))
+                        .min(Comparator.naturalOrder()).get()
                         .getStation().getName(),
                 route.stream()
-                        .sorted(Comparator.reverseOrder())
-                        .findFirst().orElseThrow(() ->
-                                new IllegalArgumentException("Service has no route defined"))
+                        .max(Comparator.naturalOrder()).get()
                         .getStation().getName()
         );
 
