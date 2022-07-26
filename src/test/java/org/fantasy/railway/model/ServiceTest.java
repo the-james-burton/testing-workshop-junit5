@@ -1,10 +1,11 @@
 package org.fantasy.railway.model;
 
-import org.fantasy.railway.util.Now;
+import org.fantasy.railway.util.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalTime;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -15,7 +16,6 @@ class ServiceTest {
 
     Service emptyService;
     Service serviceWithRoute;
-    Queue<Stop> route;
 
     Stop first;
     Stop second;
@@ -27,32 +27,16 @@ class ServiceTest {
 
         serviceWithRoute = Service.builder().build();
 
-        route = new LinkedList<>();
-
-        first = Stop.builder()
-                .service(serviceWithRoute)
-                .station(Station.builder().name("First stop").build())
-                .when(LocalTime.of(10, 0))
-                .build();
-
-        second = Stop.builder()
-                .service(serviceWithRoute)
-                .station(Station.builder().name("Second stop").build())
-                .when(LocalTime.of(10, 4))
-                .build();
-
-        third = Stop.builder()
-                .service(serviceWithRoute)
-                .station(Station.builder().name("Third stop").build())
-                .when(LocalTime.of(10, 9))
-                .build();
-
-        route.add(first);
-        route.add(second);
-        route.add(third);
-
+        Queue<Stop> route = TestUtils.createTestRoute(serviceWithRoute);
         serviceWithRoute.setRoute(route);
+
+        Iterator<Stop> stops = route.stream().iterator();
+        first = stops.next();
+        second = stops.next();
+        third = stops.next();
     }
+
+
 
     @Test
     void shouldHaveEmptyRouteOnCreation() {
