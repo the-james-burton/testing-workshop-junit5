@@ -9,8 +9,7 @@ import org.fantasy.railway.model.Stop;
 import org.fantasy.railway.model.Ticket;
 import org.fantasy.railway.util.RailwayUtils;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,21 +26,21 @@ public class BookingServiceImpl extends BaseService<Ticket> implements BookingSe
     List<Ticket> tickets = new ArrayList<>();
 
     @Override
-    public Ticket purchaseTicket(Station from, Station to, LocalDateTime when, Passenger passenger) {
+    public Ticket purchaseTicket(Station from, Station to, LocalDate when, Passenger passenger) {
         List<Stop> route = network.calculateRoute(from, to);
 
         Preconditions.checkArgument(!route.isEmpty(),
                 "No travel possible from %s to %s", from, to);
 
         Integer totalTime = RailwayUtils.totalTime(route);
-        Double discount = 1.0d - passenger.totalDiscount(when);
+        Double discount = 1.0d - passenger.totalDiscount();
 
         Double price = totalTime * PRICE_PER_MINUTE * discount;
         Ticket ticket = Ticket.builder()
                 .passenger(passenger)
                 .from(from)
                 .to(to)
-                .validOn(when.toLocalDate())
+                .validOn(when)
                 .price(price)
                 .build();
 

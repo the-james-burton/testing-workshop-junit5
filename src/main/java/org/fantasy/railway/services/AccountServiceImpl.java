@@ -1,14 +1,12 @@
 package org.fantasy.railway.services;
 
-import com.google.common.base.Preconditions;
 import lombok.Getter;
 import org.fantasy.railway.model.Concession;
 import org.fantasy.railway.model.Passenger;
+import org.fantasy.railway.util.Now;
 import org.fantasy.railway.util.RailwayUtils;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
@@ -54,7 +52,7 @@ public class AccountServiceImpl extends BaseService<Passenger> implements Accoun
     @Override
     public void removePassenger(Passenger passenger) {
         passenger.getTickets().stream()
-                .filter(ticket -> ticket.getValidOn().isAfter(LocalDate.now()))
+                .filter(ticket -> ticket.getValidOn().isAfter(Now.localDate()))
                 .findFirst()
                 .ifPresent(ticket -> {
                     throw new IllegalArgumentException(String.format("Passenger holds future ticket %s", ticket));
@@ -64,18 +62,12 @@ public class AccountServiceImpl extends BaseService<Passenger> implements Accoun
 
     @Override
     public void addConcession(Passenger passenger, Concession concession) {
-        Preconditions.checkArgument(passenger.getConcessions().contains(concession),
-                "Passenger %s already has concession %s", passenger, concession);
-
-        passenger.getConcessions().add(concession);
+        passenger.addConcession(concession);
     }
 
     @Override
     public void removeConcession(Passenger passenger, Concession concession) {
-        Preconditions.checkArgument(!passenger.getConcessions().contains(concession),
-                "Passenger %s does not have concession %s", passenger, concession);
-
-        passenger.getConcessions().remove(concession);
+        passenger.removeConcession(concession);
     }
 
 }

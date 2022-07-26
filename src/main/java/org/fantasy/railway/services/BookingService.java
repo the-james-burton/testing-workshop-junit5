@@ -4,7 +4,7 @@ import org.fantasy.railway.model.Passenger;
 import org.fantasy.railway.model.Station;
 import org.fantasy.railway.model.Ticket;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface BookingService {
@@ -17,7 +17,7 @@ public interface BookingService {
      * @param passenger the passenger the ticket is to be valid for
      * @return a ticket for the requested journey
      */
-    Ticket purchaseTicket(Station from, Station to, LocalDateTime when, Passenger passenger);
+    Ticket purchaseTicket(Station from, Station to, LocalDate when, Passenger passenger);
 
     /**
      * @return a List of all tickets

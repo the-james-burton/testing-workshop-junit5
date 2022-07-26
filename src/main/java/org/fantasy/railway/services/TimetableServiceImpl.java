@@ -5,9 +5,9 @@ import lombok.Setter;
 import org.fantasy.railway.model.Service;
 import org.fantasy.railway.model.Station;
 import org.fantasy.railway.model.Stop;
+import org.fantasy.railway.util.Now;
 import org.fantasy.railway.util.RailwayUtils;
 
-import java.time.LocalTime;
 import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -75,7 +75,7 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
             if (route.isEmpty()) continue;
             do {
                 Stop current = route.peek();
-                if (current.getWhen().isAfter(LocalTime.now())) break;
+                if (current.getWhen().isAfter(Now.localTime())) break;
                 dispatched.add(route.poll());
             } while (!route.isEmpty());
         }

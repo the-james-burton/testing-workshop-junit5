@@ -6,10 +6,15 @@ import com.google.common.graph.ValueGraphBuilder;
 import org.fantasy.railway.model.Station;
 import org.fantasy.railway.model.Stop;
 import org.fantasy.railway.util.GraphUtils;
+import org.fantasy.railway.util.Now;
 import org.fantasy.railway.util.RailwayUtils;
 
-import java.time.LocalTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Queue;
 import java.util.stream.Collectors;
 
 public class NetworkServiceImpl extends BaseService<Station> implements NetworkService {
@@ -90,7 +95,7 @@ public class NetworkServiceImpl extends BaseService<Station> implements NetworkS
     public void removeStation(Station station) {
         // do not remove the station from the network if there are any services that stop at it...
         timetable.getServices().stream()
-                .filter(service -> service.getFinishTime().isAfter(LocalTime.now()))
+                .filter(service -> service.getFinishTime().isAfter(Now.localTime()))
                 .flatMap(service -> service.getRoute().stream())
                 .map(Stop::getStation)
                 .filter(stop -> stop.getName().equals(station.getName()))
