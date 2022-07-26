@@ -1,7 +1,6 @@
 package org.fantasy.railway.services;
 
 import lombok.Getter;
-import org.fantasy.railway.model.Concession;
 import org.fantasy.railway.model.Passenger;
 import org.fantasy.railway.util.Now;
 import org.fantasy.railway.util.RailwayUtils;
@@ -55,19 +54,10 @@ public class AccountServiceImpl extends BaseService<Passenger> implements Accoun
                 .filter(ticket -> ticket.getValidOn().isAfter(Now.localDate()))
                 .findFirst()
                 .ifPresent(ticket -> {
-                    throw new IllegalArgumentException(String.format("Passenger holds future ticket %s", ticket));
+                    throw new IllegalStateException(String.format("Passenger holds future ticket %s", ticket));
                 });
         passengers.remove(passenger);
     }
 
-    @Override
-    public void addConcession(Passenger passenger, Concession concession) {
-        passenger.addConcession(concession);
-    }
-
-    @Override
-    public void removeConcession(Passenger passenger, Concession concession) {
-        passenger.removeConcession(concession);
-    }
 
 }

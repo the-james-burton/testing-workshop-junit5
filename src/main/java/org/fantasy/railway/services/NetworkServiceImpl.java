@@ -3,6 +3,7 @@ package org.fantasy.railway.services;
 import com.google.common.base.Preconditions;
 import com.google.common.graph.MutableValueGraph;
 import com.google.common.graph.ValueGraphBuilder;
+import lombok.Setter;
 import org.fantasy.railway.model.Station;
 import org.fantasy.railway.model.Stop;
 import org.fantasy.railway.util.GraphUtils;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 
 public class NetworkServiceImpl extends BaseService<Station> implements NetworkService {
 
+    @Setter
     TimetableService timetable;
     MutableValueGraph<Station, Integer> network;
 
@@ -41,6 +43,7 @@ public class NetworkServiceImpl extends BaseService<Station> implements NetworkS
     public Station getStationOrCreate(String name) {
         return getStation(name).orElseGet(() -> {
             Station station = Station.builder()
+                    .id(nextId())
                     .name(name)
                     .build();
             network.addNode(station);
@@ -97,11 +100,10 @@ public class NetworkServiceImpl extends BaseService<Station> implements NetworkS
         timetable.getServices().stream()
                 .filter(service -> service.getFinishTime().isAfter(Now.localTime()))
                 .flatMap(service -> service.getRoute().stream())
-                .map(Stop::getStation)
-                .filter(stop -> stop.getName().equals(station.getName()))
+                .filter(stop -> stop.getStation().equals(station))
                 .findAny()
                 .ifPresent(stop -> {
-                    throw new IllegalArgumentException(String.format("There is a service that stops at %s", station));
+                    throw new IllegalArgumentException(String.format("There is a service stopping at %s", stop));
                 });
 
         network.removeNode(station);
@@ -149,7 +151,7 @@ public class NetworkServiceImpl extends BaseService<Station> implements NetworkS
     }
 
     @Override
-    List<Station> getItems() {
+    public List<Station> getItems() {
         return network.asGraph().nodes().stream().collect(Collectors.toList());
     }
 }

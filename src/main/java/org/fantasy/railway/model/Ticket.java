@@ -2,6 +2,7 @@ package org.fantasy.railway.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 @EqualsAndHashCode(callSuper = false)
 public class Ticket extends Identified {
 
+    @ToString.Exclude
     Passenger passenger;
     Station from;
     Station to;

@@ -3,8 +3,6 @@ package org.fantasy.railway.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.time.LocalTime;
-
 @AllArgsConstructor
 @Getter
 public enum Concession {

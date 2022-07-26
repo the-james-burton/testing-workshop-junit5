@@ -1,6 +1,5 @@
 package org.fantasy.railway.services;
 
-import org.fantasy.railway.model.Concession;
 import org.fantasy.railway.model.Passenger;
 
 import java.time.LocalDate;
@@ -30,18 +29,6 @@ public interface AccountService {
      * @param passenger the passenger to remove from the system
      */
     void removePassenger(Passenger passenger);
-
-    /**
-     * @param passenger  the passenger to add the concession to
-     * @param concession the concession to add to the given passenger
-     */
-    void addConcession(Passenger passenger, Concession concession);
-
-    /**
-     * @param passenger  the passenger to add the concession to
-     * @param concession the concession to add to the given passenger
-     */
-    void removeConcession(Passenger passenger, Concession concession);
 
     /**
      * @return a List of all passengers
