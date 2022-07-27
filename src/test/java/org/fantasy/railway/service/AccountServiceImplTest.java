@@ -39,8 +39,9 @@ class AccountServiceImplTest {
         assertThat(passenger.getDateOfBirth()).isEqualTo(dateOfBirth);
         assertThat(passenger.getConcessions()).isEmpty();
         assertThat(passenger.getId()).isEqualTo(1);
-        assertThat(accounts.getPassengers()).contains(passenger);
-        assertThat(accounts.getPassengers()).hasSize(1);
+        assertThat(accounts.getPassengers())
+                .contains(passenger)
+                .hasSize(1);
     }
 
     @Test
@@ -58,8 +59,9 @@ class AccountServiceImplTest {
         assertThat(passenger.getDateOfBirth()).isEqualTo(dateOfBirth);
         assertThat(passenger.getConcessions()).isEmpty();
         assertThat(passenger.getId()).isEqualTo(1);
-        assertThat(accounts.getPassengers()).contains(passenger);
-        assertThat(accounts.getPassengers()).hasSize(1);
+        assertThat(accounts.getPassengers())
+                .contains(passenger)
+                .hasSize(1);
     }
 
     @Test
@@ -97,8 +99,9 @@ class AccountServiceImplTest {
     void shouldLoadPassengersFromFile() {
         accounts.loadPassengers("test-passengers.csv");
 
-        assertThat(accounts.getPassengers()).isNotEmpty();
-        assertThat(accounts.getPassengers()).hasSize(3);
+        assertThat(accounts.getPassengers())
+                .isNotEmpty()
+                .hasSize(3);
     }
 
 }
