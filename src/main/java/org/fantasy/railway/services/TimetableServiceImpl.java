@@ -8,7 +8,8 @@ import org.fantasy.railway.model.Stop;
 import org.fantasy.railway.util.Now;
 import org.fantasy.railway.util.RailwayUtils;
 
-import java.time.temporal.ChronoField;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,7 +26,7 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
     public static final Integer MAX_DISTANCE_FOR_MEDIUM = 20;
 
     @Setter
-    NetworkService networkService;
+    NetworkService network;
 
     @Getter
     List<Service> services = new ArrayList<>();
@@ -72,13 +73,16 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
 
         for (Service service : services) {
             Queue<Stop> route = service.getRoute();
-            if (route.isEmpty()) continue;
+            if (route.isEmpty())
+                continue;
             do {
                 Stop current = route.peek();
                 if (current.getWhen().isAfter(Now.localTime())) break;
                 dispatched.add(route.poll());
             } while (!route.isEmpty());
         }
+
+        services.removeIf(service -> service.getRoute().isEmpty());
 
         // TODO remove this
         System.out.format("Total %s stops visited%n%n", dispatched.size()); // TODO remove this
@@ -91,40 +95,45 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
     }
 
     @Override
-    public List<Service> createNewServices(Integer frequency, List<Stop> route) {
+    public List<Service> createNewServices(Integer frequency, Station start, Station finish) {
+        List<Stop> route = network.calculateRoute(start, finish);
         Stop first = route.get(0);
         first.setWhen(first.getWhen().plusMinutes(frequency));
 
         // does a service already exist with the same route?
         services.stream()
-                .filter(service -> service.getRoute().containsAll(route))
+                .filter(service -> service.sameRouteAs(route))
                 .findAny()
                 .ifPresent(service -> {
-                    throw new IllegalArgumentException(String.format("There is already a service defined with route %s", route));
+                    throw new IllegalStateException(String.format("There is already a service defined with route %s", route));
                 });
 
-        // prepate the route with the distances...
+        // prepare the route with the distances...
         for (int x = 1; x < route.size(); x++) {
             Stop previous = route.get(x - 1);
             Stop current = route.get(x);
-            Integer distance = networkService.distanceBetweenAdjacent(previous.getStation(), current.getStation());
+            Integer distance = network.distanceBetweenAdjacent(previous.getStation(), current.getStation());
             current.setWhen(previous.getWhen().plusMinutes(distance));
         }
 
-        int duration = route.get(route.size() - 1).getWhen().get(ChronoField.MINUTE_OF_DAY);
+        // how long does the route take to omplete?
+        LocalTime startTime = route.get(0).getWhen();
+        LocalTime finishTime = route.get(route.size() - 1).getWhen();
+        Integer duration = (int) startTime.until(finishTime, ChronoUnit.MINUTES);
+
+        // how many services can we fit into 24 hours?
+        int numberOfServicesIn24Hours = ((24 * 60) - duration) / frequency;
 
         // create service instances according to the given frequency...
-        int numberOfServicesIn24Hours = ((24 * 60) - duration) / frequency;
         List<Service> newServices = IntStream.iterate(frequency, m -> m + frequency)
                 .limit(numberOfServicesIn24Hours)
                 .boxed()
-                .map(startTime -> newService(route, startTime))
+                .map(time -> newService(route, time))
                 .collect(Collectors.toList());
 
         services.addAll(newServices);
         return newServices;
     }
-
 
     private Service newService(List<Stop> route, Integer startTime) {
 
@@ -147,11 +156,10 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
     @Override
     public List<Service> createNewServices(Queue<String> inputs) {
         Integer frequency = Integer.parseInt(inputs.poll());
-        Station start = networkService.getStationOrThrow(inputs.poll());
-        Station finish = networkService.getStationOrThrow(inputs.poll());
-        List<Stop> route = networkService.calculateRoute(start, finish);
+        Station start = network.getStationOrThrow(inputs.poll());
+        Station finish = network.getStationOrThrow(inputs.poll());
 
-        return createNewServices(frequency, route);
+        return createNewServices(frequency, start, finish);
     }
 
 

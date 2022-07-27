@@ -1,6 +1,7 @@
 package org.fantasy.railway.services;
 
 import org.fantasy.railway.model.Service;
+import org.fantasy.railway.model.Station;
 import org.fantasy.railway.model.Stop;
 
 import java.util.List;
@@ -12,10 +13,11 @@ public interface TimetableService {
      * creates new services with the given frequency starting at the given time for the given journey
      *
      * @param frequency how often the service will run (minutes)
-     * @param route     the route taken by the service
+     * @param start     the starting station
+     * @param finish    the finishing station
      * @return the service that was created
      */
-    List<Service> createNewServices(Integer frequency, List<Stop> route);
+    List<Service> createNewServices(Integer frequency, Station start, Station finish);
 
     /**
      * creates a new service from the given inputs
@@ -40,7 +42,7 @@ public interface TimetableService {
      */
     List<Service> getServices();
 
-    void setNetworkService(NetworkService networkService);
+    void setNetwork(NetworkService network);
 
     /**
      * @return services that have dispatched

@@ -25,7 +25,7 @@ public class RailwaySystem {
         timetable = new TimetableServiceImpl();
 
         bookings.setNetwork(network);
-        timetable.setNetworkService(network);
+        timetable.setNetwork(network);
 
         bootstrap();
     }
