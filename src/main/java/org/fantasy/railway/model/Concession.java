@@ -12,7 +12,11 @@ public enum Concession {
             0.2d),
     PENSIONER_DISCOUNT(
             65, 125,
-            0.4d);
+            0.4d),
+
+    DISABLED_DISCOUNT(
+            13, 125,
+                    0.2d);
 
     public final Integer minimumAge;
     public final Integer maximumAge;
