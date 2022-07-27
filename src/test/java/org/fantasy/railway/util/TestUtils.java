@@ -7,15 +7,20 @@ import org.fantasy.railway.model.Stop;
 
 import java.time.LocalTime;
 import java.util.LinkedList;
-import java.util.Queue;
 
 public class TestUtils {
 
     /**
      * @return a queue of stops representing a test route
      */
-    public static Queue<Stop> createTestRoute(Service service) {
-        Queue<Stop> route = new LinkedList<>();
+    public static LinkedList<Stop> createTestRoute(Service service) {
+        LinkedList<Stop> route = createTestRoute();
+        route.forEach(stop -> stop.setService(service));
+        return route;
+    }
+
+    public static LinkedList<Stop> createTestRoute() {
+        LinkedList<Stop> route = new LinkedList<>();
 
         route.add(firstStop());
         route.add(secondStop());
