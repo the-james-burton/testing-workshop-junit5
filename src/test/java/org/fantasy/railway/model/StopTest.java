@@ -1,7 +1,5 @@
 package org.fantasy.railway.model;
 
-import net.bytebuddy.ClassFileVersion;
-import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -32,8 +30,9 @@ class StopTest {
 
     @Test
     void shouldHaveDefaultTimeOnCreation() {
-        assertThat(emptyStop.getWhen()).isNotNull();
-        assertThat(emptyStop.getWhen()).isEqualTo(LocalTime.of(0, 0));
+        assertThat(emptyStop.getWhen())
+                .isNotNull()
+                .isEqualTo(LocalTime.of(0, 0));
     }
 
     @Test

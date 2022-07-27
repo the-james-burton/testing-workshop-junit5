@@ -40,8 +40,9 @@ class ServiceTest {
 
     @Test
     void shouldHaveEmptyRouteOnCreation() {
-        assertThat(emptyService.getRoute()).isNotNull();
-        assertThat(emptyService.getRoute()).isEmpty();
+        assertThat(emptyService.getRoute())
+                .isNotNull()
+                .isEmpty();
     }
     @Test
     void shouldReturnStartTime() {
