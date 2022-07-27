@@ -6,8 +6,10 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 @Data
@@ -55,6 +57,26 @@ public class Service extends Identified implements Comparable<Service> {
                         .max(Comparator.naturalOrder()).get()
                         .getStation().getName()
         );
+
+    }
+
+    /**
+     *
+     * @param route the route to compare with
+     * @return true if the given route is the same as this service (stops at the same stations)
+     */
+    public boolean sameRouteAs(List<Stop> route) {
+        List<Stop> myStops = new ArrayList<>(this.route);
+        List<Stop> theirStops = new ArrayList<>(route);
+
+        if (myStops.size() != theirStops.size())
+            return false;
+
+        for (int i = 0; i < myStops.size(); i++) {
+            if (!myStops.get(i).sameStationAs(theirStops.get(i)))
+                return false;
+        }
+        return true;
 
     }
 

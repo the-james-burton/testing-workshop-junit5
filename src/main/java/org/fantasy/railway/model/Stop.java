@@ -12,6 +12,7 @@ public class Stop implements Comparable<Stop> {
 
     @ToString.Exclude
     Service service;
+
     Station station;
 
     @Builder.Default
@@ -20,5 +21,9 @@ public class Stop implements Comparable<Stop> {
     @Override
     public int compareTo(Stop that) {
         return when.compareTo(that.when);
+    }
+
+    public boolean sameStationAs(Stop stop) {
+        return station.equals(stop.station);
     }
 }
