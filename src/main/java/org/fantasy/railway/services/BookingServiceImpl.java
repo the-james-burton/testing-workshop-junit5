@@ -20,8 +20,6 @@ public class BookingServiceImpl extends BaseService<Ticket> implements BookingSe
     @Setter
     NetworkService network;
 
-    TimetableServiceImpl timetable;
-
     @Getter
     List<Ticket> tickets = new ArrayList<>();
 
@@ -29,20 +27,22 @@ public class BookingServiceImpl extends BaseService<Ticket> implements BookingSe
     public Ticket purchaseTicket(Station from, Station to, LocalDate when, Passenger passenger) {
         List<Stop> route = network.calculateRoute(from, to);
 
-        Preconditions.checkArgument(!route.isEmpty(),
+        Preconditions.checkState(!route.isEmpty(),
                 "No travel possible from %s to %s", from, to);
 
         Integer totalTime = RailwayUtils.totalTime(route);
         Double discount = 1.0d - passenger.totalDiscount();
 
         Double price = totalTime * PRICE_PER_MINUTE * discount;
+
         Ticket ticket = Ticket.builder()
                 .passenger(passenger)
                 .from(from)
                 .to(to)
                 .validOn(when)
-                .price(price)
                 .build();
+
+        ticket.setPrice(price);
 
         tickets.add(ticket);
         passenger.getTickets().add(ticket);
@@ -51,7 +51,7 @@ public class BookingServiceImpl extends BaseService<Ticket> implements BookingSe
     }
 
     @Override
-    List<Ticket> getItems() {
+    public List<Ticket> getItems() {
         return tickets;
     }
 }
