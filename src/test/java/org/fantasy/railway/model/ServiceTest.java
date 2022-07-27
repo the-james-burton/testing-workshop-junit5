@@ -1,15 +1,17 @@
 package org.fantasy.railway.model;
 
-import org.fantasy.railway.util.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalTime;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.fantasy.railway.util.TestUtils.createTestRoute;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ServiceTest {
@@ -27,7 +29,7 @@ class ServiceTest {
 
         serviceWithRoute = Service.builder().build();
 
-        Queue<Stop> route = TestUtils.createTestRoute(serviceWithRoute);
+        Queue<Stop> route = createTestRoute(serviceWithRoute);
         serviceWithRoute.setRoute(route);
 
         Iterator<Stop> stops = route.stream().iterator();
@@ -115,6 +117,24 @@ class ServiceTest {
         laterServiceWithRoute.setRoute(laterRoute);
 
         assertThat(laterServiceWithRoute).isGreaterThan(serviceWithRoute);
+    }
+
+    @Test
+    void shouldHaveSameRouteAs() {
+        List<Stop> sameRoute = createTestRoute();
+        sameRoute.forEach(stop -> stop.setWhen(stop.getWhen().plusMinutes(15)));
+
+        assertThat(serviceWithRoute.sameRouteAs(sameRoute)).isTrue();
+    }
+
+    @Test
+    void shouldNotHaveSameRouteAs() {
+        List<Stop> differentRoute = createTestRoute().stream()
+                .skip(1)
+                .collect(Collectors.toList());
+        differentRoute.forEach(stop -> stop.setWhen(stop.getWhen().plusMinutes(15)));
+
+        assertThat(serviceWithRoute.sameRouteAs(differentRoute)).isFalse();
     }
 
 }
