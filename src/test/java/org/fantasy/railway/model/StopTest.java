@@ -1,43 +1,29 @@
 package org.fantasy.railway.model;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.fantasy.railway.util.TestUtils.emptyStop;
+import static org.fantasy.railway.util.TestUtils.firstStop;
+import static org.fantasy.railway.util.TestUtils.secondStop;
+import static org.fantasy.railway.util.TestUtils.thirdStop;
 
 class StopTest {
 
-    Stop emptyStop;
-    Stop firstStop;
-    Stop secondStop;
-
-    @BeforeEach
-    void setup() {
-        emptyStop = Stop.builder().build();
-
-        firstStop = Stop.builder()
-                .station(Station.builder().name("First stop").build())
-                .when(LocalTime.of(10, 0))
-                .build();
-
-        secondStop = Stop.builder()
-                .station(Station.builder().name("Second stop").build())
-                .when(LocalTime.of(10, 5))
-                .build();
-    }
 
     @Test
     void shouldHaveDefaultTimeOnCreation() {
-        assertThat(emptyStop.getWhen())
+        assertThat(emptyStop().getWhen())
                 .isNotNull()
                 .isEqualTo(LocalTime.of(0, 0));
     }
 
     @Test
     void shouldSortByWhen() {
-        assertThat(secondStop).isGreaterThan(firstStop);
+        assertThat(thirdStop()).isGreaterThan(firstStop());
+        assertThat(secondStop()).isGreaterThan(firstStop());
     }
 
 }
