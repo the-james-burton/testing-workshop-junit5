@@ -2,6 +2,7 @@ package org.fantasy.railway.service;
 
 import org.fantasy.railway.model.Service;
 import org.fantasy.railway.model.Station;
+import org.fantasy.railway.model.Stop;
 import org.fantasy.railway.services.NetworkServiceImpl;
 import org.fantasy.railway.services.TimetableService;
 import org.fantasy.railway.util.Now;
@@ -26,6 +27,8 @@ import java.util.Queue;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class NetworkServiceImplTest {
@@ -45,8 +48,87 @@ class NetworkServiceImplTest {
     void shouldLoadNetworkFromFile() {
         network.loadNetwork("test-network.csv");
 
+        // TODO can assert on all items?
         assertThat(network.getStation("A")).isPresent();
         assertThat(network.getStation("Z")).isNotPresent();
+    }
+
+    @Test
+    void shouldConvertNetworkToString() {
+        network.loadNetwork("test-network.csv");
+
+        String networkToString = network.networkToString();
+        assertThat(networkToString).contains("isDirected: false")
+                .contains("Station(name=A)")
+                .contains("[Station(name=C), Station(name=A)]=2");
+    }
+
+    @Test
+    void shouldCalculateDistanceBetweenAdjacent() {
+        network.loadNetwork("test-network.csv");
+
+        assertThat(network.distanceBetweenAdjacent(
+                network.getStationOrThrow("A"),
+                network.getStationOrThrow("C")
+                )).isEqualTo(2);
+
+    }
+
+    @Test
+    void shouldNotDistanceBetweenAdjacentIfNotAdjacent() {
+        network.loadNetwork("test-network.csv");
+
+        // keep these calls out of the assertThrows...
+        Station a = network.getStationOrThrow("A");
+        Station b = network.getStationOrThrow("B");
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                network.distanceBetweenAdjacent(a, b)
+        );
+
+        String expected = " are not adjacent";
+        String actual = exception.getMessage();
+
+        assertThat(actual).endsWith(expected);
+    }
+
+    @Test
+    void shouldCalculateRoute() {
+        network.loadNetwork("test-network.csv");
+
+        List<Stop> result = network.calculateRoute(
+                network.getStationOrThrow("B"),
+                network.getStationOrThrow("H"));
+
+        assertThat(result)
+                .isNotNull()
+                .isNotEmpty()
+                .hasSize(6);
+        assertThat(result).map(stop -> stop.getStation().getName())
+                .containsExactly("B", "E", "D", "C", "G", "H");
+
+    }
+
+    @Test
+    void shouldNotCalculateRouteIfNotPossible() {
+        network.loadNetwork("test-network.csv");
+
+        // add an isolated part of the network...
+        Queue<String> inputs = new LinkedList<>(Arrays.asList("Z", "Y", "5"));
+        network.addStation(inputs);
+
+        // keep these calls out of the assertThrows...
+        Station b = network.getStationOrThrow("B");
+        Station z = network.getStationOrThrow("Z");
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                network.calculateRoute(b, z)
+        );
+
+        String expected = "No route from ";
+        String actual = exception.getMessage();
+
+        assertThat(actual).startsWith(expected);
     }
 
     @Test
@@ -81,8 +163,6 @@ class NetworkServiceImplTest {
 
         Station station = network.getStationOrCreate(name);
 
-        assertThat(network.getItems()).hasSize(1);
-        assertThat(network.getStationOrThrow(name)).isEqualTo(station);
         assertThat(network.getItems()).hasSize(1);
         assertThat(network.getStationOrThrow(name)).isEqualTo(station);
 
@@ -161,15 +241,45 @@ class NetworkServiceImplTest {
     }
 
     @Test
+    void shouldNotAddStationsIfNotEnoughStringInput() {
+        Queue<String> inputs = new LinkedList<>();
+
+        inputs.add("one input should fail");
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                network.addStation(inputs)
+        );
+
+        String expected = "There should be at least three inputs";
+        String actual = exception.getMessage();
+
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void shouldNotAddStationsIfWrongNumberOfStringInput() {
+        Queue<String> inputs = new LinkedList<>(Arrays.asList("one", "two", "three", "four"));
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                network.addStation(inputs)
+        );
+
+        String expected = "There should be an odd number of inputs";
+        String actual = exception.getMessage();
+
+        assertThat(actual).isEqualTo(expected);
+
+    }
+        @Test
     void shouldRemoveStationIfNoService() {
-        Mockito.when(timetable.getServices()).thenReturn(new ArrayList<>());
+        when(timetable.getServices()).thenReturn(new ArrayList<>());
         String name = "Test station";
 
         Station station = network.getStationOrCreate(name);
         network.removeStation(station);
 
         assertThat(network.getStation(station.getName())).isNotPresent();
-        Mockito.verify(timetable, Mockito.times(1)).getServices();
+        verify(timetable, Mockito.times(1)).getServices();
     }
 
     @Test
@@ -180,7 +290,7 @@ class NetworkServiceImplTest {
         service.setName(service.getCurrentName());
         List<Service> services = Arrays.asList(service);
 
-        Mockito.when(timetable.getServices()).thenReturn(services);
+        when(timetable.getServices()).thenReturn(services);
 
         // set the time to be before the time of the service we just created...
         Clock clock = Clock.fixed(Instant.parse("2022-05-10T08:00:00Z"), ZoneOffset.UTC);
@@ -197,6 +307,8 @@ class NetworkServiceImplTest {
 
         assertThat(actual).startsWith(expected);
         assertThat(network.getStation(station.getName())).isPresent();
-        Mockito.verify(timetable, Mockito.times(1)).getServices();
+        verify(timetable, Mockito.times(1)).getServices();
     }
+
+
 }
