@@ -71,8 +71,8 @@ public class NetworkServiceImpl extends BaseService<Station> implements NetworkS
 
     @Override
     public Station addStation(Queue<String> inputs) {
-        Preconditions.checkArgument(inputs.size() > 2);
-        Preconditions.checkArgument(inputs.size() % 2 > 0);
+        Preconditions.checkArgument(inputs.size() > 2, "There should be at least three inputs");
+        Preconditions.checkArgument(inputs.size() % 2 > 0, "There should be an odd number of inputs");
 
         Station station = getStationOrCreate(inputs.poll());
         Map<Station, Integer> connections = new HashMap<>();
@@ -142,7 +142,7 @@ public class NetworkServiceImpl extends BaseService<Station> implements NetworkS
      */
     public Integer distanceBetweenAdjacent(Station from, Station to) {
         return network.edgeValue(from, to)
-                .orElseThrow(() -> new IllegalStateException(String.format("Stations %s and %s are not adjacent", from, to)));
+                .orElseThrow(() -> new IllegalArgumentException(String.format("Stations %s and %s are not adjacent", from, to)));
     }
 
     @Override
