@@ -147,7 +147,7 @@ public class NetworkServiceImpl extends BaseService<Station> implements NetworkS
 
     @Override
     public String networkToString() {
-        return network.asGraph().toString();
+        return network.toString();
     }
 
     @Override
