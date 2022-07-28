@@ -67,7 +67,7 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
                 ));
     }
 
-    private void dispatch() {
+    public void dispatch() {
         // TODO remove this
         System.out.print("dispatching... "); // TODO remove this
 

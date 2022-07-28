@@ -3,8 +3,10 @@ package org.fantasy.railway.service;
 import org.assertj.core.api.Assertions;
 import org.fantasy.railway.model.Service;
 import org.fantasy.railway.model.Station;
+import org.fantasy.railway.model.Stop;
 import org.fantasy.railway.services.NetworkService;
 import org.fantasy.railway.services.TimetableServiceImpl;
+import org.fantasy.railway.util.Now;
 import org.fantasy.railway.util.RailwayUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,11 +16,15 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import static java.time.Clock.fixed;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.fantasy.railway.util.TestUtils.createTestRoute;
 import static org.fantasy.railway.util.TestUtils.firstStop;
@@ -110,8 +116,8 @@ class TimetableServiceImplTest {
     @Test
     void shouldLoadServicesFromFileFullyMocked() {
         // mock returns from parsing the file...
-        Queue<String> row1 = new LinkedList<>(Arrays.asList("one","two","three"));
-        Queue<String> row2 = new LinkedList<>(Arrays.asList("four","five","six"));
+        Queue<String> row1 = new LinkedList<>(Arrays.asList("one", "two", "three"));
+        Queue<String> row2 = new LinkedList<>(Arrays.asList("four", "five", "six"));
         Queue<Queue<String>> parsedFile = new LinkedList<>(Arrays.asList(row1, row2));
         String filename = "dummy-filename.csv";
 
@@ -137,6 +143,83 @@ class TimetableServiceImplTest {
 
         }
 
+    }
+
+    @Test
+    void shouldDispatchServices() {
+        Service service = Service.builder().id(1).build();
+        LinkedList<Stop> route = createTestRoute(service);
+        Stop first = route.get(0);
+        Stop second = route.get(1);
+        Stop third = route.get(2);
+        service.setRoute(route);
+
+        timetable.getServices().add(service);
+
+        // set the time to be in the middle of the service route...
+        Instant startTime = Instant.parse("2022-05-10T10:02:00Z");
+        Now.setClock(fixed(startTime, ZoneOffset.UTC));
+
+        timetable.dispatch();
+
+        Queue<Stop> dispatched = timetable.getDispatched();
+        assertThat(dispatched)
+                .isNotEmpty()
+                .hasSize(1)
+                .containsExactly(first);
+
+        Now.setClock(fixed(startTime.plus(4, ChronoUnit.MINUTES), ZoneOffset.UTC));
+        timetable.dispatch();
+        assertThat(dispatched).containsExactly(first, second);
+
+        Now.setClock(fixed(startTime.plus(15, ChronoUnit.MINUTES), ZoneOffset.UTC));
+        timetable.dispatch();
+
+        assertThat(dispatched).containsExactly(first, second, third);
+
+    }
+
+    @Test
+    void shouldSkipAndRemoveEmptyServiceWhenDispatching() {
+        Service service = Service.builder().id(1).build();
+        timetable.getServices().add(service);
+
+        timetable.dispatch();
+
+        assertThat(timetable.getDispatched())
+                .isNotNull()
+                .isEmpty();
+
+        assertThat(timetable.getServices())
+                .isNotNull()
+                .isEmpty();
+    }
+
+    @Test
+    void shouldCancelService() {
+        Service service = Service.builder().id(1).build();
+        timetable.getItems().add(service);
+
+        timetable.cancelService(1);
+
+        assertThat(timetable.getServices())
+                .isNotNull()
+                .isEmpty();
+    }
+
+    @Test
+    void shouldNotCancelServiceIfNotExists() {
+        Service service = Service.builder().id(1).build();
+        timetable.getItems().add(service);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                timetable.cancelService(2)
+        );
+
+        String expected = "Service with id 2 does not exist";
+        String actual = exception.getMessage();
+
+        assertThat(actual).startsWith(expected);
     }
 
 }

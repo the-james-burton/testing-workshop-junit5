@@ -16,6 +16,7 @@ public class TestUtils {
     public static LinkedList<Stop> createTestRoute(Service service) {
         LinkedList<Stop> route = createTestRoute();
         route.forEach(stop -> stop.setService(service));
+        service.setName(service.getCurrentName());
         return route;
     }
 
