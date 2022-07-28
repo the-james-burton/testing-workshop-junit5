@@ -18,7 +18,7 @@ public class AccountUI extends BaseUI {
         out.println("2. Add new passenger");
         out.println("3. Load passenger list from file");
         out.println("4. Remove passenger");
-        out.println("X. ");
+        out.println("X. Quit");
         out.print("Option: ");
         String option = scanner.next();
         switch (option) {
@@ -35,7 +35,6 @@ public class AccountUI extends BaseUI {
                 removePassenger(scanner);
                 break;
             default:
-                out.println("Invalid option, please re-enter.");
                 break;
         }
         return option;
