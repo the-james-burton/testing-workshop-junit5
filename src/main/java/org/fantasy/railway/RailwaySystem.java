@@ -30,7 +30,7 @@ public class RailwaySystem {
         bootstrap();
     }
 
-    private void bootstrap() {
+    void bootstrap() {
         accounts.loadPassengers("passengers.csv");
         network.loadNetwork("network.csv");
         timetable.loadServices("services.csv");
