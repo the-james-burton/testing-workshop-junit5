@@ -34,9 +34,6 @@ class AccountUITest extends BaseUITest {
     @BeforeEach
     void setup() {
         super.setup();
-        accountUI = new AccountUI();
-        accountUI.setSystem(system);
-        accountUI.setOut(out);
     }
 
     @Test
@@ -68,7 +65,6 @@ class AccountUITest extends BaseUITest {
 
         verify(accounts).addPassenger(inputs.capture());
 
-        String output = outStream.toString();
         assertThat(inputs.getValue().poll()).isEqualTo("Alice");
         assertThat(inputs.getValue().poll()).isEqualTo("2000-01-01");
     }
@@ -82,7 +78,6 @@ class AccountUITest extends BaseUITest {
 
         verify(accounts).loadPassengers(inputString.capture());
 
-        String output = outStream.toString();
         assertThat(inputString.getValue()).isEqualTo("filename.csv");
     }
 
@@ -99,7 +94,6 @@ class AccountUITest extends BaseUITest {
 
         verify(accounts).removePassenger(passengerCaptor.capture());
         assertThat(passengerCaptor.getValue()).isEqualTo(passenger);
-        String output = outStream.toString();
     }
 
 }

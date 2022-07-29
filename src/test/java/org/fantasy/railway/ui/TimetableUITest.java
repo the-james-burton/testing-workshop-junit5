@@ -32,9 +32,6 @@ class TimetableUITest extends BaseUITest {
     @BeforeEach
     void setup() {
         super.setup();
-        timetableUI = new TimetableUI();
-        timetableUI.setSystem(system);
-        timetableUI.setOut(out);
     }
 
     @Test
@@ -97,7 +94,6 @@ class TimetableUITest extends BaseUITest {
         String output = outStream.toString();
         assertThat(output).contains(services.toString());
 
-        System.out.println(outStream.toString());
         assertThat(inputs.getValue().poll()).isEqualTo("60");
         assertThat(inputs.getValue().poll()).isEqualTo("First");
         assertThat(inputs.getValue().poll()).isEqualTo("Third");

@@ -30,9 +30,6 @@ class NetworkUITest extends BaseUITest {
     @BeforeEach
     void setup() {
         super.setup();
-        networkUI = new NetworkUI();
-        networkUI.setSystem(system);
-        networkUI.setOut(out);
     }
 
     @Test

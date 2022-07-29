@@ -29,7 +29,6 @@ class BookingUITest extends BaseUITest {
     @InjectMocks
     BookingUI bookingUI;
 
-
     @Override
     BaseUI getUI() {
         return bookingUI;
