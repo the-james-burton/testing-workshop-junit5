@@ -39,7 +39,7 @@ public class NetworkUI extends BaseUI {
     }
 
     private void viewNetwork() {
-        out.println(system.getNetwork().toString()
+        out.println(system.getNetwork().networkToString()
                 .replace(", nodes:", "\n, nodes:")
                 .replace(", edges:", "\n, edges:")
                 .replace(", [Station", "\n, [Station")
@@ -54,7 +54,7 @@ public class NetworkUI extends BaseUI {
         out.print("  Station Name: ");
         inputs.add(scanner.nextLine());
         out.print("  Add connections? (y/n)");
-        while (!"y".equalsIgnoreCase(scanner.nextLine())) {
+        while ("y".equalsIgnoreCase(scanner.nextLine())) {
             out.print("   Enter connected station name: ");
             inputs.add(scanner.nextLine());
             out.print("   Enter connected station distance: ");
