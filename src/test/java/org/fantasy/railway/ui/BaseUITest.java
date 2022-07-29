@@ -28,9 +28,6 @@ public abstract class BaseUITest {
     @Captor
     ArgumentCaptor<String> inputString;
 
-    @Captor
-    ArgumentCaptor<Integer> inputInteger;
-
     PrintStream out;
     ByteArrayOutputStream outStream;
 
@@ -64,6 +61,10 @@ public abstract class BaseUITest {
         system.setBookings(bookings);
         system.setNetwork(network);
         system.setTimetable(timetable);
+
+        getUI().setSystem(system);
+        getUI().setOut(out);
+
     }
 
     @Test
