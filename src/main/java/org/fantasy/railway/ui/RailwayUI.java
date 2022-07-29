@@ -32,8 +32,7 @@ public class RailwayUI extends BaseUI {
         timetableUI.setSystem(this.system);
     }
 
-    public void topMenu() {
-        Scanner scanner = new Scanner(System.in);
+    public void topMenu(Scanner scanner) {
         out.println("Welcome to the Fantasy Railway System!\n\n");
         String lastOption = "";
         while (!lastOption.equalsIgnoreCase("x")) {
