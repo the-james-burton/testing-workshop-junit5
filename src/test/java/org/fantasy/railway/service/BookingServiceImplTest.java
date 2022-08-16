@@ -12,6 +12,7 @@ import org.fantasy.railway.util.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -33,6 +34,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class BookingServiceImplTest {
 
+    @InjectMocks
     BookingServiceImpl booking;
 
     @Mock
@@ -40,8 +42,8 @@ class BookingServiceImplTest {
 
     @BeforeEach
     void setup() {
-        booking = new BookingServiceImpl();
-        booking.setNetwork(network);
+        // demonstrate that the booking service is new each time...
+        // System.out.println(booking.toString());
     }
 
     @Test
