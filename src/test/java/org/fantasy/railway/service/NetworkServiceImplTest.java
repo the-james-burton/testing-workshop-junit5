@@ -8,7 +8,9 @@ import org.fantasy.railway.services.TimetableService;
 import org.fantasy.railway.util.Now;
 import org.fantasy.railway.util.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -19,14 +21,18 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -72,6 +78,26 @@ class NetworkServiceImplTest {
                 network.getStationOrThrow("C")
                 )).isEqualTo(2);
 
+    }
+
+
+    @TestFactory
+    Stream<DynamicTest> shouldAlwaysCalculateRoute() {
+        network.loadNetwork("test-network.csv");
+
+        return IntStream
+                .iterate(0, n -> n + 1)
+                .limit(10)
+                .mapToObj(n -> {
+                    List<Station> stations = network.getItems();
+                    Collections.shuffle(stations);
+                    Station from = stations.get(0);
+                    Station to = stations.get(1);
+                    return dynamicTest(
+                            String.format("%s -> %s", from.getName(), to.getName()),
+                            () -> assertThat(network.calculateRoute(from, to))
+                                    .isNotNull());
+                });
     }
 
     @Test
@@ -134,7 +160,6 @@ class NetworkServiceImplTest {
     @Test
     void shouldThrowExceptionIfStationNotExist() {
         String name = "Test station";
-        Station station = Station.builder().name(name).build();
 
         Exception exception = assertThrows(IllegalArgumentException.class, () ->
                 network.getStationOrThrow(name)
