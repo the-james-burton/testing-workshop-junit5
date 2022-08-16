@@ -4,6 +4,8 @@ import com.google.common.base.Preconditions;
 import org.fantasy.railway.model.Stop;
 
 import java.io.InputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.temporal.ChronoUnit;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,7 +45,12 @@ public class RailwayUtils {
 
     static Predicate<String> comment = row -> (row.isEmpty() || row.startsWith("#"));
 
-    private static Queue<String> parseLine(String line) {
+    /**
+     *
+     * @param line the CSV line to split
+     * @return a queue of strings from the given line split by comma
+     */
+    public static Queue<String> parseLine(String line) {
         Queue<String> values = new LinkedList<>();
         try (Scanner parser = new Scanner(line)) {
             parser.useDelimiter(",");
@@ -62,9 +69,16 @@ public class RailwayUtils {
      * @return the total time take for this journey
      */
     public static Integer totalTime(List<Stop> route) {
-        return new Long(
-                route.get(0).getWhen().until(route.get(route.size() - 1).getWhen(), ChronoUnit.MINUTES)
-        ).intValue();
+        return (int) route.get(0).getWhen().until(route.get(route.size() - 1).getWhen(), ChronoUnit.MINUTES);
+    }
+
+    /**
+     *
+     * @param price the double to parse
+     * @return a BigDecimal representing the given price
+     */
+    public static BigDecimal parsePrice(Double price) {
+        return BigDecimal.valueOf(price).setScale(2, RoundingMode.HALF_UP);
     }
 
 }
