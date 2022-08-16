@@ -1,6 +1,5 @@
 package org.fantasy.railway.model;
 
-import org.fantasy.railway.util.TestUtils;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalTime;
@@ -29,8 +28,8 @@ class StopTest {
 
     @Test
     void shouldHaveSameStationAs() {
-        Stop stop1 = TestUtils.firstStop();
-        Stop stop2 = TestUtils.firstStop();
+        Stop stop1 = firstStop();
+        Stop stop2 = firstStop();
         stop2.setWhen(stop2.getWhen().plusMinutes(15));
 
         assertThat(stop1.sameStationAs(stop2)).isTrue();
@@ -38,8 +37,8 @@ class StopTest {
 
     @Test
     void shouldNotHaveSameStationAs() {
-        Stop stop1 = TestUtils.firstStop();
-        Stop stop2 = TestUtils.secondStop();
+        Stop stop1 = firstStop();
+        Stop stop2 = secondStop();
 
         assertThat(stop1.sameStationAs(stop2)).isFalse();
     }

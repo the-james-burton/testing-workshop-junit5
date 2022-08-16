@@ -4,9 +4,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.fantasy.railway.util.RailwayUtils;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 
 @Getter
@@ -25,7 +25,7 @@ public class Ticket extends Identified {
      * @param price a double for the raw price value
      */
     public void setPrice(Double price) {
-        this.price = BigDecimal.valueOf(price).setScale(2, RoundingMode.HALF_UP);
+        this.price = RailwayUtils.parsePrice(price);
     }
 
 }
