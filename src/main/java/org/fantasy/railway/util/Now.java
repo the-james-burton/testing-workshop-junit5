@@ -2,7 +2,6 @@ package org.fantasy.railway.util;
 
 import java.time.Clock;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class Now {
@@ -22,10 +21,6 @@ public class Now {
 
     public static LocalTime localTime() {
         return LocalTime.now(clock);
-    }
-
-    public static LocalDateTime localDateTime() {
-        return LocalDateTime.now(clock);
     }
 
 }
