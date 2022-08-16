@@ -2,8 +2,10 @@ package org.fantasy.railway.ui;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.fantasy.railway.model.Concession;
 import org.fantasy.railway.model.Passenger;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
@@ -16,9 +18,10 @@ public class AccountUI extends BaseUI {
         out.println("\nPlease select an option:");
         out.println("1. View passengers");
         out.println("2. Add new passenger");
-        out.println("3. Load passenger list from file");
-        out.println("4. Remove passenger");
-        out.println("X. Quit");
+        out.println("3. Add concession to passenger");
+        out.println("4. Load passenger list from file");
+        out.println("5. Remove passenger");
+        out.println("X. Back to top menu");
         out.print("Option: ");
         String option = scanner.next();
         switch (option) {
@@ -29,9 +32,12 @@ public class AccountUI extends BaseUI {
                 addNewPassenger(scanner);
                 break;
             case "3":
-                loadPassengers(scanner);
+                addConcessionToPassenger(scanner);
                 break;
             case "4":
+                loadPassengers(scanner);
+                break;
+            case "5":
                 removePassenger(scanner);
                 break;
             default:
@@ -58,6 +64,21 @@ public class AccountUI extends BaseUI {
 
         Passenger passenger = system.getAccounts().addPassenger(inputs);
         out.format("New passenger %s added.%n%n", passenger);
+    }
+
+    private void addConcessionToPassenger(Scanner scanner) {
+        scanner.nextLine();
+        out.println("\nPlease enter passenger Id:");
+        Integer passengerId = scanner.nextInt();
+        Passenger passenger = system.getAccounts().getById(passengerId);
+        out.println(passenger);
+        out.format("%nPlease enter concession (%s) to add to passenger: ", Arrays.asList(Concession.values()));
+        scanner.nextLine();
+        String input = scanner.nextLine();
+        Concession concession = Concession.valueOf(input);
+
+        passenger.addConcession(concession);
+        out.format("Concession %s added to %s%n", concession, passenger);
     }
 
     private void loadPassengers(Scanner scanner) {
