@@ -55,7 +55,6 @@ class NetworkUITest extends BaseUITest {
 
         verify(network).addStation(inputs.capture());
 
-        System.out.println(outStream.toString());
         assertThat(inputs.getValue().poll()).isEqualTo("First");
         assertThat(inputs.getValue().poll()).isEqualTo("Second");
         assertThat(inputs.getValue().poll()).isEqualTo("4");

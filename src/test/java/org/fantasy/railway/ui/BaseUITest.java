@@ -73,6 +73,9 @@ public abstract class BaseUITest {
         Scanner scanner = new Scanner(in);
         getUI().displayMenu(scanner);
 
+        // useful for debugging...
+        // System.out.println(outStream.toString());
+
         assertThat(outStream.toString())
                 .isNotEmpty()
                 .contains("Please select an option");
