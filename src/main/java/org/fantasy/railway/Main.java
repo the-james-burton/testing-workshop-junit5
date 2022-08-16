@@ -9,7 +9,7 @@ public class Main {
 
     public static void main(String[] args) {
         RailwaySystem system = new RailwaySystem();
-        RailwayUI ui  = new RailwayUI();
+        RailwayUI ui = new RailwayUI();
         Scanner scanner = new Scanner(System.in);
         PrintStream out = System.out;
         startProgram(system, ui, scanner, out);

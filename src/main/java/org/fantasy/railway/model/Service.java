@@ -18,9 +18,9 @@ import java.util.Queue;
 public class Service extends Identified implements Comparable<Service> {
 
     @Builder.Default
-    Queue<Stop> route = new LinkedList<>();
+    private Queue<Stop> route = new LinkedList<>();
 
-    String name;
+    private String name;
 
     public LocalTime getStartTime() {
         return route.stream()
@@ -61,7 +61,6 @@ public class Service extends Identified implements Comparable<Service> {
     }
 
     /**
-     *
      * @param route the route to compare with
      * @return true if the given route is the same as this service (stops at the same stations)
      */

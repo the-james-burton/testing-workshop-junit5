@@ -72,10 +72,10 @@ class TimetableUITest extends BaseUITest {
         assertThat(stops)
                 .isNotEmpty()
                 .allSatisfy(stop -> {
-            assertThat(output).contains(stop.getService().getName());
-            assertThat(output).contains(stop.getStation().getName());
-            assertThat(output).contains(stop.getWhen().toString());
-        });
+                    assertThat(output).contains(stop.getService().getName());
+                    assertThat(output).contains(stop.getStation().getName());
+                    assertThat(output).contains(stop.getWhen().toString());
+                });
     }
 
     @Test

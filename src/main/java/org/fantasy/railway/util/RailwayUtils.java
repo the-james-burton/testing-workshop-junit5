@@ -15,6 +15,8 @@ import java.util.function.Predicate;
 
 public class RailwayUtils {
 
+    static Predicate<String> comment = row -> (row.isEmpty() || row.startsWith("#"));
+
     /**
      * class is singleton - static method use only
      */
@@ -43,10 +45,7 @@ public class RailwayUtils {
         return records;
     }
 
-    static Predicate<String> comment = row -> (row.isEmpty() || row.startsWith("#"));
-
     /**
-     *
      * @param line the CSV line to split
      * @return a queue of strings from the given line split by comma
      */
@@ -73,7 +72,6 @@ public class RailwayUtils {
     }
 
     /**
-     *
      * @param price the double to parse
      * @return a BigDecimal representing the given price
      */

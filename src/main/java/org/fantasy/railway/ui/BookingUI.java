@@ -14,7 +14,7 @@ public class BookingUI extends BaseUI {
         out.println("\nPlease select an option:");
         out.println("1. View tickets");
         out.println("2. Purchase a ticket");
-        out.println("X. ");
+        out.println("X. Back to top menu");
         out.print("Option: ");
         String option = scanner.next();
         switch (option) {

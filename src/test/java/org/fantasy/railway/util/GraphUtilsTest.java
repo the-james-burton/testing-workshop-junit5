@@ -17,6 +17,20 @@ class GraphUtilsTest {
 
     private ValueGraph<String, Integer> graph;
 
+    /**
+     * @return a stream of arguments: source, target, expected shortest path
+     */
+    static Stream<Arguments> generateData() {
+        return Stream.of(
+                Arguments.of("D", "H", Arrays.asList("D", "C", "G", "H")),
+                Arguments.of("A", "F", Arrays.asList("A", "E", "D", "F")),
+                Arguments.of("E", "H", Arrays.asList("E", "D", "C", "G", "H")),
+                Arguments.of("B", "H", Arrays.asList("B", "E", "D", "C", "G", "H")),
+                Arguments.of("B", "I", Arrays.asList("B", "I")),
+                Arguments.of("E", "H", Arrays.asList("E", "D", "C", "G", "H"))
+        );
+    }
+
     @BeforeEach
     void setUp() {
         graph = createSampleGraph();
@@ -30,20 +44,6 @@ class GraphUtilsTest {
     void shouldFindTheShortestPath(String source, String target, List<String> expected) {
         List<String> shortestPath = GraphUtils.findShortestPath(graph, source, target);
         Assertions.assertIterableEquals(shortestPath, expected);
-    }
-
-    /**
-     * @return a stream of arguments: source, target, expected shortest path
-     */
-    static Stream<Arguments> generateData() {
-        return Stream.of(
-                Arguments.of("D", "H", Arrays.asList("D", "C", "G", "H")),
-                Arguments.of("A", "F", Arrays.asList("A", "E", "D", "F")),
-                Arguments.of("E", "H", Arrays.asList("E", "D", "C", "G", "H")),
-                Arguments.of("B", "H", Arrays.asList("B", "E", "D", "C", "G", "H")),
-                Arguments.of("B", "I", Arrays.asList("B", "I")),
-                Arguments.of("E", "H", Arrays.asList("E", "D", "C", "G", "H"))
-        );
     }
 
     /*

@@ -11,7 +11,7 @@ import lombok.experimental.SuperBuilder;
 public class Station extends Identified {
 
     @Builder.Default
-    String name = "";
+    private String name = "";
 
 }
 /*

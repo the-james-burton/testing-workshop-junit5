@@ -39,13 +39,13 @@ class ServiceTest {
     }
 
 
-
     @Test
     void shouldHaveEmptyRouteOnCreation() {
         assertThat(emptyService.getRoute())
                 .isNotNull()
                 .isEmpty();
     }
+
     @Test
     void shouldReturnStartTime() {
         LocalTime expected = first.getWhen();
@@ -65,7 +65,7 @@ class ServiceTest {
     @Test
     void shouldThrowExceptionInGetStartTimeIfNoRoute() {
         Exception exception = assertThrows(IllegalStateException.class, () ->
-            emptyService.getStartTime()
+                emptyService.getStartTime()
         );
 
         String expectedMessage = "No route defined for this service";
@@ -77,7 +77,7 @@ class ServiceTest {
     @Test
     void shouldThrowExceptionInGetFinishTimeIfNoRoute() {
         Exception exception = assertThrows(IllegalStateException.class, () ->
-            emptyService.getFinishTime()
+                emptyService.getFinishTime()
         );
 
         String expected = "No route defined for this service";

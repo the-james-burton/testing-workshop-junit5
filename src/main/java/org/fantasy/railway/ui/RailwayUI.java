@@ -33,13 +33,13 @@ public class RailwayUI extends BaseUI {
     }
 
     public void topMenu(Scanner scanner) {
-        out.println("Welcome to the Fantasy Railway System!\n\n");
+        out.println("Welcome to the Fantasy Railway System!\n");
         String lastOption = "";
         while (!lastOption.equalsIgnoreCase("x")) {
             try {
                 lastOption = displayMenu(scanner);
             } catch (RuntimeException e) {
-                out.format("ERROR : %s", e.getMessage());
+                out.format("ERROR : %s%n", e.getMessage());
                 e.printStackTrace(out);
             }
         }
@@ -52,7 +52,7 @@ public class RailwayUI extends BaseUI {
         out.println("2. Ticket booking");
         out.println("3. Network Management");
         out.println("4. Timetabling");
-        out.println("X. ");
+        out.println("X. QUIT");
         out.print("Option: ");
         String option = scanner.next();
         switch (option) {

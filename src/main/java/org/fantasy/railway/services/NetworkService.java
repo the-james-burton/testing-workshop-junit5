@@ -69,7 +69,6 @@ public interface NetworkService {
     Integer distanceBetweenAdjacent(Station from, Station to);
 
     /**
-     *
      * @return a printable version of the contents of the network
      */
     String networkToString();

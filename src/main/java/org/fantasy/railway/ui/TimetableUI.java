@@ -16,7 +16,7 @@ public class TimetableUI extends BaseUI {
         out.println("1. List services");
         out.println("2. Show dispatched services");
         out.println("3. Add new service");
-        out.println("X. ");
+        out.println("X. Back to top menu");
         out.print("Option: ");
         String option = scanner.next();
         switch (option) {

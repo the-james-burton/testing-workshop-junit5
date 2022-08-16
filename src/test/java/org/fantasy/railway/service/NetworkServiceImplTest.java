@@ -76,7 +76,7 @@ class NetworkServiceImplTest {
         assertThat(network.distanceBetweenAdjacent(
                 network.getStationOrThrow("A"),
                 network.getStationOrThrow("C")
-                )).isEqualTo(2);
+        )).isEqualTo(2);
 
     }
 
@@ -295,7 +295,8 @@ class NetworkServiceImplTest {
         assertThat(actual).isEqualTo(expected);
 
     }
-        @Test
+
+    @Test
     void shouldRemoveStationIfNoService() {
         when(timetable.getServices()).thenReturn(new ArrayList<>());
         String name = "Test station";

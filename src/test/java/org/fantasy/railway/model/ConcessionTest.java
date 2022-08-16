@@ -8,7 +8,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ConcessionTest {
 
     @ParameterizedTest
-    @EnumSource(Concession.class) // passing all concessions
+    @EnumSource(Concession.class)
+        // passing all concessions
     void shouldHaveMinimumAgeAboveTwelve(Concession concession) {
         assertThat(concession.getMinimumAge()).isGreaterThanOrEqualTo(13);
     }

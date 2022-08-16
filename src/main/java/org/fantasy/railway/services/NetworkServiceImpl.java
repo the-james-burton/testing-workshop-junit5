@@ -123,7 +123,7 @@ public class NetworkServiceImpl extends BaseService<Station> implements NetworkS
                         .build()));
 
         //
-        for (int stop = 1; route.size() - 1 > stop; stop++) {
+        for (int stop = 1; route.size() > stop; stop++) {
             Stop previous = route.get(stop - 1);
             Stop current = route.get(stop);
             current.setWhen(previous.getWhen().plusMinutes(

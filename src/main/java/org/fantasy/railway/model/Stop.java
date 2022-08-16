@@ -11,12 +11,12 @@ import java.time.LocalTime;
 public class Stop implements Comparable<Stop> {
 
     @ToString.Exclude
-    Service service;
+    private Service service;
 
-    Station station;
+    private Station station;
 
     @Builder.Default
-    LocalTime when = LocalTime.of(0,0);
+    private LocalTime when = LocalTime.of(0, 0);
 
     @Override
     public int compareTo(Stop that) {

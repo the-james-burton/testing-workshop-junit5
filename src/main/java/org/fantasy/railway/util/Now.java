@@ -6,10 +6,10 @@ import java.time.LocalTime;
 
 public class Now {
 
+    private static Clock clock = Clock.systemUTC();
+
     private Now() {
     }
-
-    private static Clock clock = Clock.systemUTC();
 
     public static void setClock(Clock cloc) {
         clock = cloc;

@@ -10,16 +10,17 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter
+@ToString
 @SuperBuilder
 @EqualsAndHashCode(callSuper = false)
 public class Ticket extends Identified {
 
     @ToString.Exclude
-    Passenger passenger;
-    Station from;
-    Station to;
-    LocalDate validOn;
-    BigDecimal price;
+    private Passenger passenger;
+    private Station from;
+    private Station to;
+    private LocalDate validOn;
+    private BigDecimal price;
 
     /**
      * @param price a double for the raw price value
