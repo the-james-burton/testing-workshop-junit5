@@ -34,6 +34,7 @@ public class GraphUtils {
      * @return the shortest path; or {@code null} if no path was found
      * @author <a href="sven@happycoders.eu">Sven Woltmann</a>
      */
+    @SuppressWarnings("UnstableApiUsage")
     public static <N> List<N> findShortestPath(ValueGraph<N, Integer> graph, N source, N target) {
         Map<N, NodeWrapper<N>> nodeWrappers = new HashMap<>();
         PriorityQueue<NodeWrapper<N>> queue = new PriorityQueue<>();
