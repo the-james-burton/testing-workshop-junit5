@@ -28,9 +28,9 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
     @Getter
     List<Service> services = new ArrayList<>();
 
-    ScheduledExecutorService dispatcher = Executors.newSingleThreadScheduledExecutor();
+    final ScheduledExecutorService dispatcher = Executors.newSingleThreadScheduledExecutor();
 
-    Queue<Stop> dispatched = new LinkedList<>();
+    final Queue<Stop> dispatched = new LinkedList<>();
 
     public TimetableServiceImpl() {
         // dispatch train services every minute...
@@ -50,16 +50,6 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
                 .forEach(this::createNewServices);
         dispatch();
         dispatched.clear();
-    }
-
-    @Override
-    public void cancelService(Integer serviceId) {
-        services.remove(services.stream()
-                .filter(service -> serviceId.equals(service.getId()))
-                .findFirst()
-                .orElseThrow(() ->
-                        new IllegalArgumentException(String.format("Service with id %s does not exist", serviceId))
-                ));
     }
 
     public void dispatch() {
@@ -114,10 +104,10 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
         // how long does the route take to complete?
         LocalTime startTime = route.get(0).getWhen();
         LocalTime finishTime = route.get(route.size() - 1).getWhen();
-        Integer duration = (int) startTime.until(finishTime, ChronoUnit.MINUTES);
+        long duration = startTime.until(finishTime, ChronoUnit.MINUTES);
 
         // how many services can we fit into 24 hours?
-        int numberOfServicesIn24Hours = ((24 * 60) - duration) / frequency;
+        long numberOfServicesIn24Hours = ((24 * 60) - duration) / frequency;
 
         // create service instances according to the given frequency...
         List<Service> newServices = IntStream.iterate(frequency, m -> m + frequency)

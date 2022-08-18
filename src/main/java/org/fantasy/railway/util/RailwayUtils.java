@@ -18,7 +18,7 @@ import java.util.function.Predicate;
  */
 public class RailwayUtils {
 
-    static Predicate<String> comment = row -> (row.isEmpty() || row.startsWith("#"));
+    static final Predicate<String> comment = row -> (row.isEmpty() || row.startsWith("#"));
 
     /**
      * class is singleton - static method use only

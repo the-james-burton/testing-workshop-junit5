@@ -27,11 +27,5 @@ public interface BookingService {
      */
     List<Ticket> getTickets();
 
-    /**
-     * @param id the id of the Ticket to lookup
-     * @return the Ticket with the given id
-     */
-    Ticket getById(Integer id);
-
     void setNetwork(NetworkService network);
 }

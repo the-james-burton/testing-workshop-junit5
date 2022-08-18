@@ -9,6 +9,7 @@ import java.util.List;
  * Extending this class signifies that the service manages Identified objects
  * @param <T> the Identified object that is being managed
  */
+@SuppressWarnings("java:S1610")
 public abstract class BaseService<T extends Identified> {
 
     abstract List<T> getItems();

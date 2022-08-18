@@ -36,11 +36,6 @@ public interface TimetableService {
     void loadServices(String filename);
 
     /**
-     * @param service the id of the service to cancel
-     */
-    void cancelService(Integer service);
-
-    /**
      * @return a List of all services
      */
     List<Service> getServices();
@@ -49,12 +44,6 @@ public interface TimetableService {
      * @return services that have dispatched
      */
     Queue<Stop> getDispatched();
-
-    /**
-     * @param id the id of the Service to lookup
-     * @return the Service with the given id
-     */
-    Service getById(Integer id);
 
     void setNetwork(NetworkService network);
 

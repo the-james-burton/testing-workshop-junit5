@@ -18,12 +18,13 @@ import java.util.Optional;
 import java.util.Queue;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("UnstableApiUsage")
 public class NetworkServiceImpl extends BaseService<Station> implements NetworkService {
 
     @Setter
     TimetableService timetable;
 
-    MutableValueGraph<Station, Integer> network;
+    final MutableValueGraph<Station, Integer> network;
 
     public NetworkServiceImpl() {
         network = ValueGraphBuilder.undirected().build();
@@ -63,7 +64,7 @@ public class NetworkServiceImpl extends BaseService<Station> implements NetworkS
                 "Station %s does not exist in the network", station);
         network.addNode(station);
         connections.keySet()
-                .forEach(s -> network.addNode(s));
+                .forEach(network::addNode);
         connections
                 .forEach((connection, distance) -> network.putEdgeValue(station, connection, distance));
         return station;

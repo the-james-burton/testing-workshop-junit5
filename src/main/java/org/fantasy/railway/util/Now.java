@@ -6,7 +6,7 @@ import java.time.LocalTime;
 
 /**
  * Class to make unit testing of time based events easier
- * https://medium.com/agorapulse-stories/how-to-solve-now-problem-in-your-java-tests-7c7f4a6d703c
+ * <a href="https://medium.com/agorapulse-stories/how-to-solve-now-problem-in-your-java-tests-7c7f4a6d703c">medium article</a>
  */
 public class Now {
 

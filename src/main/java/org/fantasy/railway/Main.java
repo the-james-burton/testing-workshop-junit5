@@ -17,6 +17,7 @@ public class Main {
      *
      * @param args no args are required
      */
+    @SuppressWarnings("java:S106")
     public static void main(String[] args) {
         RailwaySystem system = new RailwaySystem();
         RailwayUI ui = new RailwayUI();

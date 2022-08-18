@@ -195,31 +195,4 @@ class TimetableServiceImplTest {
                 .isEmpty();
     }
 
-    @Test
-    void shouldCancelService() {
-        Service service = Service.builder().id(1).build();
-        timetable.getItems().add(service);
-
-        timetable.cancelService(1);
-
-        assertThat(timetable.getServices())
-                .isNotNull()
-                .isEmpty();
-    }
-
-    @Test
-    void shouldNotCancelServiceIfNotExists() {
-        Service service = Service.builder().id(1).build();
-        timetable.getItems().add(service);
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () ->
-                timetable.cancelService(2)
-        );
-
-        String expected = "Service with id 2 does not exist";
-        String actual = exception.getMessage();
-
-        assertThat(actual).startsWith(expected);
-    }
-
 }
