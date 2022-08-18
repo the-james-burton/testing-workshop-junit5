@@ -19,7 +19,7 @@ public class GraphUtils {
     /**
      * utility class to be used as static only
      */
-    GraphUtils() {
+    private GraphUtils() {
     }
 
     /**

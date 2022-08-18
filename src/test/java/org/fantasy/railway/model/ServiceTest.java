@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.fantasy.railway.util.TestUtils.createTestRoute;
+import static org.fantasy.railway.util.TestUtils.firstStop;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ServiceTest {
@@ -128,11 +129,21 @@ class ServiceTest {
     }
 
     @Test
-    void shouldNotHaveSameRouteAs() {
+    void shouldNotHaveSameRouteAsIfDifferentSize() {
         List<Stop> differentRoute = createTestRoute().stream()
                 .skip(1)
                 .collect(Collectors.toList());
         differentRoute.forEach(stop -> stop.setWhen(stop.getWhen().plusMinutes(15)));
+
+        assertThat(serviceWithRoute.sameRouteAs(differentRoute)).isFalse();
+    }
+
+    @Test
+    void shouldNotHaveSameRouteAsIfDifferentStops() {
+        List<Stop> differentRoute = createTestRoute().stream()
+                .skip(1)
+                .collect(Collectors.toList());
+        differentRoute.add(firstStop());
 
         assertThat(serviceWithRoute.sameRouteAs(differentRoute)).isFalse();
     }
