@@ -10,6 +10,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
 
+/**
+ * UI class to manage passenger accounts
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class AccountUI extends BaseUI {
@@ -56,18 +59,24 @@ public class AccountUI extends BaseUI {
         scanner.nextLine();
         Queue<String> inputs = new LinkedList<>();
 
+        // gather user input...
         out.println("\nPlease enter passenger details:");
         out.print("  Passenger Name: ");
         inputs.add(scanner.nextLine());
         out.print("  Passenger DOB (yyyy-mm-dd): ");
         inputs.add(scanner.nextLine());
 
+        // perform the back end call...
         Passenger passenger = system.getAccounts().addPassenger(inputs);
+
+        // confirm success to the user...
         out.format("New passenger %s added.%n%n", passenger);
     }
 
     private void addConcessionToPassenger(Scanner scanner) {
         scanner.nextLine();
+
+        // gather user input...
         out.println("\nPlease enter passenger Id:");
         Integer passengerId = scanner.nextInt();
         Passenger passenger = system.getAccounts().getById(passengerId);
@@ -77,26 +86,39 @@ public class AccountUI extends BaseUI {
         String input = scanner.nextLine();
         Concession concession = Concession.valueOf(input);
 
+        // perform the back end call...
         passenger.addConcession(concession);
+
+        // confirm success to the user...
         out.format("Concession %s added to %s%n", concession, passenger);
     }
 
     private void loadPassengers(Scanner scanner) {
         scanner.nextLine();
+
+        // gather user input...
         out.println("\nPlease enter filename:");
         String filename = scanner.nextLine();
 
+        // perform the back end call...
         system.getAccounts().loadPassengers(filename);
+
+        // confirm success to the user...
         out.format("Passenger file %s successfully loaded", filename);
     }
 
     private void removePassenger(Scanner scanner) {
         scanner.nextLine();
+
+        // gather user input...
         out.println("\nPlease enter passenger Id:");
         Integer passengerId = scanner.nextInt();
         Passenger passenger = system.getAccounts().getById(passengerId);
 
+        // perform the back end call...
         system.getAccounts().removePassenger(passenger);
+
+        // confirm success to the user...
         out.format("Passenger %s removed.%n%n", passenger);
     }
 

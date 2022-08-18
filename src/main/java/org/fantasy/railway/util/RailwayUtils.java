@@ -13,6 +13,9 @@ import java.util.Queue;
 import java.util.Scanner;
 import java.util.function.Predicate;
 
+/**
+ * Utility functions to assist with various operations
+ */
 public class RailwayUtils {
 
     static Predicate<String> comment = row -> (row.isEmpty() || row.startsWith("#"));
@@ -73,7 +76,7 @@ public class RailwayUtils {
 
     /**
      * @param price the double to parse
-     * @return a BigDecimal representing the given price
+     * @return a BigDecimal representing the given price, with a scale of 2 and half up rounding
      */
     public static BigDecimal parsePrice(Double price) {
         return BigDecimal.valueOf(price).setScale(2, RoundingMode.HALF_UP);

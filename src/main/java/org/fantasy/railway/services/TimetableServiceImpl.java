@@ -22,9 +22,6 @@ import java.util.stream.IntStream;
 
 public class TimetableServiceImpl extends BaseService<Service> implements TimetableService {
 
-    public static final Integer MAX_DISTANCE_FOR_SMALL = 20;
-    public static final Integer MAX_DISTANCE_FOR_MEDIUM = 20;
-
     @Setter
     NetworkService network;
 
@@ -36,7 +33,10 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
     Queue<Stop> dispatched = new LinkedList<>();
 
     public TimetableServiceImpl() {
+        // dispatch train services every minute...
         dispatcher.scheduleAtFixedRate(this::dispatch, 1, 1, TimeUnit.MINUTES);
+
+        // TODO create new timetable at start of day...
     }
 
     @Override
@@ -44,11 +44,6 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
         return services;
     }
 
-    /**
-     * loads a timetable from the given file
-     *
-     * @param filename the file to load the timetable from
-     */
     @Override
     public void loadServices(String filename) {
         RailwayUtils.parseFile(filename)
@@ -69,7 +64,7 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
 
     public void dispatch() {
         // TODO remove this
-        System.out.print("\ndispatching... "); // TODO remove this
+        System.out.print("\ndispatching... ");
 
         for (Service service : services) {
             Queue<Stop> route = service.getRoute();
@@ -85,7 +80,7 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
         services.removeIf(service -> service.getRoute().isEmpty());
 
         // TODO remove this
-        System.out.format("Total %s stops visited%n%n", dispatched.size()); // TODO remove this
+        System.out.format("Total %s stops visited since last viewed%n%n", dispatched.size());
     }
 
 
@@ -116,7 +111,7 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
             current.setWhen(previous.getWhen().plusMinutes(distance));
         }
 
-        // how long does the route take to omplete?
+        // how long does the route take to complete?
         LocalTime startTime = route.get(0).getWhen();
         LocalTime finishTime = route.get(route.size() - 1).getWhen();
         Integer duration = (int) startTime.until(finishTime, ChronoUnit.MINUTES);
@@ -137,17 +132,21 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
 
     private Service newService(List<Stop> route, Integer startTime) {
 
+        // clone the route with the given start time...
         List<Stop> cloned = route.stream()
                 .map(stop -> stop.toBuilder().when(stop.getWhen().plusMinutes(startTime)).build())
                 .collect(Collectors.toList());
 
+        // create a new service using the cloned route...
         Service service = Service.builder()
                 .id(nextId())
                 .route(new LinkedList<>(cloned))
                 .build();
 
+        // give it a starting name...
         service.setName(service.getCurrentName());
 
+        // set all stops to be for the new service...
         service.getRoute()
                 .forEach(stop -> stop.setService(service));
         return service;

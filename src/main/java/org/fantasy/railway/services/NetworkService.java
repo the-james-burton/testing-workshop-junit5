@@ -8,6 +8,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Queue;
 
+/**
+ * Methods to manages the train network
+ */
 public interface NetworkService {
 
     /**
@@ -24,7 +27,7 @@ public interface NetworkService {
 
     /**
      * @param name the name of the new station
-     * @return the new station
+     * @return the new station, throwing an exception if station does not exist
      */
     Station getStationOrThrow(String name);
 
@@ -72,5 +75,7 @@ public interface NetworkService {
      * @return a printable version of the contents of the network
      */
     String networkToString();
+
+    void setTimetable(TimetableService timetable);
 
 }

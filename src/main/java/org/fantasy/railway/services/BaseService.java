@@ -5,6 +5,10 @@ import org.fantasy.railway.model.Identified;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Extending this class signifies that the service manages Identified objects
+ * @param <T> the Identified object that is being managed
+ */
 public abstract class BaseService<T extends Identified> {
 
     abstract List<T> getItems();

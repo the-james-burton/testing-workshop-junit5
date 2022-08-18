@@ -6,6 +6,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
 
+/**
+ * UI class to manage the railway network
+ */
 public class NetworkUI extends BaseUI {
 
     @Override
@@ -50,6 +53,7 @@ public class NetworkUI extends BaseUI {
         scanner.nextLine();
         Queue<String> inputs = new LinkedList<>();
 
+        // gather user input...
         out.println("\nPlease enter station details:");
         out.print("  Station Name: ");
         inputs.add(scanner.nextLine());
@@ -61,26 +65,40 @@ public class NetworkUI extends BaseUI {
             inputs.add(scanner.nextLine());
             out.print("  Add another connection? (y/n)");
         }
+
+        // perform the back end call...
         Station station = system.getNetwork().addStation(inputs);
+
+        // confirm success to the user...
         out.format("New station added: %s%n%n", station);
 
     }
 
     private void loadNetwork(Scanner scanner) {
         scanner.nextLine();
+
+        // gather user input...
         out.println("\nPlease enter filename:");
         String filename = scanner.nextLine();
 
+        // perform the back end call...
         system.getNetwork().loadNetwork(filename);
+
+        // confirm success to the user...
         out.format("Network file %s successfully loaded", filename);
     }
 
     private void removeStation(Scanner scanner) {
         scanner.nextLine();
+
+        // gather user input...
         out.println("\nPlease enter station to remove from the network: ");
         Station station = system.getNetwork().getStationOrThrow(scanner.nextLine());
 
+        // perform the back end call...
         system.getNetwork().removeStation(station);
+
+        // confirm success to the user...
         out.format("Station %s removed.%n%n", station.getName());
 
     }

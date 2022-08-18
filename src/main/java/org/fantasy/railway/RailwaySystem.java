@@ -10,6 +10,9 @@ import org.fantasy.railway.services.NetworkServiceImpl;
 import org.fantasy.railway.services.TimetableService;
 import org.fantasy.railway.services.TimetableServiceImpl;
 
+/**
+ * Wire up all services with real implementations to form a cohesive whole
+ */
 @Data
 public class RailwaySystem {
 
@@ -18,6 +21,9 @@ public class RailwaySystem {
     private NetworkService network;
     private TimetableService timetable;
 
+    /**
+     * create new service instances and wire them up as needed
+     */
     public void initialize() {
         accounts = new AccountServiceImpl();
         bookings = new BookingServiceImpl();
@@ -26,10 +32,14 @@ public class RailwaySystem {
 
         bookings.setNetwork(network);
         timetable.setNetwork(network);
+        network.setTimetable(timetable);
 
         bootstrap();
     }
 
+    /**
+     * Load starting data from the files
+     */
     void bootstrap() {
         accounts.loadPassengers("passengers.csv");
         network.loadNetwork("network.csv");

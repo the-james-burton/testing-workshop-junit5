@@ -7,6 +7,9 @@ import org.fantasy.railway.model.Ticket;
 import java.time.LocalDate;
 import java.util.Scanner;
 
+/**
+ * UI class to manage tickets
+ */
 public class BookingUI extends BaseUI {
 
 
@@ -39,6 +42,8 @@ public class BookingUI extends BaseUI {
 
     private void purchaseTicket(Scanner scanner) {
         scanner.nextLine();
+
+        // gather user input...
         out.println("\nPlease enter details:");
         out.print("  Station from: ");
         Station from = system.getNetwork().getStationOrThrow(scanner.nextLine());
@@ -47,9 +52,12 @@ public class BookingUI extends BaseUI {
         out.print("  When (yyy-mm-dd): ");
         LocalDate when = LocalDate.parse(scanner.nextLine());
         out.print("  Passenger ID: ");
-        Passenger passenger = system.getAccounts().getById(scanner.nextInt());
 
+        // perform the back end call...
+        Passenger passenger = system.getAccounts().getById(scanner.nextInt());
         Ticket ticket = system.getBookings().purchaseTicket(from, to, when, passenger);
+
+        // confirm success to the user...
         out.format("New ticket quoted: %s%n%n", ticket);
     }
 

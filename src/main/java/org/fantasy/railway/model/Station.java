@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 
+/**
+ * A station (node) on the network
+ */
 @Data
 @SuperBuilder
 @EqualsAndHashCode(callSuper = false)

@@ -5,6 +5,10 @@ import lombok.EqualsAndHashCode;
 
 import java.util.Scanner;
 
+/**
+ * Provides a top level menu to the user, allowing them to select which service to interact with.
+ * Creates instances of each individual UI class and wires them up to the RailwaySystem so they can interact with the back end services.
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class RailwayUI extends BaseUI {
@@ -14,6 +18,9 @@ public class RailwayUI extends BaseUI {
     NetworkUI networkUI;
     TimetableUI timetableUI;
 
+    /**
+     * Create each UI class and wire them up with the system output and RailwaySystem
+     */
     public void initialize() {
         accountUI = new AccountUI();
         accountUI.setOut(this.out);
@@ -32,6 +39,10 @@ public class RailwayUI extends BaseUI {
         timetableUI.setSystem(this.system);
     }
 
+    /**
+     * The top menu is the first UI display presented to the user
+     * @param scanner the JDK Scanner to use for system input
+     */
     public void topMenu(Scanner scanner) {
         out.println("Welcome to the Fantasy Railway System!\n");
         String lastOption = "";

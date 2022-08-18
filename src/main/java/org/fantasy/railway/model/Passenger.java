@@ -13,6 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+/**
+ * Represents someone travelling on the fantasy railway network.
+ * They may have a list of concessions providing discounts to ticket prices.
+ * They may also have one or more tickets they have purchased for travel.
+ */
 @Data
 @SuperBuilder
 @ToString(callSuper = true)
@@ -30,7 +35,7 @@ public class Passenger extends Identified {
 
 
     /**
-     * @return the total discount amount (will not be greater than 1.0)
+     * @return the total discount amount from all concessions (will not be greater than 1.0)
      */
     public Double totalDiscount() {
         Double discount = concessions.stream()
@@ -40,6 +45,10 @@ public class Passenger extends Identified {
         return Math.min(1.0d, discount);
     }
 
+    /**
+     * adds the given concession to the passenger, if this passenger qualifies
+     * @param concession the concession to add to this passenger
+     */
     public void addConcession(Concession concession) {
         Preconditions.checkArgument(!concessions.contains(concession),
                 "Passenger %s already has concession %s", id, concession);
@@ -54,6 +63,10 @@ public class Passenger extends Identified {
 
     }
 
+    /**
+     * removes the given concession from this passenger
+     * @param concession the concession to remove from this passenger
+     */
     public void removeConcession(Concession concession) {
         Preconditions.checkArgument(concessions.contains(concession),
                 "Passenger %s does not have concession %s", id, concession);

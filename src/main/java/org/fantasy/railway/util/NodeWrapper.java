@@ -5,6 +5,7 @@ import lombok.Data;
 
 /**
  * Data structure containing a node, it's total distance from the start and its predecessor.
+ * Used by GraphUtils.findShortestPath
  *
  * @author <a href="sven@happycoders.eu">Sven Woltmann</a>
  * Simplified with Lombok

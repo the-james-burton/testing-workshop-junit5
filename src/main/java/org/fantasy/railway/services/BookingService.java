@@ -7,6 +7,9 @@ import org.fantasy.railway.model.Ticket;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Defines methods to sell tickets to passengers and retrieve them
+ */
 public interface BookingService {
 
     /**
@@ -24,11 +27,11 @@ public interface BookingService {
      */
     List<Ticket> getTickets();
 
-    void setNetwork(NetworkService network);
-
     /**
      * @param id the id of the Ticket to lookup
      * @return the Ticket with the given id
      */
     Ticket getById(Integer id);
+
+    void setNetwork(NetworkService network);
 }

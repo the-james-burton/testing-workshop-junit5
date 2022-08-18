@@ -7,6 +7,9 @@ import org.fantasy.railway.model.Stop;
 import java.util.List;
 import java.util.Queue;
 
+/**
+ * Defines a way to manage train services running on the railway network
+ */
 public interface TimetableService {
 
     /**
@@ -28,7 +31,7 @@ public interface TimetableService {
     List<Service> createNewServices(Queue<String> inputs);
 
     /**
-     * @param filename the filename to load
+     * @param filename the filename to load services from
      */
     void loadServices(String filename);
 
@@ -42,8 +45,6 @@ public interface TimetableService {
      */
     List<Service> getServices();
 
-    void setNetwork(NetworkService network);
-
     /**
      * @return services that have dispatched
      */
@@ -54,5 +55,7 @@ public interface TimetableService {
      * @return the Service with the given id
      */
     Service getById(Integer id);
+
+    void setNetwork(NetworkService network);
 
 }

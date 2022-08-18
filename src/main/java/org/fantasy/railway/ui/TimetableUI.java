@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Scanner;
 
+/**
+ * UI class to manage train services running on the railway network
+ */
 public class TimetableUI extends BaseUI {
 
     @Override
@@ -58,6 +61,7 @@ public class TimetableUI extends BaseUI {
         scanner.nextLine();
         Queue<String> inputs = new LinkedList<>();
 
+        // gather user input...
         out.println("\nPlease define new service: ");
         out.print(" Frequency (minutes): ");
         inputs.add(scanner.nextLine());
@@ -66,7 +70,10 @@ public class TimetableUI extends BaseUI {
         out.print(" Finishing station: ");
         inputs.add(scanner.nextLine());
 
+        // perform the back end call...
         List<Service> services = system.getTimetable().createNewServices(inputs);
+
+        // confirm success to the user...
         out.format("New services added: %s%n%n", services);
     }
 

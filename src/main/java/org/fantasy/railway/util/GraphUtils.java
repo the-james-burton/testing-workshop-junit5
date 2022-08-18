@@ -11,6 +11,9 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
 
+/**
+ * Utilities to work with Guava Graph
+ */
 public class GraphUtils {
 
     /**

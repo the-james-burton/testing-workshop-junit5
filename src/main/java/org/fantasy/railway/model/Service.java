@@ -12,6 +12,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+/**
+ * Represents a train service stopping at a list of stations at certain times of the day
+ */
 @Data
 @SuperBuilder
 @EqualsAndHashCode(callSuper = false)
@@ -22,6 +25,10 @@ public class Service extends Identified implements Comparable<Service> {
 
     private String name;
 
+    /**
+     *
+     * @return the start time of the service (the time at the first stop)
+     */
     public LocalTime getStartTime() {
         return route.stream()
                 .findFirst()
@@ -30,6 +37,10 @@ public class Service extends Identified implements Comparable<Service> {
                 .getWhen();
     }
 
+    /**
+     *
+     * @return the finish time of the service (the time at the last stop)
+     */
     public LocalTime getFinishTime() {
         return route.stream()
                 .max(Comparator.naturalOrder())
@@ -43,7 +54,10 @@ public class Service extends Identified implements Comparable<Service> {
         return getFinishTime().compareTo(that.getFinishTime());
     }
 
-
+    /**
+     * A train service can change its name depending on where it is on its route.
+     * @return the name of the service, according to the departure time of the next stop
+     */
     public String getCurrentName() {
         if (route.isEmpty())
             return "This service has completed its journey";

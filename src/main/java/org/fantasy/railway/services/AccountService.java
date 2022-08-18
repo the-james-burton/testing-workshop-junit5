@@ -6,6 +6,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Queue;
 
+/**
+ * Methods for managing passenger accounts
+ */
 public interface AccountService {
     /**
      * @param name        the name of the new passenger

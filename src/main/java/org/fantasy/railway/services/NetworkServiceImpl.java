@@ -22,8 +22,8 @@ public class NetworkServiceImpl extends BaseService<Station> implements NetworkS
 
     @Setter
     TimetableService timetable;
-    MutableValueGraph<Station, Integer> network;
 
+    MutableValueGraph<Station, Integer> network;
 
     public NetworkServiceImpl() {
         network = ValueGraphBuilder.undirected().build();
