@@ -40,6 +40,11 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
     }
 
     @Override
+    public void shutdown() {
+        dispatcher.shutdown();
+    }
+
+    @Override
     public List<Service> getItems() {
         return services;
     }

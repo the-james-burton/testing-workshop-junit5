@@ -47,4 +47,9 @@ public interface TimetableService {
 
     void setNetwork(NetworkService network);
 
+    /**
+     * shutdown any timer tasks running the dispatching so the system can exit cleanly
+     */
+    void shutdown();
+
 }

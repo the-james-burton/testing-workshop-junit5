@@ -24,7 +24,8 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         PrintStream out = System.out;
         startProgram(system, ui, scanner, out);
-        System.exit(0);
+        // will reach here when user chooses to exit the system...
+        system.shutdown();
     }
 
     /**

@@ -46,5 +46,8 @@ public class RailwaySystem {
         timetable.loadServices("services.csv");
     }
 
+    void shutdown() {
+        timetable.shutdown();
+    }
 
 }
