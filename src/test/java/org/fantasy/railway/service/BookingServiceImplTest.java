@@ -91,7 +91,8 @@ class BookingServiceImplTest {
 
     @Test
     void shouldGetItems() {
-        shouldPurchaseTicket();
+        Ticket ticket = Ticket.builder().id(1).build();
+        booking.getTickets().add(ticket);
 
         assertThat(booking.getItems()).hasSize(1);
     }
@@ -111,7 +112,7 @@ class BookingServiceImplTest {
         Ticket ticket = booking.purchaseTicket(from, to, validOn, passenger);
 
         assertThat(ticket.getPrice()).isEqualTo(BigDecimal.valueOf(4.5d * 0.8d).setScale(2, RoundingMode.HALF_UP));
-
+        verify(network, times(1)).calculateRoute(any(), any());
 
     }
 
