@@ -8,12 +8,13 @@ import org.fantasy.railway.services.NetworkService;
 import org.fantasy.railway.services.TimetableServiceImpl;
 import org.fantasy.railway.util.Now;
 import org.fantasy.railway.util.RailwayUtils;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
@@ -40,16 +41,12 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class TimetableServiceImplTest {
 
+    @Spy
+    @InjectMocks
     TimetableServiceImpl timetable;
 
     @Mock
     NetworkService network;
-
-    @BeforeEach
-    void setup() {
-        timetable = Mockito.spy(new TimetableServiceImpl());
-        timetable.setNetwork(network);
-    }
 
     @Test
     void shouldCreateNewServices() {
