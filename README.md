@@ -173,40 +173,5 @@ You can also run the tests outside of your IDE, at the command line. This projec
 
 Throughout this workshop, we will use [AssertJ](https://assertj.github.io/doc/) to make assertions instead of the rather primitive assertion features built into JUnit 5.
 
-## Module 2 : Simple Unit Testing
-
-Now that you can execute tests and view coverage, lets
 
 
-
-Verify
-
-Spy
-
-Mocking
-
-Parameterised tests
-1. EnumSource - ConcessionTest
-2. ValueSource - RailwayUtilsTest
-3. CsvSource - RailwayUtilsTest
-4. Method source - GraphutilsTest
-
-Dynamic tests
-1. NetworkServiceImplTest
-
-UI tests
-
-Testing base class methods with base test class
-1. Show BaseUITest and how it tests BaseUI and defines the contract
-
-
-ArgumentCaptor
-
-	1. Write AccountUITest - use verify, 
-
-Testing main classes
-
-
-
-Testing time
-The "Now" class
