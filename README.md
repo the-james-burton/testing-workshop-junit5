@@ -147,15 +147,35 @@ At the command line, you have two options, the first has a faster turnaround, th
 
 # Modules
 
-## Module 1 : Basic Unit Testing
+Before starting these modules, please be sure you have...
 
-## Module 2 : Further Unit Testing
+- Met the pre-requisites described above
+- Cloned the code to your workstation
+- Imported the maven project into your IDE
+- are able to build the project at the command line
+- are able to run the Main class in your IDE
 
-Static test utils
-Expected/actual
+## Module 1 : Running tests and viewing coverage
 
-Testing exceptions
-1. Write PassengerTest
+We will start with running some simple tests to get the feel of it all. Find the **StopTest** class. You will see that one test is already written for you. Have a look at the test. At this point, note how we have a **TestUtils** class in place that provides some static functions. You are free to add further functions to this class as this workshop progresses to help reuse code. Let's run it by using the following techniques:
+
+- Run the test using your IDE. In JetBrains IDEA, a green play button appears by the test method name which you can click to run. Observe the results and check execution is successful.
+- Debug the test using your IDE. You can put a breakpoint in the test method or the code under test. Observe the execution stops at your breakpoint. Inspect the values. Continue execution and observe the results.
+- Run all the tests in **StopTest** in your IDE. A green play button is available by the class name in IDEA.
+- Run all the tests in the project in your IDE.
+
+Now do the same again, but his time **run with coverage** in your IDE. This will give you a report showing how much of the codebase has been tested. You can see the number is very small just now! As you progress through this module, you will write more and more tests, improving this coverage number. You can dive into the report in your IDE and double-click to open the class. Note how the coverage is indicated by red/yellow/green. These indicate no coverage/partial coverage (not all branches)/fully covered respoectively.
+
+You can also run the tests outside of your IDE, at the command line. This project is also configured (via the jacoco maven plugin in the pom.xml) to produce a coverage report when the tests are run.
+
+- Run all the tests in the entire project at the command line by using ```mvn test```. Observe the results.
+- Open the generated coverage report which can be found in **target\site\jacoco\index.html** and take a look.
+
+Throughout this workshop, we will use [AssertJ](https://assertj.github.io/doc/) to make assertions instead of the rather primitive assertion features built into JUnit 5.
+
+## Module 2 : Simple Unit Testing
+
+Now that you can execute tests and view coverage, lets
 
 
 
