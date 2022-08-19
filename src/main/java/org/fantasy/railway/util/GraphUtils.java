@@ -31,7 +31,7 @@ public class GraphUtils {
      * @param source the source node
      * @param target the target node
      * @param <N>    the node type
-     * @return the shortest path; or {@code null} if no path was found
+     * @return the shortest path; or empty list if no path was found
      * @author <a href="sven@happycoders.eu">Sven Woltmann</a>
      */
     @SuppressWarnings("UnstableApiUsage")

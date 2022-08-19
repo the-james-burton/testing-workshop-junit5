@@ -17,7 +17,6 @@ public class NetworkUI extends BaseUI {
         out.println("1. View network");
         out.println("2. Add new station");
         out.println("3. Load network from file");
-        out.println("4. Remove station");
         out.println("x. Back to top menu");
         out.print("Option: ");
         String option = scanner.next();
@@ -30,9 +29,6 @@ public class NetworkUI extends BaseUI {
                 break;
             case "3":
                 loadNetwork(scanner);
-                break;
-            case "4":
-                removeStation(scanner);
                 break;
             default:
                 out.println("Invalid option, please re-enter.");
@@ -86,21 +82,6 @@ public class NetworkUI extends BaseUI {
 
         // confirm success to the user...
         out.format("Network file %s successfully loaded", filename);
-    }
-
-    private void removeStation(Scanner scanner) {
-        scanner.nextLine();
-
-        // gather user input...
-        out.println("\nPlease enter station to remove from the network: ");
-        Station station = system.getNetwork().getStationOrThrow(scanner.nextLine());
-
-        // perform the back end call...
-        system.getNetwork().removeStation(station);
-
-        // confirm success to the user...
-        out.format("Station %s removed.%n%n", station.getName());
-
     }
 
 }

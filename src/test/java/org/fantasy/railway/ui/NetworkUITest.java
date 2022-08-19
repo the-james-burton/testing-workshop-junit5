@@ -1,10 +1,8 @@
 package org.fantasy.railway.ui;
 
-import org.fantasy.railway.model.Station;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -12,7 +10,6 @@ import java.io.ByteArrayInputStream;
 import java.util.Scanner;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.fantasy.railway.util.TestUtils.firstStop;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -75,21 +72,6 @@ class NetworkUITest extends BaseUITest {
         String output = outStream.toString();
         assertThat(inputString.getValue()).isEqualTo("filename.csv");
         assertThat(output).contains("Network file filename.csv successfully loaded");
-    }
-
-    @Test
-    void shouldRemoveStation() {
-        ArgumentCaptor<Station> stationCaptor = ArgumentCaptor.forClass(Station.class);
-        in = new ByteArrayInputStream("4\nFirst\n".getBytes());
-        Scanner scanner = new Scanner(in);
-
-        Station station = firstStop().getStation();
-        when(network.getStationOrThrow(station.getName())).thenReturn(station);
-
-        networkUI.displayMenu(scanner);
-
-        verify(network).removeStation(stationCaptor.capture());
-        assertThat(stationCaptor.getValue()).isEqualTo(station);
     }
 
 }

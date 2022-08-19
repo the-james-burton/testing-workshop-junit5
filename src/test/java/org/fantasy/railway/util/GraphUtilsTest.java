@@ -3,15 +3,22 @@ package org.fantasy.railway.util;
 import com.google.common.graph.MutableValueGraph;
 import com.google.common.graph.ValueGraph;
 import com.google.common.graph.ValueGraphBuilder;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 class GraphUtilsTest {
 
@@ -43,7 +50,7 @@ class GraphUtilsTest {
     @MethodSource("generateData")
     void shouldFindTheShortestPath(String source, String target, List<String> expected) {
         List<String> shortestPath = GraphUtils.findShortestPath(graph, source, target);
-        Assertions.assertIterableEquals(shortestPath, expected);
+        assertThat(shortestPath).isEqualTo(expected);
     }
 
     /*
@@ -84,5 +91,26 @@ class GraphUtilsTest {
         graph.putEdgeValue("H", "I", 3);
         return graph;
     }
+
+    @TestFactory
+    Stream<DynamicTest> shouldAlwaysCalculateRoute() {
+
+        // TODO dynamic test exercise
+
+        return IntStream
+                .iterate(0, n -> n + 1)
+                .limit(10)
+                .mapToObj(n -> {
+                    List<String> nodes = graph.asGraph().nodes().stream().collect(Collectors.toList());
+                    Collections.shuffle(nodes);
+                    String from = nodes.get(0);
+                    String to = nodes.get(1);
+                    return dynamicTest(
+                            String.format("%s -> %s", from, to),
+                            () -> assertThat(GraphUtils.findShortestPath(graph, from, to))
+                                    .isNotNull());
+                });
+    }
+
 
 }
