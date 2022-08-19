@@ -8,16 +8,6 @@ import static org.fantasy.railway.util.TestUtils.firstStop;
 class StopTest {
 
     @Test
-    void shouldHaveDefaultTimeOnCreation() {
-        // TODO EXERCISE 2
-    }
-
-    @Test
-    void shouldSortByWhen() {
-        // TODO EXERCISE 2
-    }
-
-    @Test
     void shouldHaveSameStationAs() {
         // RUN IN EXERCISE 1
 
@@ -32,6 +22,16 @@ class StopTest {
 
     @Test
     void shouldNotHaveSameStationAs() {
+        // TODO EXERCISE 2
+    }
+
+    @Test
+    void shouldHaveDefaultTimeOnCreation() {
+        // TODO EXERCISE 2
+    }
+
+    @Test
+    void shouldSortByWhen() {
         // TODO EXERCISE 2
     }
 

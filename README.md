@@ -189,9 +189,11 @@ Now that you can execute tests and view coverage, let's proceed and write some s
 - Implement all test method stubs in PassengerTest as indicated for Module 2
 - Implement all test method stubs in ServiceTest as indicated for Module 2
 
-The stubs are a guideline, so please feel free to change as you see fit. 
+The stubs are a guideline, so please feel free to change as you see fit. When done try running your tests using the techniques you learned in exercise 1. How much has your coverage gone up by? Are there any parts of the classes under test that are not yet tested? If yes, don't worry - we will look at this in the next exercise!
 
 ## Exercise 3 : Testing Exceptions
+
+If you run your test coverage report after doing exercise 2, you will notice that the uncovered code is the part that throws exceptions. JUnit 5 provides a nice way of testing these and making assertions on them. Read chaper 6 of [A Guide to JUnit 5](https://www.baeldung.com/junit-5) and then go on to implement the remaining method stubs in **StopTest**, **PassengerTest** and **ServiceTest**.
 
 Verify
 
