@@ -195,6 +195,24 @@ The stubs are a guideline, so please feel free to change as you see fit. When do
 
 If you run your test coverage report after doing exercise 2, you will notice that the uncovered code is the part that throws exceptions. JUnit 5 provides a nice way of testing these and making assertions on them. Read chaper 6 of [A Guide to JUnit 5](https://www.baeldung.com/junit-5) and then go on to implement the remaining method stubs in **StopTest**, **PassengerTest** and **ServiceTest**.
 
+Once done, run your coverage report again and it should be looking pretty good for the three model classes we have tested so far! 
+
+You may have noticed that some of the classes we have tested so far extend a base class **Identified**. However, if you look at that class there is no behaviour to test, so there is nothing special to do here - subclasses can be tested like any other. In the next exercise we will encounter a base class that does indeed have behaviour to test and we will see how to test it.
+
+There are also some model classes we have not yet tested. We will look at these when we cover some advanced testing scenarios.
+
+## Exercise 4 : Testing Services and Base class behaviour
+
+We now move onto looking at testing a service, the **AccountServiceImpl**. This is the simplest of the services and can be tested in a similar way to the POJOs you have already tested. The main thing that is new here is the base class **BaseService** contains two methods - one private and one public. Best practice outlined in [Unit Test Private Methods in Java](https://www.baeldung.com/java-unit-test-private-methods) means that we only need to test the public method. If the private method is not fully tested as we approach 100% test coverage, then it has dead code that should be removed. Bear this in mind when writing tests in the real world.
+
+When testing services it can be useful to use the JUnit 5 test lifecycle **@BeforeEach** annotation to ensure that you have a fresh service before each test runs. This guarantees that your tests are stateless and reduces code duplication. The test class skeleton is prepared in this way.
+
+No go ahead and implement the test stubs in **AccountServiceImplTest**. 
+
+If you want to dive into alternative methods for testing abstract base classes, you can look at [Testing an Abstract Class With JUnit](https://www.baeldung.com/junit-test-abstract-class).
+
+## Exercise 5 : 
+
 Verify
 
 Spy
