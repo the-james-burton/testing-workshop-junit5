@@ -173,5 +173,40 @@ You can also run the tests outside of your IDE, at the command line. This projec
 
 Throughout this workshop, we will use [AssertJ](https://assertj.github.io/doc/) to make assertions instead of the rather primitive assertion features built into JUnit 5.
 
+## Module 2 : Simple Unit Testing
+
+Now that you can execute tests and view coverage, let's proceed and write some simple tests on POJOs within the system. Doing this will build your knowledge of the system and get you writing tests in the arrange/act/assert way. Since we are using Lombok, coverage will be good even if we do not test getters/setters. Remember to make assertions too, using [AssertJ](https://assertj.github.io/doc/)!
+
+- Implement all test method stubs in StopTest
+- Implement all test method stubs in PassengerTest as indicated for Module 2
+- Implement all test method stubs in PassengerTest as indicated for Module 2
+
+Verify
+
+Spy
+
+Mocking
+
+Parameterised tests
+1. EnumSource - ConcessionTest
+2. ValueSource - RailwayUtilsTest
+3. CsvSource - RailwayUtilsTest
+4. Method source - GraphutilsTest
+
+Dynamic tests
+1. NetworkServiceImplTest
+
+UI tests
+
+Testing base class methods with base test class
+1. Show BaseUITest and how it tests BaseUI and defines the contract
 
 
+ArgumentCaptor
+
+	1. Write AccountUITest - use verify, 
+
+Testing main classes
+
+Testing time
+The "Now" class
