@@ -24,7 +24,7 @@ public class AccountUI extends BaseUI {
         out.println("3. Add concession to passenger");
         out.println("4. Load passenger list from file");
         out.println("5. Remove passenger");
-        out.println("X. Back to top menu");
+        out.println("x. Back to top menu");
         out.print("Option: ");
         String option = scanner.next();
         switch (option) {

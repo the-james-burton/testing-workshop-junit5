@@ -18,7 +18,7 @@ public class NetworkUI extends BaseUI {
         out.println("2. Add new station");
         out.println("3. Load network from file");
         out.println("4. Remove station");
-        out.println("X. Back to top menu");
+        out.println("x. Back to top menu");
         out.print("Option: ");
         String option = scanner.next();
         switch (option) {

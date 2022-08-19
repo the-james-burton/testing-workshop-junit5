@@ -63,7 +63,7 @@ public class RailwayUI extends BaseUI {
         out.println("2. Ticket booking");
         out.println("3. Network Management");
         out.println("4. Timetabling");
-        out.println("X. QUIT");
+        out.println("x. QUIT");
         out.print("Option: ");
         String option = scanner.next();
         switch (option) {
@@ -78,6 +78,9 @@ public class RailwayUI extends BaseUI {
                 break;
             case "4":
                 timetableUI.displayMenu(scanner);
+                break;
+            case "x":
+            case "X":
                 break;
             default:
                 out.println("Invalid option, please re-enter.");

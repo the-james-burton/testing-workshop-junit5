@@ -17,7 +17,7 @@ public class BookingUI extends BaseUI {
         out.println("\nPlease select an option:");
         out.println("1. View tickets");
         out.println("2. Purchase a ticket");
-        out.println("X. Back to top menu");
+        out.println("x. Back to top menu");
         out.print("Option: ");
         String option = scanner.next();
         switch (option) {
@@ -58,7 +58,7 @@ public class BookingUI extends BaseUI {
         Ticket ticket = system.getBookings().purchaseTicket(from, to, when, passenger);
 
         // confirm success to the user...
-        out.format("New ticket quoted: %s%n%n", ticket);
+        out.format("New ticket sold: %s to passenger: %s%n%n", ticket, passenger);
     }
 
 
