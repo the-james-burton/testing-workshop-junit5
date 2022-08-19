@@ -58,4 +58,11 @@ class RailwaySystemTest {
         verify(network, times(1)).loadNetwork("network.csv");
         verify(timetable, times(1)).loadServices("services.csv");
     }
+
+    @Test
+    void shouldShutdown() {
+        system.shutdown();
+
+        verify(timetable, times(1)).shutdown();
+    }
 }
