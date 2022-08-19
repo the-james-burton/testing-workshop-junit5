@@ -172,6 +172,4 @@ You can also run the tests outside of your IDE, at the command line. This projec
 - Open the generated coverage report which can be found in **target\site\jacoco\index.html** and take a look.
 
 Throughout this workshop, we will use [AssertJ](https://assertj.github.io/doc/) to make assertions instead of the rather primitive assertion features built into JUnit 5.
-
-
-
+ 
