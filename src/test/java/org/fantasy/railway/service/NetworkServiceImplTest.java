@@ -75,26 +75,6 @@ class NetworkServiceImplTest {
 
     }
 
-
-    @TestFactory
-    Stream<DynamicTest> shouldAlwaysCalculateRoute() {
-        network.loadNetwork("test-network.csv");
-
-        return IntStream
-                .iterate(0, n -> n + 1)
-                .limit(10)
-                .mapToObj(n -> {
-                    List<Station> stations = network.getItems();
-                    Collections.shuffle(stations);
-                    Station from = stations.get(0);
-                    Station to = stations.get(1);
-                    return dynamicTest(
-                            String.format("%s -> %s", from.getName(), to.getName()),
-                            () -> assertThat(network.calculateRoute(from, to))
-                                    .isNotNull());
-                });
-    }
-
     @Test
     void shouldNotDistanceBetweenAdjacentIfNotAdjacent() {
         network.loadNetwork("test-network.csv");
@@ -331,5 +311,26 @@ class NetworkServiceImplTest {
         verify(timetable, Mockito.times(1)).getServices();
     }
 
+    @TestFactory
+    Stream<DynamicTest> shouldAlwaysCalculateRoute() {
+
+        // TODO dynamic test exercise
+
+        network.loadNetwork("test-network.csv");
+
+        return IntStream
+                .iterate(0, n -> n + 1)
+                .limit(10)
+                .mapToObj(n -> {
+                    List<Station> stations = network.getItems();
+                    Collections.shuffle(stations);
+                    Station from = stations.get(0);
+                    Station to = stations.get(1);
+                    return dynamicTest(
+                            String.format("%s -> %s", from.getName(), to.getName()),
+                            () -> assertThat(network.calculateRoute(from, to))
+                                    .isNotNull());
+                });
+    }
 
 }

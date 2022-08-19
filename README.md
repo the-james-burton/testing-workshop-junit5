@@ -207,7 +207,7 @@ We now move onto looking at testing a service, the **AccountServiceImpl**. This 
 
 When testing services it can be useful to use the JUnit 5 test lifecycle **@BeforeEach** annotation to ensure that you have a fresh service before each test runs. This guarantees that your tests are stateless and reduces code duplication. The test class skeleton is prepared in this way.
 
-No go ahead and implement the test stubs in **AccountServiceImplTest**. 
+Now go ahead and implement the test stubs in **AccountServiceImplTest**. 
 
 If you want to dive into alternative methods for testing abstract base classes, you can look at [Testing an Abstract Class With JUnit](https://www.baeldung.com/junit-test-abstract-class).
 
@@ -217,7 +217,7 @@ In the previous exercise, the service we tested did not have any external depend
 
 However, when testing the BookingServiceImpl we only want to test that "unit" of code, not the NetworkService. In other words, we are trying to determine if the BookingServiceImpl works as expected not the NetworkService it uses. Thus, if the NetworkService breaks in some way, this should not fail the BookingServiceImpl tests. This is a core reason why mocking external dependencies is required at this point. Now we could simply implement a cut down test version of the NetworkService and wire that up when testing, but there is a popular library that can help: Mockito.  Mockito is already added to this project, so no need to add it to the pom.xml.
 
-
+You should now review the **BookingServiceImplTest** class and implement the remaining methods. Use Mockito **when** and **verify** features to mock calls to the external NetworkService dependency and verify that the calls were made by the Booking service under test.
 
 Verify
 
