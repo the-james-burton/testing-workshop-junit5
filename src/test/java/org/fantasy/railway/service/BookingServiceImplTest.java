@@ -47,6 +47,15 @@ class BookingServiceImplTest {
     }
 
     @Test
+    void shouldGetItems() {
+        Ticket ticket = Ticket.builder().id(1).build();
+        booking.getTickets().add(ticket);
+
+        assertThat(booking.getItems()).hasSize(1);
+    }
+
+
+    @Test
     void shouldPurchaseTicket() {
         Passenger passenger = newAdult();
         List<Stop> route = new ArrayList<>(TestUtils.createTestRoute(Service.builder().build()));
@@ -88,14 +97,6 @@ class BookingServiceImplTest {
 
         assertThat(actual).startsWith(expected);
         verify(network, times(1)).calculateRoute(any(), any());
-    }
-
-    @Test
-    void shouldGetItems() {
-        Ticket ticket = Ticket.builder().id(1).build();
-        booking.getTickets().add(ticket);
-
-        assertThat(booking.getItems()).hasSize(1);
     }
 
     @Test
