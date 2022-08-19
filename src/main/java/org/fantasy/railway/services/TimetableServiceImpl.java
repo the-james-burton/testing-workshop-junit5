@@ -53,9 +53,6 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
     }
 
     public void dispatch() {
-        // TODO remove this
-        System.out.print("\ndispatching... ");
-
         for (Service service : services) {
             Queue<Stop> route = service.getRoute();
             if (route.isEmpty())
@@ -68,11 +65,7 @@ public class TimetableServiceImpl extends BaseService<Service> implements Timeta
         }
 
         services.removeIf(service -> service.getRoute().isEmpty());
-
-        // TODO remove this
-        System.out.format("Total %s stops visited since last viewed%n%n", dispatched.size());
     }
-
 
     @Override
     public Queue<Stop> getDispatched() {
