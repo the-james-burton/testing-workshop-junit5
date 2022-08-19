@@ -7,7 +7,6 @@ import lombok.Setter;
 import org.fantasy.railway.model.Station;
 import org.fantasy.railway.model.Stop;
 import org.fantasy.railway.util.GraphUtils;
-import org.fantasy.railway.util.Now;
 import org.fantasy.railway.util.RailwayUtils;
 
 import java.util.HashMap;
@@ -24,7 +23,8 @@ public class NetworkServiceImpl extends BaseService<Station> implements NetworkS
     @Setter
     TimetableService timetable;
 
-    final MutableValueGraph<Station, Integer> network;
+    @Setter
+    MutableValueGraph<Station, Integer> network;
 
     public NetworkServiceImpl() {
         network = ValueGraphBuilder.undirected().build();
@@ -91,23 +91,6 @@ public class NetworkServiceImpl extends BaseService<Station> implements NetworkS
     public void loadNetwork(String filename) {
         RailwayUtils.parseFile(filename)
                 .forEach(this::addStation);
-    }
-
-    /**
-     * @param station the station to remove from the network
-     */
-    public void removeStation(Station station) {
-        // do not remove the station from the network if there are any services that stop at it...
-        timetable.getServices().stream()
-                .filter(service -> service.getFinishTime().isAfter(Now.localTime()))
-                .flatMap(service -> service.getRoute().stream())
-                .filter(stop -> stop.getStation().equals(station))
-                .findAny()
-                .ifPresent(stop -> {
-                    throw new IllegalArgumentException(String.format("There is a service stopping at %s", stop));
-                });
-
-        network.removeNode(station);
     }
 
     public List<Stop> calculateRoute(Station from, Station to) {

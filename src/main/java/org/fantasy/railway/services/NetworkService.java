@@ -50,11 +50,6 @@ public interface NetworkService {
     void loadNetwork(String filename);
 
     /**
-     * @param station the station to remove from the network
-     */
-    void removeStation(Station station);
-
-    /**
      * useful for calculating the cost of a ticket and defining a new service
      *
      * @param from the starting station of the journey

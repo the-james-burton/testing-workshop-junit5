@@ -1,110 +1,122 @@
 package org.fantasy.railway.service;
 
-import org.fantasy.railway.model.Service;
+import com.google.common.collect.Sets;
+import com.google.common.graph.MutableValueGraph;
 import org.fantasy.railway.model.Station;
 import org.fantasy.railway.model.Stop;
 import org.fantasy.railway.services.NetworkServiceImpl;
 import org.fantasy.railway.services.TimetableService;
-import org.fantasy.railway.util.Now;
-import org.fantasy.railway.util.TestUtils;
-import org.junit.jupiter.api.DynamicTest;
+import org.fantasy.railway.util.GraphUtils;
+import org.fantasy.railway.util.RailwayUtils;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Answers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.Clock;
-import java.time.Instant;
-import java.time.ZoneOffset;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Queue;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.DynamicTest.dynamicTest;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class NetworkServiceImplTest {
 
+    static final Station one = Station.builder().id(1).name("one").build();
+    static final Station two = Station.builder().id(2).name("two").build();
+    static final Station three = Station.builder().id(3).name("three").build();
+
+    @Spy
     @InjectMocks
     NetworkServiceImpl network;
 
     @Mock
     TimetableService timetable;
 
+    @Mock(answer = Answers.RETURNS_DEEP_STUBS)
+    MutableValueGraph<Station, Integer> networkGraph;
+
     @Test
     void shouldLoadNetworkFromFile() {
-        network.loadNetwork("test-network.csv");
+        String filename = "not-real-file.csv";
+        Queue<String> row = new LinkedList<>();
+        Queue<Queue<String>> results = new LinkedList<>();
+        row.addAll(Arrays.asList("one", "two", "three"));
+        results.add(row);
 
-        // TODO can assert on all items?
-        assertThat(network.getStation("A")).isPresent();
-        assertThat(network.getStation("Z")).isNotPresent();
+        try (MockedStatic<RailwayUtils> utils = Mockito.mockStatic(RailwayUtils.class)) {
+
+            utils.when(() -> RailwayUtils.parseFile(filename)).thenReturn(results);
+
+            // the return value isn't important as it is not used in the method under test...
+            doReturn(one).when(network).addStation(row);
+
+            // execute the method under test...
+            network.loadNetwork(filename);
+
+            // verify the mocked static method was called...
+            utils.verify(() -> RailwayUtils.parseFile(filename),
+                    times(1)
+            );
+
+            // verify that the forEach made the expected calls...
+            verify(network, times(results.size())).addStation(row);
+        }
+
+    }
+
+    @Test
+    void shouldGetStation() {
+        Station one = Station.builder().name("one").build();
+        Station two = Station.builder().name("two").build();
+
+        when(networkGraph.asGraph().nodes()).thenReturn(Sets.newHashSet(one, two));
+
+        assertThat(network.getStation(one.getName())).contains(one);
     }
 
     @Test
     void shouldConvertNetworkToString() {
-        network.loadNetwork("test-network.csv");
+        String expected = "to string return";
+        when(networkGraph.toString()).thenReturn(expected);
 
-        String networkToString = network.networkToString();
-        assertThat(networkToString).contains("isDirected: false")
-                .contains("Station(name=A)")
-                .contains("[Station(name=C), Station(name=A)]=2");
+        assertThat(network.networkToString()).isEqualTo(expected);
     }
 
     @Test
     void shouldCalculateDistanceBetweenAdjacent() {
-        network.loadNetwork("test-network.csv");
+        Integer expected = 7;
 
-        assertThat(network.distanceBetweenAdjacent(
-                network.getStationOrThrow("A"),
-                network.getStationOrThrow("C")
-        )).isEqualTo(2);
+        when(networkGraph.edgeValue(one, two)).thenReturn(Optional.of(expected));
 
-    }
+        assertThat(network.distanceBetweenAdjacent(one, two)).isEqualTo(expected);
 
-
-    @TestFactory
-    Stream<DynamicTest> shouldAlwaysCalculateRoute() {
-        network.loadNetwork("test-network.csv");
-
-        return IntStream
-                .iterate(0, n -> n + 1)
-                .limit(10)
-                .mapToObj(n -> {
-                    List<Station> stations = network.getItems();
-                    Collections.shuffle(stations);
-                    Station from = stations.get(0);
-                    Station to = stations.get(1);
-                    return dynamicTest(
-                            String.format("%s -> %s", from.getName(), to.getName()),
-                            () -> assertThat(network.calculateRoute(from, to))
-                                    .isNotNull());
-                });
     }
 
     @Test
     void shouldNotDistanceBetweenAdjacentIfNotAdjacent() {
-        network.loadNetwork("test-network.csv");
-
-        // keep these calls out of the assertThrows...
-        Station a = network.getStationOrThrow("A");
-        Station b = network.getStationOrThrow("B");
+        when(networkGraph.edgeValue(one, two)).thenReturn(Optional.empty());
 
         Exception exception = assertThrows(IllegalArgumentException.class, () ->
-                network.distanceBetweenAdjacent(a, b)
+                network.distanceBetweenAdjacent(one, two)
         );
 
         String expected = " are not adjacent";
@@ -115,103 +127,116 @@ class NetworkServiceImplTest {
 
     @Test
     void shouldCalculateRoute() {
-        network.loadNetwork("test-network.csv");
 
-        List<Stop> result = network.calculateRoute(
-                network.getStationOrThrow("B"),
-                network.getStationOrThrow("H"));
+        // expected shortest path for our mock to return...
+        List<Station> shortestPath = Arrays.asList(one, two, three);
 
-        assertThat(result)
-                .isNotNull()
-                .isNotEmpty()
-                .hasSize(6);
-        assertThat(result).map(stop -> stop.getStation().getName())
-                .containsExactly("B", "E", "D", "C", "G", "H");
+        // cannot use "when" in partial mocks, use doReturn instead...
+        doReturn(2).when(network).distanceBetweenAdjacent(one, two);
+        doReturn(3).when(network).distanceBetweenAdjacent(two, three);
+
+        try (MockedStatic<GraphUtils> main = Mockito.mockStatic(GraphUtils.class)) {
+
+            // mock the external static function being used...
+            main.when(() -> GraphUtils.findShortestPath(networkGraph, one, three)).thenReturn(shortestPath);
+
+            // execute the method under test...
+            List<Stop> result = network.calculateRoute(one, three);
+
+            // verify the mocked static method was called...
+            main.verify(() -> GraphUtils.findShortestPath(networkGraph, one, three), times(1));
+
+            assertThat(result).hasSize(3);
+            assertThat(Duration.between(
+                    result.get(0).getWhen(),
+                    result.get(2).getWhen()
+            ).toMinutes()).isEqualTo(5);
+            assertThat(result).map(stop -> stop.getStation().getName())
+                    .containsExactly("one", "two", "three");
+        }
 
     }
 
     @Test
     void shouldNotCalculateRouteIfNotPossible() {
-        network.loadNetwork("test-network.csv");
+         try (MockedStatic<GraphUtils> main = Mockito.mockStatic(GraphUtils.class)) {
 
-        // add an isolated part of the network...
-        Queue<String> inputs = new LinkedList<>(Arrays.asList("Z", "Y", "5"));
-        network.addStation(inputs);
+            // mock the external static function being used...
+            main.when(() -> GraphUtils.findShortestPath(networkGraph, one, two)).thenReturn(new ArrayList<>());
 
-        // keep these calls out of the assertThrows...
-        Station b = network.getStationOrThrow("B");
-        Station z = network.getStationOrThrow("Z");
+            Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                    network.calculateRoute(one, two)
+            );
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () ->
-                network.calculateRoute(b, z)
-        );
+            String expected = "No route from ";
+            String actual = exception.getMessage();
 
-        String expected = "No route from ";
-        String actual = exception.getMessage();
+            assertThat(actual).startsWith(expected);
+        }
 
-        assertThat(actual).startsWith(expected);
     }
 
     @Test
     void shouldThrowExceptionIfStationNotExist() {
-        String name = "Test station";
+        when(networkGraph.asGraph().nodes()).thenReturn(Sets.newHashSet(one, two));
+        String name = three.getName();
 
         Exception exception = assertThrows(IllegalArgumentException.class, () ->
                 network.getStationOrThrow(name)
         );
 
-        String expected = String.format("Station %s does not exist in the network", name);
+        String expected = String.format("Station %s does not exist in the network", three.getName());
         String actual = exception.getMessage();
 
         assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    void shouldNotThrowExceptionIfStationExist() {
-        String name = "Test station";
-        Station station = Station.builder().name(name).build();
+    void shouldGetStationIfStationExist() {
+        when(networkGraph.asGraph().nodes()).thenReturn(Sets.newHashSet(one, two));
 
-        network.getStationOrCreate(name);
-        Station actual = network.getStationOrThrow(name);
+        Station actual = network.getStationOrCreate(one.getName());
 
-        assertThat(actual).isEqualTo(station);
+        assertThat(actual).isEqualTo(one);
+        verify(networkGraph, times(0)).addNode(any());
     }
 
     @Test
-    void shouldGetStationOrCreate() {
-        String name = "Test station";
+    void shouldCreateStationIfNotExists() {
+        String newStation = "three";
 
-        Station station = network.getStationOrCreate(name);
+        when(networkGraph.asGraph().nodes()).thenReturn(Sets.newHashSet(one, two));
+        doReturn(Arrays.asList(one, two)).when(network).getItems();
 
-        assertThat(network.getItems()).hasSize(1);
-        assertThat(network.getStationOrThrow(name)).isEqualTo(station);
+        Station actual = network.getStationOrCreate(newStation);
 
-        assertThat(station).isNotNull();
-        assertThat(station.getName()).isEqualTo(name);
-        assertThat(station.getId()).isEqualTo(1);
+        assertThat(actual.getName()).isEqualTo(newStation);
+        assertThat(actual.getId()).isEqualTo(3);
+
+        // this is an important verification...
+        verify(networkGraph, times(1)).addNode(any());
+
     }
 
     @Test
     void shouldGetItems() {
-        String name = "test station";
+        when(networkGraph.asGraph().nodes()).thenReturn(Sets.newHashSet(one, two));
 
-        Station station = network.getStationOrCreate(name);
-
-        assertThat(network.getItems()).contains(station);
+        assertThat(network.getItems()).containsExactlyInAnyOrder(one, two);
     }
 
     @Test
     void shouldThrowExceptionIfAddConnectionWithStationNotExist() {
-        Station station = Station.builder().name("Test station").build();
-        Station connection = Station.builder().name("connection").build();
+        when(networkGraph.asGraph().nodes()).thenReturn(Sets.newHashSet(one, two));
+
         Map<Station, Integer> connections = new HashMap<>();
-        connections.put(connection, 3);
+        connections.put(two, 3);
 
         Exception exception = assertThrows(IllegalArgumentException.class, () ->
-                network.addConnections(station, connections)
+                network.addConnections(three, connections)
         );
 
-        String expected = String.format("Station %s does not exist in the network", station);
+        String expected = String.format("Station %s does not exist in the network", three);
         String actual = exception.getMessage();
 
         assertThat(actual).isEqualTo(expected);
@@ -219,45 +244,38 @@ class NetworkServiceImplTest {
 
     @Test
     void shouldAddConnection() {
-        String name = "Test station";
-        Station connection = Station.builder().name("connection").build();
+        when(networkGraph.asGraph().nodes()).thenReturn(Sets.newHashSet(one, two, three));
+
         Map<Station, Integer> connections = new HashMap<>();
-        connections.put(connection, 3);
+        connections.put(two, 3);
 
-        Station station = network.getStationOrCreate(name);
-        network.addConnections(station, connections);
+        network.addConnections(three, connections);
 
-        assertThat(network.getStation(name)).hasValue(station);
-        assertThat(network.getStation(connection.getName())).hasValue(connection);
-        assertThat(network.distanceBetweenAdjacent(station, connection)).isEqualTo(3);
+        assertThat(network.getStation(three.getName())).hasValue(three);
+        verify(networkGraph, times(1)).addNode(three);
+        verify(networkGraph, times(1)).putEdgeValue(three, two, 3);
     }
 
     @Test
     void shouldAddStationsFromStringInput() {
-        String firstName = "first station";
-        String secondName = "second station";
-        String thirdName = "third station";
-
-        Integer firstToSecond = 7;
-        Integer firstToThird = 9;
-
         Queue<String> inputs = new LinkedList<>();
-        inputs.add(firstName);
-        inputs.add(secondName);
-        inputs.add(firstToSecond.toString());
-        inputs.add(thirdName);
-        inputs.add(firstToThird.toString());
+        inputs.add(one.getName());
+        inputs.add(two.getName());
+        inputs.add("7");
+        inputs.add(three.getName());
+        inputs.add("9");
+
+        doReturn(one).when(network).getStationOrCreate(one.getName());
+        doReturn(two).when(network).getStationOrCreate(two.getName());
+        doReturn(three).when(network).getStationOrCreate(three.getName());
+        doReturn(one).when(network).addConnections(eq(one), any());
 
         Station station = network.addStation(inputs);
-        Station first = network.getStationOrThrow(firstName);
-        Station second = network.getStationOrThrow(secondName);
-        Station third = network.getStationOrThrow(thirdName);
+        verify(network, times(1)).getStationOrCreate(one.getName());
+        verify(network, times(1)).getStationOrCreate(two.getName());
+        verify(network, times(1)).getStationOrCreate(three.getName());
+        verify(network, times(1)).addConnections(eq(one), any());
 
-        assertThat(station.getId()).isEqualTo(1);
-        assertThat(station).isEqualTo(first);
-        assertThat(network.getItems()).contains(first, second, third);
-        assertThat(network.distanceBetweenAdjacent(first, second)).isEqualTo(firstToSecond);
-        assertThat(network.distanceBetweenAdjacent(first, third)).isEqualTo(firstToThird);
     }
 
     @Test
@@ -290,46 +308,5 @@ class NetworkServiceImplTest {
         assertThat(actual).isEqualTo(expected);
 
     }
-
-    @Test
-    void shouldRemoveStationIfNoService() {
-        when(timetable.getServices()).thenReturn(new ArrayList<>());
-        String name = "Test station";
-
-        Station station = network.getStationOrCreate(name);
-        network.removeStation(station);
-
-        assertThat(network.getStation(station.getName())).isNotPresent();
-        verify(timetable, Mockito.times(1)).getServices();
-    }
-
-    @Test
-    void shouldNotRemoveStationIfFutureServiceExists() {
-        // create a service that our mock will return...
-        Service service = Service.builder().id(1).build();
-        service.setRoute(TestUtils.createTestRoute(service));
-        service.setName(service.getCurrentName());
-        List<Service> services = Arrays.asList(service);
-
-        when(timetable.getServices()).thenReturn(services);
-
-        // set the time to be before the time of the service we just created...
-        Clock clock = Clock.fixed(Instant.parse("2022-05-10T08:00:00Z"), ZoneOffset.UTC);
-        Now.setClock(clock);
-
-        String stationName = service.getRoute().peek().getStation().getName();
-        Station station = network.getStationOrCreate(stationName);
-        Exception exception = assertThrows(IllegalArgumentException.class, () ->
-                network.removeStation(station)
-        );
-
-        String expected = "There is a service stopping at";
-        String actual = exception.getMessage();
-
-        assertThat(actual).startsWith(expected);
-        assertThat(network.getStation(station.getName())).isPresent();
-        verify(timetable, Mockito.times(1)).getServices();
-    }
-
 
 }
