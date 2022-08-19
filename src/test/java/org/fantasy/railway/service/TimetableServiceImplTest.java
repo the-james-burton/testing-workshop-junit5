@@ -8,7 +8,6 @@ import org.fantasy.railway.services.NetworkService;
 import org.fantasy.railway.services.TimetableServiceImpl;
 import org.fantasy.railway.util.Now;
 import org.fantasy.railway.util.RailwayUtils;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -49,12 +48,6 @@ class TimetableServiceImplTest {
     @Mock
     NetworkService network;
 
-    @BeforeEach
-    void setup() {
-        timetable = Mockito.spy(new TimetableServiceImpl());
-        timetable.setNetwork(network);
-    }
-
     @Test
     void shouldCreateNewServices() {
         Station first = firstStop().getStation();
@@ -94,30 +87,6 @@ class TimetableServiceImplTest {
         assertThat(actual).startsWith(expected);
     }
 
-    @Test
-    void shouldCreateNewServicesFromStringInput() {
-
-        // TODO EXERCISE about partial mocks/spy
-
-        Integer frequency = 60;
-        Station start = firstStop().getStation();
-        Station finish = secondStop().getStation();
-        Queue<String> inputs = new LinkedList<>(Arrays.asList(frequency.toString(), start.getName(), finish.getName()));
-
-        // mock return objects...
-        Service service = Service.builder().id(1).build();
-        List<Service> expected = Arrays.asList(service);
-
-        // replace real implementation with stubs..
-        doReturn(expected).when(timetable).createNewServices(frequency, start, finish);
-        when(network.getStationOrThrow(start.getName())).thenReturn(start);
-        when(network.getStationOrThrow(finish.getName())).thenReturn(finish);
-
-        List<Service> actual = timetable.createNewServices(inputs);
-
-        verify(timetable, times(1)).createNewServices(frequency, start, finish);
-        assertThat(actual).isEqualTo(expected);
-    }
 
     @Test
     void shouldLoadServicesFromFileFullyMocked() {
@@ -152,7 +121,52 @@ class TimetableServiceImplTest {
     }
 
     @Test
+    void shouldSkipAndRemoveEmptyServiceWhenDispatching() {
+        Service service = Service.builder().id(1).build();
+        timetable.getServices().add(service);
+
+        timetable.dispatch();
+
+        assertThat(timetable.getDispatched())
+                .isNotNull()
+                .isEmpty();
+
+        assertThat(timetable.getServices())
+                .isNotNull()
+                .isEmpty();
+    }
+
+    @Test
+    void shouldCreateNewServicesFromStringInput() {
+
+        // TODO EXERCISE about partial mocks/spy
+
+        Integer frequency = 60;
+        Station start = firstStop().getStation();
+        Station finish = secondStop().getStation();
+        Queue<String> inputs = new LinkedList<>(Arrays.asList(frequency.toString(), start.getName(), finish.getName()));
+
+        // mock return objects...
+        Service service = Service.builder().id(1).build();
+        List<Service> expected = Arrays.asList(service);
+
+        // replace real implementation with stubs..
+        doReturn(expected).when(timetable).createNewServices(frequency, start, finish);
+        when(network.getStationOrThrow(start.getName())).thenReturn(start);
+        when(network.getStationOrThrow(finish.getName())).thenReturn(finish);
+
+        List<Service> actual = timetable.createNewServices(inputs);
+
+        verify(timetable, times(1)).createNewServices(frequency, start, finish);
+        verify(network, times(2)).getStationOrThrow(any());
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
     void shouldDispatchServices() {
+
+        // TODO exercise about time based testing
+
         Service service = Service.builder().id(1).build();
         LinkedList<Stop> route = createTestRoute(service);
         Stop first = route.get(0);
@@ -183,22 +197,6 @@ class TimetableServiceImplTest {
 
         assertThat(dispatched).containsExactly(first, second, third);
 
-    }
-
-    @Test
-    void shouldSkipAndRemoveEmptyServiceWhenDispatching() {
-        Service service = Service.builder().id(1).build();
-        timetable.getServices().add(service);
-
-        timetable.dispatch();
-
-        assertThat(timetable.getDispatched())
-                .isNotNull()
-                .isEmpty();
-
-        assertThat(timetable.getServices())
-                .isNotNull()
-                .isEmpty();
     }
 
 }
