@@ -8,18 +8,24 @@ This Unit Testing Workshop is designed to get you familiar with unit testing in 
 
 Starting with a complete and working application, you will be coached through the process of writing unit tests for it in your own IDE, until your tests cover the whole application. 
 
+## Learning Objectives
+
 Many popular JUnit techniques and approaches are covered. When you complete the course you will...
-- be able to understand and write good testable object-oriented code
-- spot what needs to be tested
-- know how to design a good unit test
-- know how to make great assertions to ensure code doesn't break
-- be confident in the libraries used
+
+- Be able to understand what makes object-oriented java code testable
+- Spot what needs to be tested
+- Write JUnit test cases
+- Know how to design a good unit test
+- Know how to make great assertions to ensure code doesn't break
+- Be aware of some of the more advanced features of JUnit 5
+- Use Mockito to better isolate your tests
+- Use AssertJ to make better assertions in your tests
 
 ## Topics
 
-The main things we will look at in this course are
+The main things we will look at in this course are...
 
-### JUnit 5 as a test management and execution framework
+### [JUnit 5](https://junit.org/junit5/docs/current/user-guide/) as a test management and execution framework
 
 - arrange / act / assert
 - test lifecycle
@@ -33,24 +39,24 @@ The main things we will look at in this course are
 - How to use test utilities
 - How to get coverage reports to track your testing progress
  
-### AssertJ to make modern assertions in a fluent style
+### [AssertJ](https://assertj.github.io/doc/) to make modern assertions in a fluent style
 
 AssertJ is a great choice for making assertions. The built in assertions in JUnit 5, whilst more advanced than JUnit 4 are still very far behind what can be done in AssertJ. The original "assertThat" library Hamcrest has not been updated since 2019. Google Truth is very similar to AssertJ but has a smaller developer pool and a slower rate of enhancement. 
 
-### Mockito to mock dependencies and inspect usage
+### [Mockito](https://site.mockito.org/) to mock dependencies and inspect usage
 
 Mockito is the leader in mocking frameworks, allowing objects and interfaces to be quickly simulated in test code, ensuring your unit test doesn't break due to failurs in code not under test. Since v3.4.0 it now supports mocking static classes, removing the main reason people needed to keep using the abandonded PowerMock project.
 
-### Lombok library to reduce the amount of code you write (and thus need to test)
+### [Lombok](https://projectlombok.org/) library to reduce the amount of code you write (and thus need to test)
 
 Lombok is a very popular library which provides low-level support for writing less code in your projects. Some of the features we use in this workshop are the getter/setter generation and the builder generation. This reduces the amount of code you need to write both in your POJOs and in the services that use them. This, of course, reduces the amount of tests you need to write.
 
-## Pre-req
+## Pre-requisites
 
 You need to have installed...
 
-- JDK v8 or above
-- Apache Maven
+- JDK v8 or above : **java -version** must work at your command prompt.
+- Apache Maven and some familiarity with it : **mvn -version** must work at your command prompt.
 - A modern java IDE, such as Eclipse or IDEA (community edition is fine for this)
 
 # The System
@@ -117,9 +123,9 @@ At the command line, you have two options, the first has a faster turnaround, th
 
 - **unpackaged**: ```mvn compile exec:java -Dexec.mainClass=org.fantasy.railway.Main```
 - **packaged** : ```java -jar target\railway-1.0-SNAPSHOT-jar-with-dependencies.jar```
-- 
+ 
 # About Unit Testing
-
+ 
 ## Pluralsight courses
 
 - [JUnit 5 Fundamentals by Esteban Herrera](https://app.pluralsight.com/library/courses/junit-5-fundamentals)
@@ -155,7 +161,9 @@ Before starting these modules, please be sure you have...
 - are able to build the project at the command line
 - are able to run the Main class in your IDE
 
-## Module 1 : Running tests and viewing coverage
+There are no fixed "correct" answers in this workshop. The "solution" represents just one suggested way of implement unit tests.
+
+## Exercise 1 : Running tests and viewing coverage
 
 We will start with running some simple tests to get the feel of it all. Find the **StopTest** class. You will see that one test is already written for you. Have a look at the test. At this point, note how we have a **TestUtils** class in place that provides some static functions. You are free to add further functions to this class as this workshop progresses to help reuse code. Let's run it by using the following techniques:
 
@@ -166,20 +174,24 @@ We will start with running some simple tests to get the feel of it all. Find the
 
 Now do the same again, but his time **run with coverage** in your IDE. This will give you a report showing how much of the codebase has been tested. You can see the number is very small just now! As you progress through this module, you will write more and more tests, improving this coverage number. You can dive into the report in your IDE and double-click to open the class. Note how the coverage is indicated by red/yellow/green. These indicate no coverage/partial coverage (not all branches)/fully covered respoectively.
 
-You can also run the tests outside of your IDE, at the command line. This project is also configured (via the jacoco maven plugin in the pom.xml) to produce a coverage report when the tests are run.
+You can also run the tests outside your IDE, at the command line. This project is also configured (via the jacoco maven plugin in the pom.xml) to produce a coverage report when the tests are run.
 
 - Run all the tests in the entire project at the command line by using ```mvn test```. Observe the results.
 - Open the generated coverage report which can be found in **target\site\jacoco\index.html** and take a look.
 
 Throughout this workshop, we will use [AssertJ](https://assertj.github.io/doc/) to make assertions instead of the rather primitive assertion features built into JUnit 5.
 
-## Module 2 : Simple Unit Testing
+## Exercise 2 : Simple Unit Testing
 
 Now that you can execute tests and view coverage, let's proceed and write some simple tests on POJOs within the system. Doing this will build your knowledge of the system and get you writing tests in the arrange/act/assert way. Since we are using Lombok, coverage will be good even if we do not test getters/setters. Remember to make assertions too, using [AssertJ](https://assertj.github.io/doc/)!
 
 - Implement all test method stubs in StopTest
 - Implement all test method stubs in PassengerTest as indicated for Module 2
-- Implement all test method stubs in PassengerTest as indicated for Module 2
+- Implement all test method stubs in ServiceTest as indicated for Module 2
+
+The stubs are a guideline, so please feel free to change as you see fit. 
+
+## Exercise 3 : Testing Exceptions
 
 Verify
 

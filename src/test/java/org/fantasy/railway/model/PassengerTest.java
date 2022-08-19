@@ -12,10 +12,7 @@ class PassengerTest {
 
     @Test
     void shouldAddConcessionIfNotPresentAndPassengerQualifies() {
-        Passenger passenger = newYoungPerson();
-        passenger.addConcession(Concession.YOUNG_PERSONS_RAILCARD);
-
-        assertThat(passenger.getConcessions()).contains(Concession.YOUNG_PERSONS_RAILCARD);
+        // TODO EXERCISE 2
     }
 
     @Test
@@ -48,12 +45,7 @@ class PassengerTest {
 
     @Test
     void shouldRemoveConcessionIfPresent() {
-        Passenger passenger = newYoungPerson();
-        passenger.addConcession(Concession.YOUNG_PERSONS_RAILCARD);
-
-        passenger.removeConcession(Concession.YOUNG_PERSONS_RAILCARD);
-
-        assertThat(passenger.getConcessions()).doesNotContain(Concession.YOUNG_PERSONS_RAILCARD);
+        // TODO EXERCISE 2
     }
 
     @Test
@@ -72,29 +64,16 @@ class PassengerTest {
 
     @Test
     void shouldGiveNoDiscountWithNoConcessions() {
-        Double discount = newYoungPerson().totalDiscount();
-
-        assertThat(discount).isEqualTo(0.0d);
+        // TODO EXERCISE 2
     }
 
     @Test
     void shouldGiveDiscountWithOneConcession() {
-        Passenger passenger = newYoungPerson();
-        passenger.addConcession(Concession.YOUNG_PERSONS_RAILCARD);
-
-        Double discount = passenger.totalDiscount();
-
-        assertThat(discount).isEqualTo(0.2d);
+        // TODO EXERCISE 2
     }
 
     @Test
     void shouldGiveDiscountWithTwoConcessions() {
-        Passenger passenger = newYoungPerson();
-        passenger.addConcession(Concession.YOUNG_PERSONS_RAILCARD);
-        passenger.addConcession(Concession.DISABLED_DISCOUNT);
-
-        Double discount = passenger.totalDiscount();
-
-        assertThat(discount).isEqualTo(0.4d);
+        // TODO EXERCISE 2
     }
 }
