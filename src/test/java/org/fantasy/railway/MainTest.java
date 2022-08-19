@@ -40,7 +40,6 @@ class MainTest {
         verify(railwayUI, times(1)).setOut(out);
         verify(railwayUI, times(1)).initialize();
         verify(railwayUI, times(1)).topMenu(scanner);
-
     }
 
 

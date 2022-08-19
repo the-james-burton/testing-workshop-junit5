@@ -47,7 +47,7 @@ public class RailwaySystem {
     }
 
     void shutdown() {
-        timetable.shutdown();
+        if (timetable != null) timetable.shutdown();
     }
 
 }
