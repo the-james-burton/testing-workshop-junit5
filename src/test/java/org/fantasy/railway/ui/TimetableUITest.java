@@ -6,6 +6,8 @@ import org.fantasy.railway.util.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -13,6 +15,7 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Queue;
 import java.util.Scanner;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,6 +23,9 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class TimetableUITest extends BaseUITest {
+
+    @Captor
+    ArgumentCaptor<Queue<String>> inputs;
 
     @InjectMocks
     TimetableUI timetableUI;

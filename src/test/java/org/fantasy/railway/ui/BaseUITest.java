@@ -6,27 +6,17 @@ import org.fantasy.railway.services.BookingService;
 import org.fantasy.railway.services.NetworkService;
 import org.fantasy.railway.services.TimetableService;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mock;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.util.Queue;
 import java.util.Scanner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public abstract class BaseUITest {
-
-
-    @Captor
-    ArgumentCaptor<Queue<String>> inputs;
-
-    @Captor
-    ArgumentCaptor<String> inputString;
 
     PrintStream out;
     ByteArrayOutputStream outStream;
