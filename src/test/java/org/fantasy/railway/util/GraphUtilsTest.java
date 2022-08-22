@@ -7,10 +7,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,35 +20,8 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 class GraphUtilsTest {
 
-    private ValueGraph<String, Integer> graph;
-
-    /**
-     * @return a stream of arguments: source, target, expected shortest path
-     */
-    static Stream<Arguments> generateData() {
-        return Stream.of(
-                Arguments.of("D", "H", Arrays.asList("D", "C", "G", "H")),
-                Arguments.of("A", "F", Arrays.asList("A", "E", "D", "F")),
-                Arguments.of("E", "H", Arrays.asList("E", "D", "C", "G", "H")),
-                Arguments.of("B", "H", Arrays.asList("B", "E", "D", "C", "G", "H")),
-                Arguments.of("B", "I", Arrays.asList("B", "I")),
-                Arguments.of("E", "H", Arrays.asList("E", "D", "C", "G", "H"))
-        );
-    }
-
-    @BeforeEach
-    void setUp() {
-        graph = createSampleGraph();
-    }
-
-    /**
-     * Tests the implementation of Dijkstra's algorithm using the sample graph
-     */
-    @ParameterizedTest
-    @MethodSource("generateData")
-    void shouldFindTheShortestPath(String source, String target, List<String> expected) {
-        List<String> shortestPath = GraphUtils.findShortestPath(graph, source, target);
-        assertThat(shortestPath).isEqualTo(expected);
+    void shouldFindTheShortestPath() {
+        // TODO EXERCISE 9
     }
 
     /*

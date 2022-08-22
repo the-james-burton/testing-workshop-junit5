@@ -249,9 +249,15 @@ In this exercise we are going to look at a few different types of parameterized 
 
 When you run your parameterized tests, note how the output is reported. You will see that each data point you provide is considered as a separate test.
 
+## Exercise 9 : Parameterized Tests - method source
 
- 
-Method source - GraphutilsTest
+The built-in sources are useful, but are less suited to use with complex objects. Indeed, you will have noticed that you needed to convert a result to string when writing your @CsvSource test in the previous exercise. Fortunately, JUnit 5 provides a way of providing complex objects to your parameterized tests in the form of method source.
+
+This fantasy railway system contains a **GraphUtils** class which offers a **findShortestPath()** generic function. This is a good candidate for a method source parameterized test. We can define a custom graph, ask for shortest paths and provide the expected list by way of method source.
+
+Using this technique, you can now implement the test **GraphUtils.shouldFindTheShortestPath()**. A function is already provided which will give you a sample graph. You can use it to help arrange your test data prior to executing the test. Your method source is not provided - you will need to write it yourself.
+
+
 
 Dynamic tests
 1. NetworkServiceImplTest
