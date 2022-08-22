@@ -32,7 +32,6 @@ public class RailwaySystem {
 
         bookings.setNetwork(network);
         timetable.setNetwork(network);
-        network.setTimetable(timetable);
 
         bootstrap();
     }

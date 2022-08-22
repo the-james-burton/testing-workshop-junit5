@@ -5,7 +5,6 @@ import com.google.common.graph.MutableValueGraph;
 import org.fantasy.railway.model.Station;
 import org.fantasy.railway.model.Stop;
 import org.fantasy.railway.services.NetworkServiceImpl;
-import org.fantasy.railway.services.TimetableService;
 import org.fantasy.railway.util.GraphUtils;
 import org.fantasy.railway.util.RailwayUtils;
 import org.junit.jupiter.api.Test;
@@ -47,9 +46,6 @@ class NetworkServiceImplFullyMockedTest {
     @Spy
     @InjectMocks
     NetworkServiceImpl network;
-
-    @Mock
-    TimetableService timetable;
 
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     MutableValueGraph<Station, Integer> networkGraph;

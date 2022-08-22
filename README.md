@@ -193,7 +193,9 @@ The stubs are a guideline, so please feel free to change as you see fit. When do
 
 ## Exercise 3 : Testing Exceptions
 
-If you run your test coverage report after doing exercise 2, you will notice that the uncovered code is the part that throws exceptions. JUnit 5 provides a nice way of testing these and making assertions on them. Read chaper 6 of [A Guide to JUnit 5](https://www.baeldung.com/junit-5) and then go on to implement the remaining method stubs in **StopTest**, **PassengerTest** and **ServiceTest**.
+If you run your test coverage report after doing exercise 2, you will notice that the uncovered code is the part that throws exceptions. JUnit 5 provides a nice way of testing these and making assertions on them. Read chaper 6 of [A Guide to JUnit 5](https://www.baeldung.com/junit-5).
+
+Now you can implement the remaining method stubs in **StopTest**, **PassengerTest** and **ServiceTest**.
 
 Once done, run your coverage report again and it should be looking pretty good for the three model classes we have tested so far! 
 
@@ -203,11 +205,11 @@ There are also some model classes we have not yet tested. We will look at these 
 
 ## Exercise 4 : Testing Services and Base class behaviour
 
-We now move onto looking at testing a service, the **AccountServiceImpl**. This is the simplest of the services and can be tested in a similar way to the POJOs you have already tested. The main thing that is new here is the base class **BaseService** contains two methods - one private and one public. Best practice outlined in [Unit Test Private Methods in Java](https://www.baeldung.com/java-unit-test-private-methods) means that we only need to test the public method. If the private method is not fully tested as we approach 100% test coverage, then it has dead code that should be removed. Bear this in mind when writing tests in the real world.
+We now move onto looking at testing services, the **AccountServiceImpl**. These are fairly simple services and can be tested in a similar way to the POJOs you have already tested. The main thing that is new here is the base class **BaseService** contains two methods - one private and one public. Best practice outlined in [Unit Test Private Methods in Java](https://www.baeldung.com/java-unit-test-private-methods) means that we only need to test the public method. If the private method is not fully tested as we approach 100% test coverage, then it has dead code that should be removed. Bear this in mind when writing tests in the real world.
 
 When testing services it can be useful to use the JUnit 5 test lifecycle **@BeforeEach** annotation to ensure that you have a fresh service before each test runs. This guarantees that your tests are stateless and reduces code duplication. The test class skeleton is prepared in this way.
 
-Now go ahead and implement the test stubs in **AccountServiceImplTest**. 
+Now go ahead and implement the test stubs in **AccountServiceImplTest** and **NetworkServiceImplTest** by exercising all methods in the classes and asserting on their behaviour. This is a good workout to build up your testing "muscle". For the network service test, you can find a test network to load in the **src/test/resources** directory.
 
 If you want to dive into alternative methods for testing abstract base classes, you can look at [Testing an Abstract Class With JUnit](https://www.baeldung.com/junit-test-abstract-class).
 
@@ -263,8 +265,7 @@ Let's take a quick look at JUnit 5 dynamic tests. You can learn about this featu
 
 In the **GraphUtilsTest** class, implement the **shouldAlwaysCalculateRoute()** so that it asserts a route is found between two randomly chosen nodes at least ten times. You will need to change the return type and add the required annotation.
 
-Dynamic tests
-1. NetworkServiceImplTest
+
 
 UI tests
 
@@ -280,3 +281,6 @@ Testing main classes
 
 Testing time
 The "Now" class
+
+further learning
+jqwik

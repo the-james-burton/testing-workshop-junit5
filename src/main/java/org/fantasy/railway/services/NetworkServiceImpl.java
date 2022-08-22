@@ -21,9 +21,6 @@ import java.util.stream.Collectors;
 public class NetworkServiceImpl extends BaseService<Station> implements NetworkService {
 
     @Setter
-    TimetableService timetable;
-
-    @Setter
     MutableValueGraph<Station, Integer> network;
 
     public NetworkServiceImpl() {

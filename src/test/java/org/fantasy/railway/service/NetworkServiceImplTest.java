@@ -3,12 +3,8 @@ package org.fantasy.railway.service;
 import org.fantasy.railway.model.Station;
 import org.fantasy.railway.model.Stop;
 import org.fantasy.railway.services.NetworkServiceImpl;
-import org.fantasy.railway.services.TimetableService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -20,14 +16,14 @@ import java.util.Queue;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@ExtendWith(MockitoExtension.class)
 class NetworkServiceImplTest {
 
-    @InjectMocks
     NetworkServiceImpl network;
 
-    @Mock
-    TimetableService timetable;
+    @BeforeEach
+    void setup() {
+        network = new NetworkServiceImpl();
+    }
 
     @Test
     void shouldLoadNetworkFromFile() {
