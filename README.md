@@ -209,13 +209,13 @@ We now move onto looking at testing services, the **AccountServiceImpl**. These 
 
 When testing services it can be useful to use the JUnit 5 test lifecycle **@BeforeEach** annotation to ensure that you have a fresh service before each test runs. This guarantees that your tests are stateless and reduces code duplication. The test class skeleton is prepared in this way.
 
-Now go ahead and implement the test stubs in **AccountServiceImplTest** and **NetworkServiceImplTest** by exercising all methods in the classes and asserting on their behaviour. This is a good workout to build up your testing "muscle". For the network service test, you can find a test network to load in the **src/test/resources** directory.
+Now go ahead and implement the test stubs in **AccountServiceImplTest** and **NetworkServiceImplTest** by exercising all methods in the classes and asserting on their behaviour. This is a good workout to build up your testing "muscle". For the network service test, you can find a test network to load in the **src/test/resources** directory. Again, feel free to modify the stubs if you wish - they are only a guideline.
 
 If you want to dive into alternative methods for testing abstract base classes, you can look at [Testing an Abstract Class With JUnit](https://www.baeldung.com/junit-test-abstract-class).
 
 ## Exercise 5 : Mocking External Behaviour
 
-In the previous exercise, the service we tested did not have any external dependencies. It did not use any other services to achieve its desired operation. In this exercise we now look at another service in this system, the **BookingServiceImpl** which you can see makes use of the **NetworkService**, specifically to calculate a route between two stations so a price can be determined.
+In the previous exercise, the service we tested did not have any external dependencies (except for static function use). It did not use any other services to achieve its desired operation. In this exercise we now look at another service in this system, the **BookingServiceImpl** which you can see makes use of the **NetworkService**, specifically to calculate a route between two stations so a price can be determined.
 
 However, when testing the BookingServiceImpl we only want to test that "unit" of code, not the NetworkService. In other words, we are trying to determine if the BookingServiceImpl works as expected not the NetworkService it uses. Thus, if the NetworkService breaks in some way, this should not fail the BookingServiceImpl tests. This is a core reason why mocking external dependencies is required at this point. Now we could simply implement a cut down test version of the NetworkService and wire that up when testing, but there is a popular library that can help: Mockito.  Mockito is already added to this project, so no need to add it to the pom.xml.
 
