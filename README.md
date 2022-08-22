@@ -263,19 +263,21 @@ Using this technique, you can now implement the test **GraphUtils.shouldFindTheS
 
 Let's take a quick look at JUnit 5 dynamic tests. You can learn about this feature in the [Guide to Dynamic Tests in Junit 5](https://www.baeldung.com/junit5-dynamic-tests). In a nutshell, dynamic tests are created by your code and are only really limited by your imagination! In practice, there are few compelling reasons to use a dynamic test. Try searching your company repo for usages and see what you find. They can find use in permutation and combination testing such as that found within the [Chronicle Test Framework](https://github.com/OpenHFT/Chronicle-Test-Framework).
 
-In the **GraphUtilsTest** class, implement the **shouldAlwaysCalculateRoute()** so that it asserts a route is found between two randomly chosen nodes at least ten times. You will need to change the return type and add the required annotation.
+In the **GraphUtilsTest** class, implement the **shouldAlwaysCalculateRoute()** so that it asserts a route is found between two randomly chosen nodes at least ten times. You can use the existing sample graph. You will need to change the return type and add the required annotation.
 
+## Exercise 11 : Making Systems Testable
 
+We've spent some time looking at cool testing features, but what are some of the techniques that help make our systems easily testable? In this project we are not using a dependency injection framework such as Spring, but that doesn't prevent us from using the same techniques. When we want to run the system, it must at some point create actual real instances of the services and also of the UI.
 
-UI tests
+To achieve this, there is a class **RailwaySystem** that pulls together all the services into one. It also offers the ability to **initialize()** the system with real service instances and **bootstrap()** the system with live data. This is a lombok @Data class so the services being used can be injected with mocks. The actual behaviour is then easy to test, since the class doesn't really do very much.
 
-Testing base class methods with base test class
-1. Show BaseUITest and how it tests BaseUI and defines the contract
+Go ahead and implement the test stubs seen in **RailwaySystemTest**. Note that you may need to partially mock the class to prevent it running the **bootstrap()** method when testing **initialize()**. This is more practice :)
 
+## Exercise xx : Using base classes in tests
 
-ArgumentCaptor
+As you have seen, the fantasy railway system contains a simple text based UI so a user can perform actions on the services. This UI is object-oriented and has an abstract base class **BaseUI** which all UI classes extend. There is an abstract method in the base class **displayMenu()** which the subclasses need to implement. The BaseUI class also provides an instance of **RailwaySystem** (a class which pulls together all service classes into one) and a PrintStream which tells the UI where to send its output to.
 
-	1. Write AccountUITest - use verify, 
+ArgumentCaptor Write AccountUITest - use verify, 
 
 Testing main classes
 
