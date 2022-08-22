@@ -57,7 +57,7 @@ public abstract class BaseUITest {
 
     @Test
     void shouldDisplayMenu() {
-        in = new ByteArrayInputStream("X\n".getBytes());
+        in = new ByteArrayInputStream("x\n".getBytes());
         Scanner scanner = new Scanner(in);
         getUI().displayMenu(scanner);
 
