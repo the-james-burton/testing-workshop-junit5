@@ -2,27 +2,22 @@ package org.fantasy.railway.ui;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.ByteArrayInputStream;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class NetworkUITest extends BaseUITest {
-
-    @Captor
-    ArgumentCaptor<Queue<String>> inputs;
-
-    @Captor
-    ArgumentCaptor<String> inputString;
 
     @InjectMocks
     NetworkUI networkUI;
@@ -53,13 +48,10 @@ class NetworkUITest extends BaseUITest {
 
         networkUI.displayMenu(scanner);
 
-        verify(network).addStation(inputs.capture());
+        Queue<String> inputs = new LinkedList<>();
+        inputs.addAll(Arrays.asList("First", "Second", "4", "Third", "6"));
 
-        assertThat(inputs.getValue().poll()).isEqualTo("First");
-        assertThat(inputs.getValue().poll()).isEqualTo("Second");
-        assertThat(inputs.getValue().poll()).isEqualTo("4");
-        assertThat(inputs.getValue().poll()).isEqualTo("Third");
-        assertThat(inputs.getValue().poll()).isEqualTo("6");
+        verify(network, times(1)).addStation(inputs);
 
     }
 
@@ -70,11 +62,9 @@ class NetworkUITest extends BaseUITest {
 
         networkUI.displayMenu(scanner);
 
-        verify(network).loadNetwork(inputString.capture());
+        verify(network, times(1)).loadNetwork("filename.csv");
 
         String output = outStream.toString();
-        assertThat(inputString.getValue()).isEqualTo("filename.csv");
         assertThat(output).contains("Network file filename.csv successfully loaded");
     }
-
 }
