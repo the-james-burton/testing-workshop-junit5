@@ -19,10 +19,6 @@ import java.util.stream.Collectors;
 
 @SuppressWarnings("UnstableApiUsage")
 public class NetworkServiceImpl extends BaseService<Station> implements NetworkService {
-
-    @Setter
-    TimetableService timetable;
-
     @Setter
     MutableValueGraph<Station, Integer> network;
 

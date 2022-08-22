@@ -71,6 +71,4 @@ public interface NetworkService {
      */
     String networkToString();
 
-    void setTimetable(TimetableService timetable);
-
 }
