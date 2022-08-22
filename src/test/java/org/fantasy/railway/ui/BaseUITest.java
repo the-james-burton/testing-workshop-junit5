@@ -5,6 +5,7 @@ import org.fantasy.railway.services.AccountService;
 import org.fantasy.railway.services.BookingService;
 import org.fantasy.railway.services.NetworkService;
 import org.fantasy.railway.services.TimetableService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
@@ -39,6 +40,7 @@ public abstract class BaseUITest {
 
     abstract BaseUI getUI();
 
+    @BeforeEach
     void setup() {
         // initialise the in / out...
         outStream = new ByteArrayOutputStream();

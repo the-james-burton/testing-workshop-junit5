@@ -1,6 +1,5 @@
 package org.fantasy.railway.ui;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -34,11 +33,6 @@ class RailwayUITest extends BaseUITest {
     @Spy
     @InjectMocks
     RailwayUI railwayUI;
-
-    @BeforeEach
-    void setup() {
-        super.setup();
-    }
 
     @Test
     void shouldInitialize() {

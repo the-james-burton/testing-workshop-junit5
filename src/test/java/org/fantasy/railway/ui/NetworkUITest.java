@@ -1,6 +1,5 @@
 package org.fantasy.railway.ui;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -31,11 +30,6 @@ class NetworkUITest extends BaseUITest {
     @Override
     BaseUI getUI() {
         return networkUI;
-    }
-
-    @BeforeEach
-    void setup() {
-        super.setup();
     }
 
     @Test
