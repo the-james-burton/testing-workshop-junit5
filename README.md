@@ -219,11 +219,25 @@ However, when testing the BookingServiceImpl we only want to test that "unit" of
 
 You should now review the **BookingServiceImplTest** class and implement the remaining methods. Use Mockito **when** and **verify** features to mock calls to the external NetworkService dependency and verify that the calls were made by the Booking service under test.
 
-Verify
+## Exercise 6 : Partial Mocks
 
-Spy
+When testing certain methods in business service classes you may find that they use one or more other methods to achieve a high level operation. If these other methods are in different classes, you now know how to use Mockito to mock them and make asserions on the behaviour. However, what if these other methods are in the same class?
 
-Mocking
+Mockito can also help with this. We will now look at [Using Spies](https://www.baeldung.com/mockito-spy). A Mockito "Spy" allows us to use a real object and mock some of the methods in side it when we need to.
+
+Now open the **TimetableServiceImplTest** class. Implement the methods indicated for this exercise. Remember, we are building more skills here and testing a real application, so you may need to use some of the previous techniques you have learned so far in this workshop to achieve good test coverage. If you notice that a method you are testing calls another method in the class, you can mock it by using the Mockito **doReturn().when()...** syntax instead of the **when().thenReturn()...** we have used previously for fully mocked objects.
+
+Using partial mocks can be very helpful with complex classes to isolate functionality in methods to ensure you testing remains focussed on the unit under test. This can help you build more resilient tests that are less prone to breaking when functionality they are dependent on has a problem.
+
+## Exercise 7 : Mocking Static Methods
+
+So far we have looked at how to mock instances of classes, but what happens if you need to mock a static method? In many cases, mocking a static method does not make sense. Static methods often come from third part libraries, such as the **Preconditions.checkArgument()** you see in this project. They can also be found in the JDK, for example **BigDecimal.valueOf()** also used here. It can _sometimes_ make sense to mock static methods when you own the implementation, it is complex, and you want to isolate the testing of it to it's own test class.
+
+In our project we have a **RailwayUtils** class which provides static methods to the rest of the system, including a **parseFile()** function that does some moderately complex parsing. Staying with **TimetableServiceImpl** we can see that the **loadServices()** method uses it. So here we have a situation where we may benefit from mocking the static function.
+
+Let's go ahead and implement the **shouldLoadServicesFromFileFullyMocked()** in the **TimetableServiceImplTest** class to test the **loadServices()** method. You can static mock the **RailwayUtils.parseFile()** function and also use your new partial mocking skills to mock other methods used in the same class, so isolate testing to just the functionality expressed in the method under test. 
+
+
 
 Parameterised tests
 1. EnumSource - ConcessionTest
