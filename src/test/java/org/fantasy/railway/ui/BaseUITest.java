@@ -7,6 +7,7 @@ import org.fantasy.railway.services.NetworkService;
 import org.fantasy.railway.services.TimetableService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import java.io.ByteArrayInputStream;
@@ -24,6 +25,7 @@ public abstract class BaseUITest {
 
     InputStream in;
 
+    @InjectMocks
     RailwaySystem system;
 
     @Mock
@@ -47,13 +49,7 @@ public abstract class BaseUITest {
         out = new PrintStream(outStream);
         in = null;
 
-        // set up the system with a complete set of mock services...
-        system = new RailwaySystem();
-        system.setAccounts(accounts);
-        system.setBookings(bookings);
-        system.setNetwork(network);
-        system.setTimetable(timetable);
-
+        // inject the mocks into whatever UI subclass test is being run...
         getUI().setSystem(system);
         getUI().setOut(out);
 
@@ -64,9 +60,6 @@ public abstract class BaseUITest {
         in = new ByteArrayInputStream("X\n".getBytes());
         Scanner scanner = new Scanner(in);
         getUI().displayMenu(scanner);
-
-        // useful for debugging...
-        // System.out.println(outStream.toString());
 
         assertThat(outStream.toString())
                 .isNotEmpty()
