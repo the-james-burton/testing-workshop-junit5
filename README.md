@@ -273,9 +273,11 @@ To achieve this, there is a class **RailwaySystem** that pulls together all the 
 
 Go ahead and implement the test stubs seen in **RailwaySystemTest**. Note that you may need to partially mock the class to prevent it running the **bootstrap()** method when testing **initialize()**. This is more practice :)
 
-## Exercise xx : Using base classes in tests
+## Exercise 12 : Using base classes in tests
 
-As you have seen, the fantasy railway system contains a simple text based UI so a user can perform actions on the services. This UI is object-oriented and has an abstract base class **BaseUI** which all UI classes extend. There is an abstract method in the base class **displayMenu()** which the subclasses need to implement. The BaseUI class also provides an instance of **RailwaySystem** (a class which pulls together all service classes into one) and a PrintStream which tells the UI where to send its output to.
+As you have seen, the fantasy railway system contains a simple text based UI so a user can perform actions on the services. This UI is object-oriented and has an abstract base class **BaseUI** which all UI classes extend. There is an abstract method in the base class **displayMenu()** which the subclasses need to implement. The BaseUI class also provides an instance of **RailwaySystem** which we tested previously and a PrintStream which tells the UI where to send its output to.
+
+We can use basic object oriented techniques here to both provide a good test setup for UI tests we will write shortly, plus a test to check the implementation of the abstract method **displayMenu()** is working as expected.
 
 ArgumentCaptor Write AccountUITest - use verify, 
 
