@@ -1,7 +1,6 @@
 package org.fantasy.railway.ui;
 
 import org.fantasy.railway.model.Passenger;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -38,11 +37,6 @@ class AccountUITest extends BaseUITest {
     @Override
     BaseUI getUI() {
         return accountUI;
-    }
-
-    @BeforeEach
-    void setup() {
-        super.setup();
     }
 
     @Test
