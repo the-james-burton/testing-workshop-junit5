@@ -237,13 +237,21 @@ In our project we have a **RailwayUtils** class which provides static methods to
 
 Let's go ahead and implement the **shouldLoadServicesFromFileFullyMocked()** in the **TimetableServiceImplTest** class to test the **loadServices()** method. You can static mock the **RailwayUtils.parseFile()** function and also use your new partial mocking skills to mock other methods used in the same class, so isolate testing to just the functionality expressed in the method under test. 
 
+## Exercise 8 : Parameterized Tests - built in sources
+
+We will now take a look at JUnit's parameterized tests. You can read the [Guide to JUnit 5 Parameterized Tests](https://www.baeldung.com/parameterized-tests-junit-5) to familiarize yourself with the feature, which allows you to run a test multiple times with different data.
+
+In this exercise we are going to look at a few different types of parameterized test and give you the opportunity to write some tests using the built-in data source providers...
+
+1. Implement **RailwayUtilsTest.shouldParseDouble()** using a **@ValueSource**.
+1. Implement **RailwayUtilsTest.shouldParseDoubleAsExpected()** using a **@CsvSource** to provide both the input and expected output.
+1. Implement all test methods in **ConcessionTest** using a **@EnumSource** to enforce certain restrictions on the concessions.
+
+When you run your parameterized tests, note how the output is reported. You will see that each data point you provide is considered as a separate test.
 
 
-Parameterised tests
-1. EnumSource - ConcessionTest
-2. ValueSource - RailwayUtilsTest
-3. CsvSource - RailwayUtilsTest
-4. Method source - GraphutilsTest
+ 
+Method source - GraphutilsTest
 
 Dynamic tests
 1. NetworkServiceImplTest

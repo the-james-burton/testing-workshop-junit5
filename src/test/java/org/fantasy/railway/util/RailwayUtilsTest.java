@@ -3,9 +3,6 @@ package org.fantasy.railway.util;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Queue;
@@ -52,19 +49,12 @@ class RailwayUtilsTest {
                 .containsExactly("one", "two", "three");
     }
 
-    @ParameterizedTest
-    @ValueSource(doubles = {1.0d, 2.0d, Math.PI, Integer.MAX_VALUE, Double.MAX_VALUE})
     void shouldParseDouble(Double price) {
-        assertThat(RailwayUtils.parsePrice(price))
-                .isNotNull()
-                .isNotZero()
-                .hasScaleOf(2);
+        // TODO EXERCISE 8
     }
 
-    @ParameterizedTest
-    @CsvSource({"1.0d,1.00", "2.58d,2.58", "3.14159265359d,3.14", "4.123d, 4.12", "4.125, 4.13", "4.126,4.13"})
     void shouldParseDoubleAsExpected(Double price, String expected) {
-        assertThat(RailwayUtils.parsePrice(price)).hasToString(expected);
+        // TODO EXERCISE 8
     }
 
 }
