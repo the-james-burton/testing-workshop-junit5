@@ -257,7 +257,11 @@ This fantasy railway system contains a **GraphUtils** class which offers a **fin
 
 Using this technique, you can now implement the test **GraphUtils.shouldFindTheShortestPath()**. A function is already provided which will give you a sample graph. You can use it to help arrange your test data prior to executing the test. Your method source is not provided - you will need to write it yourself.
 
+## Exercise 10 : Dynamic Tests
 
+Let's take a quick look at JUnit 5 dynamic tests. You can learn about this feature in the [Guide to Dynamic Tests in Junit 5](https://www.baeldung.com/junit5-dynamic-tests). In a nutshell, dynamic tests are created by your code and are only really limited by your imagination! In practice, there are few compelling reasons to use a dynamic test. Try searching your company repo for usages and see what you find. They can find use in permutation and combination testing such as that found within the [Chronicle Test Framework](https://github.com/OpenHFT/Chronicle-Test-Framework).
+
+In the **GraphUtilsTest** class, implement the **shouldAlwaysCalculateRoute()** so that it asserts a route is found between two randomly chosen nodes at least ten times. You will need to change the return type and add the required annotation.
 
 Dynamic tests
 1. NetworkServiceImplTest
