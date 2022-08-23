@@ -7,7 +7,7 @@ import org.fantasy.railway.services.NetworkService;
 import org.fantasy.railway.services.TimetableService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
+import org.mockito.Answers;
 import org.mockito.Mock;
 
 import java.io.ByteArrayInputStream;
@@ -17,6 +17,7 @@ import java.io.PrintStream;
 import java.util.Scanner;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 public abstract class BaseUITest {
 
@@ -25,7 +26,7 @@ public abstract class BaseUITest {
 
     InputStream in;
 
-    @InjectMocks
+    @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     RailwaySystem system;
 
     @Mock
@@ -49,8 +50,13 @@ public abstract class BaseUITest {
         out = new PrintStream(outStream);
         in = null;
 
+        when(system.getAccounts()).thenReturn(accounts);
+        when(system.getBookings()).thenReturn(bookings);
+        when(system.getNetwork()).thenReturn(network);
+        when(system.getTimetable()).thenReturn(timetable);
+
         // inject the mocks into whatever UI subclass test is being run...
-        getUI().setSystem(system);
+        //getUI().setSystem(system);
         getUI().setOut(out);
 
     }

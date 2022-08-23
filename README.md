@@ -277,9 +277,9 @@ Go ahead and implement the test stubs seen in **RailwaySystemTest**. Note that y
 
 As you have seen, the fantasy railway system contains a simple text based UI so a user can perform actions on the services. This UI is object-oriented and has an abstract base class **BaseUI** which all UI classes extend. There is an abstract method in the base class **displayMenu()** which the subclasses need to implement. The BaseUI class also provides an instance of **RailwaySystem** which we tested previously and a PrintStream which tells the UI where to send its output to.
 
-We can use basic object oriented techniques here to both provide a good test setup for UI tests we will write shortly, plus a test to check the implementation of the abstract method **displayMenu()** is working as expected.
+We can use basic object-oriented techniques here to both provide a good test setup for UI tests we will write shortly, plus a test to check the implementation of the abstract method **displayMenu()** is working as expected.
 
-
+Open up the **BaseUITest** class which is written for you. First, note that it is abstract - it cannot be run itself. Second, observe that it provides concrete instances of in/out classes so we can provide input to our UIs under test, and concrete instance of the Railway
 
 ArgumentCaptor Write AccountUITest - use verify, 
 
