@@ -44,7 +44,7 @@ class RailwayUITest extends BaseUITest {
         assertThat(railwayUI.getNetworkUI()).isNotEqualTo(networkUI);
         assertThat(railwayUI.getTimetableUI()).isNotEqualTo(timetableUI);
 
-        // and contain the mocks we have injected...
+        // and contain the in / out we have injected...
         assertThat(railwayUI.getAccountUI().getOut()).isEqualTo(out);
         assertThat(railwayUI.getBookingUI().getOut()).isEqualTo(out);
         assertThat(railwayUI.getNetworkUI().getOut()).isEqualTo(out);
