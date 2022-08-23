@@ -1,65 +1,19 @@
 package org.fantasy.railway;
 
-import org.fantasy.railway.ui.RailwayUI;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
-
-import java.io.PrintStream;
-import java.util.Scanner;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class MainTest {
 
-    @Mock
-    RailwaySystem system;
-
-    @Mock
-    RailwayUI railwayUI;
-
-    @Mock
-    Scanner scanner;
-
-    @Mock
-    PrintStream out;
-
-    @Test
     void shouldStartProgram() {
-        Main.startProgram(system, railwayUI, scanner, out);
-
-        verify(system, times(1)).initialize();
-        verify(railwayUI, times(1)).setSystem(system);
-        verify(railwayUI, times(1)).setOut(out);
-        verify(railwayUI, times(1)).initialize();
-        verify(railwayUI, times(1)).topMenu(scanner);
+        // TODO EXERCISE 16
+        // hint : this is a straight forward call to static method with mock verify() as needed
     }
 
-
-    @Test
     void shouldCallStartProgram() {
-
-        // mock the static method that is used so it returns our mock objects...
-        try (MockedStatic<Main> main = Mockito.mockStatic(Main.class)) {
-            main.when(() -> Main.startProgram(any(), any(), any(), any())).thenAnswer((Answer<Void>) invocation -> null);
-            main.when(() -> Main.main(null)).thenCallRealMethod();
-
-            // execute the method under test...
-            Main.main(null);
-
-            // verify the mocked static method was called...
-            main.verify(() -> Main.startProgram(any(), any(), any(), any()),
-                    times(1)
-            );
-
-        }
-
+        // TODO EXERCISE 16
+        // main challenge is how to mock the static void method used by 'main()' without actually starting the real system!
     }
+
 }

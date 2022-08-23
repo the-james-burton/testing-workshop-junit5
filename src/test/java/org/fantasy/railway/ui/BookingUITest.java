@@ -1,6 +1,5 @@
 package org.fantasy.railway.ui;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -16,12 +15,10 @@ class BookingUITest extends BaseUITest {
         return bookingUI;
     }
 
-    @Test
     void shouldViewTickets() {
         // TODO EXERCISE 14
     }
 
-    @Test
     void shouldPurchaseNewTicket() {
         // TODO EXERCISE 14
     }

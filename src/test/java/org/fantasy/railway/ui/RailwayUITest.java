@@ -36,33 +36,27 @@ class RailwayUITest extends BaseUITest {
         return railwayUI;
     }
 
-    @Test
     void shouldDisplayTopMenu() {
         // TODO EXERCISE 13
     }
 
-    @Test
     void shouldSafelyHandleRuntimeException() {
         // TODO EXERCISE 13
         // hint : using a when().thenThrow() may help in this test
     }
 
-    @Test
     void shouldNavigateToAccountMenu() {
         // TODO EXERCISE 13
     }
 
-    @Test
     void shouldNavigateToBookingMenu() {
         // TODO EXERCISE 13
     }
 
-    @Test
     void shouldNavigateToNetworkMenu() {
         // TODO EXERCISE 13
     }
 
-    @Test
     void shouldNavigateToTimetableMenu() {
         // TODO EXERCISE 13
     }

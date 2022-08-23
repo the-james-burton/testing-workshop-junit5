@@ -1,6 +1,5 @@
 package org.fantasy.railway.ui;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -23,17 +22,14 @@ class TimetableUITest extends BaseUITest {
         return timetableUI;
     }
 
-    @Test
     void shouldListServices() {
         // TODO EXERCISE 14
     }
 
-    @Test
     void shouldShowDispatchedServices() {
         // TODO EXERCISE 14
     }
 
-    @Test
     void shouldAddNewService() {
         // TODO EXERCISE 14
     }

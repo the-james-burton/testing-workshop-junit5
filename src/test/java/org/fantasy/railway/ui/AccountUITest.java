@@ -1,6 +1,5 @@
 package org.fantasy.railway.ui;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -26,27 +25,22 @@ class AccountUITest extends BaseUITest {
         return accountUI;
     }
 
-    @Test
     void shouldViewPassengers() {
         // TODO EXERCISE 14
     }
 
-    @Test
     void shouldAddNewPassenger() {
         // TODO EXERCISE 14
     }
 
-    @Test
     void shouldAddConcessionToPassenger() {
         // TODO EXERCISE 14
     }
 
-    @Test
     void shouldNotAddConcessionToPassengerNotQualifying() {
         // TODO EXERCISE 14
     }
 
-    @Test
     void shouldLoadPassengers() {
         // TODO EXERCISE 14
     }

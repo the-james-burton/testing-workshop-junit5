@@ -20,17 +20,14 @@ class StopTest {
         assertThat(stop1.sameStationAs(stop2)).isTrue();
     }
 
-    @Test
     void shouldNotHaveSameStationAs() {
         // TODO EXERCISE 2
     }
 
-    @Test
     void shouldHaveDefaultTimeOnCreation() {
         // TODO EXERCISE 2
     }
 
-    @Test
     void shouldSortByWhen() {
         // TODO EXERCISE 2
     }
