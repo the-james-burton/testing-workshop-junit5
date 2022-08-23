@@ -87,39 +87,6 @@ class TimetableServiceImplTest {
         assertThat(actual).startsWith(expected);
     }
 
-
-    @Test
-    void shouldLoadServicesFromFileFullyMocked() {
-        // mock returns from parsing the file...
-        Queue<String> row1 = new LinkedList<>(Arrays.asList("one", "two", "three"));
-        Queue<String> row2 = new LinkedList<>(Arrays.asList("four", "five", "six"));
-        Queue<Queue<String>> parsedFile = new LinkedList<>(Arrays.asList(row1, row2));
-        String filename = "dummy-filename.csv";
-
-        // replace real implementation with stubs...
-        doReturn(new LinkedList<>()).when(timetable).createNewServices(row1);
-        doReturn(new LinkedList<>()).when(timetable).createNewServices(row2);
-
-        // mock the static method that is used so it returns our mock objects...
-        try (MockedStatic<RailwayUtils> utils = Mockito.mockStatic(RailwayUtils.class)) {
-            utils.when(() -> RailwayUtils.parseFile(filename)).thenReturn(parsedFile);
-
-            // execute the method under test...
-            timetable.loadServices(filename);
-
-            // verify the mocked static method was called...
-            utils.verify(() -> RailwayUtils.parseFile(filename),
-                    times(1)
-            );
-
-            // verify that the forEach made the expected calls...
-            verify(timetable, times(1)).createNewServices(row1);
-            verify(timetable, times(1)).createNewServices(row2);
-
-        }
-
-    }
-
     @Test
     void shouldSkipAndRemoveEmptyServiceWhenDispatching() {
         Service service = Service.builder().id(1).build();
@@ -163,10 +130,42 @@ class TimetableServiceImplTest {
     }
 
     @Test
+    void shouldLoadServicesFromFileFullyMocked() {
+
+        // setup mock returns from parsing the file...
+        Queue<String> row1 = new LinkedList<>(Arrays.asList("one", "two", "three"));
+        Queue<String> row2 = new LinkedList<>(Arrays.asList("four", "five", "six"));
+        Queue<Queue<String>> parsedFile = new LinkedList<>(Arrays.asList(row1, row2));
+        String filename = "dummy-filename.csv";
+
+        // replace real implementation with stubs...
+        doReturn(new LinkedList<>()).when(timetable).createNewServices(row1);
+        doReturn(new LinkedList<>()).when(timetable).createNewServices(row2);
+
+        // mock the static method that is used so it returns our mock objects...
+        try (MockedStatic<RailwayUtils> utils = Mockito.mockStatic(RailwayUtils.class)) {
+            utils.when(() -> RailwayUtils.parseFile(filename)).thenReturn(parsedFile);
+
+            // execute the method under test...
+            timetable.loadServices(filename);
+
+            // verify the mocked static method was called...
+            utils.verify(() -> RailwayUtils.parseFile(filename),
+                    times(1)
+            );
+
+            // verify that the forEach made the expected calls...
+            verify(timetable, times(1)).createNewServices(row1);
+            verify(timetable, times(1)).createNewServices(row2);
+
+        }
+
+    }
+
+    @Test
     void shouldDispatchServices() {
 
-        // TODO exercise about time based testing
-
+        // setup a known test route with stops at known times
         Service service = Service.builder().id(1).build();
         LinkedList<Stop> route = createTestRoute(service);
         Stop first = route.get(0);
@@ -182,19 +181,21 @@ class TimetableServiceImplTest {
 
         timetable.dispatch();
 
+        // first check should have one stop based on the time we used...
         Queue<Stop> dispatched = timetable.getDispatched();
         assertThat(dispatched)
                 .isNotEmpty()
                 .hasSize(1)
                 .containsExactly(first);
 
+        // now we roll the clock forward and expect another stop to be dispatched...
         Now.setClock(fixed(startTime.plus(4, ChronoUnit.MINUTES), ZoneOffset.UTC));
         timetable.dispatch();
         assertThat(dispatched).containsExactly(first, second);
 
+        // and one more time for one more stop...
         Now.setClock(fixed(startTime.plus(15, ChronoUnit.MINUTES), ZoneOffset.UTC));
         timetable.dispatch();
-
         assertThat(dispatched).containsExactly(first, second, third);
 
     }

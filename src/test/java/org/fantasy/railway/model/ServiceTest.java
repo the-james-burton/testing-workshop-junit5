@@ -63,29 +63,6 @@ class ServiceTest {
         assertThat(expected).isEqualTo(actual);
     }
 
-    @Test
-    void shouldThrowExceptionInGetStartTimeIfNoRoute() {
-        Exception exception = assertThrows(IllegalStateException.class, () ->
-                emptyService.getStartTime()
-        );
-
-        String expectedMessage = "No route defined for this service";
-        String actualMessage = exception.getMessage();
-
-        assertThat(actualMessage).isEqualTo(expectedMessage);
-    }
-
-    @Test
-    void shouldThrowExceptionInGetFinishTimeIfNoRoute() {
-        Exception exception = assertThrows(IllegalStateException.class, () ->
-                emptyService.getFinishTime()
-        );
-
-        String expected = "No route defined for this service";
-        String actual = exception.getMessage();
-
-        assertThat(actual).isEqualTo(expected);
-    }
 
     @Test
     void shouldReturnCompletedMessageForCurrentNameIfEmptyRoute() {
@@ -146,6 +123,30 @@ class ServiceTest {
         differentRoute.add(firstStop());
 
         assertThat(serviceWithRoute.sameRouteAs(differentRoute)).isFalse();
+    }
+
+    @Test
+    void shouldThrowExceptionInGetStartTimeIfNoRoute() {
+        Exception exception = assertThrows(IllegalStateException.class, () ->
+                emptyService.getStartTime()
+        );
+
+        String expectedMessage = "No route defined for this service";
+        String actualMessage = exception.getMessage();
+
+        assertThat(actualMessage).isEqualTo(expectedMessage);
+    }
+
+    @Test
+    void shouldThrowExceptionInGetFinishTimeIfNoRoute() {
+        Exception exception = assertThrows(IllegalStateException.class, () ->
+                emptyService.getFinishTime()
+        );
+
+        String expected = "No route defined for this service";
+        String actual = exception.getMessage();
+
+        assertThat(actual).isEqualTo(expected);
     }
 
 }
