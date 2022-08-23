@@ -260,7 +260,7 @@ In this exercise we are going to look at a few different types of parameterized 
 
 When you run your parameterized tests, note how the output is reported. You will see that each data point you provide is considered as a separate test.
 
-## Exercise 9 : Parameterized Tests - method source
+## Exercise 10 : Parameterized Tests - method source
 
 The built-in sources are useful, but are less suited to use with complex objects. Indeed, you will have noticed that you needed to convert a result to string when writing your @CsvSource test in the previous exercise. Fortunately, JUnit 5 provides a way of providing complex objects to your parameterized tests in the form of method source.
 
@@ -268,13 +268,13 @@ This fantasy railway system contains a **GraphUtils** class which offers a **fin
 
 Using this technique, you can now implement the test **GraphUtils.shouldFindTheShortestPath()**. A function is already provided which will give you a sample graph. You can use it to help arrange your test data prior to executing the test. Your method source is not provided - you will need to write it yourself.
 
-## Exercise 10 : Dynamic Tests
+## Exercise 11 : Dynamic Tests
 
 Let's take a quick look at JUnit 5 dynamic tests. You can learn about this feature in the [Guide to Dynamic Tests in Junit 5](https://www.baeldung.com/junit5-dynamic-tests). In a nutshell, dynamic tests are created by your code and are only really limited by your imagination! In practice, there are few compelling reasons to use a dynamic test. Try searching your company repo for usages and see what you find. They can find use in permutation and combination testing such as that found within the [Chronicle Test Framework](https://github.com/OpenHFT/Chronicle-Test-Framework).
 
 In the **GraphUtilsTest** class, implement the **shouldAlwaysCalculateRoute()** so that it asserts a route is found between two randomly chosen nodes at least ten times. You can use the existing sample graph. You will need to change the return type and add the required annotation.
 
-## Exercise 11 : Making Systems Testable
+## Exercise 12 : Making Systems Testable
 
 We've spent some time looking at cool testing features, but what are some of the techniques that help make our systems easily testable? In this project we are not using a dependency injection framework such as Spring, but that doesn't prevent us from using the same techniques. When we want to run the system, it must at some point create actual real instances of the services and also of the UI.
 
@@ -282,7 +282,7 @@ To achieve this, there is a class **RailwaySystem** that pulls together all the 
 
 Go ahead and implement the test stubs seen in **RailwaySystemTest**. Note that you may need to partially mock the class to prevent it running the **bootstrap()** method when testing **initialize()**. This is more practice :)
 
-## Exercise 12 : Using base classes in tests
+## Exercise 13 : Using base classes in tests
 
 As you have seen, the fantasy railway system contains a simple text based UI so a user can perform actions on the services. This UI is object-oriented and has an abstract base class **BaseUI** which all UI classes extend. There is an abstract method in the base class **displayMenu()** which the subclasses need to implement. The BaseUI class also provides an instance of **RailwaySystem** which we tested previously and a PrintStream which tells the UI where to send its output to.
 
@@ -297,7 +297,7 @@ Open up the **BaseUITest** class which is written for you. Note the following...
 
 Now go ahead and implement the test stubs in the **NetworkUITest** and **RailwayUITest** classes.
 
-## Exercise 13 : Capturing Arguments
+## Exercise 14 : Capturing Arguments
 
 In the previous exercise, you may have noticed the difficulty in making assertions against the behaviour of the UI methods under test. Did they really call the back end service as expected? You may have been successful with mockito **verify()**, but what if there was a more complex object being created and used within the method? At best, we are using the argument matching capability of the **verify()** feature (when it works) but this isn't letting us write assertions as we would like to.
 
@@ -305,7 +305,7 @@ This is where [Using Mockito ArgumentCaptor](https://www.baeldung.com/mockito-ar
 
 Being aware of ArgumentMatchers you can now implement the remaining test stubs in **AccountUITest**, **BookingUITest** and **TimetableUITest**.
 
-## Exercise 14: Controlling time when testing
+## Exercise 15 : Controlling time when testing
 
 In this fantasy railway system, there is a time based event processing to dispatch trains from stations as they continue on their journey. You can see this in the **TimetableServiceImpl**. There is a 'dispatcher' executor service which calls a 'dispatch' method every minute, storing the results in a 'dispatched' queue for future consumption. In the 'dispatch' method, you can see it is checking to see if the time of the train service's next stop is after the current time.
 
