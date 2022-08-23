@@ -13,6 +13,7 @@ import java.io.PrintStream;
 import java.util.Scanner;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -48,14 +49,14 @@ class MainTest {
 
         // mock the static method that is used so it returns our mock objects...
         try (MockedStatic<Main> main = Mockito.mockStatic(Main.class)) {
-            main.when(() -> Main.startProgram(any(), any(), any(), any())).thenAnswer((Answer<Void>) invocation -> null);
+            main.when(() -> Main.startProgram(any(), any(), any(), eq(System.out))).thenAnswer((Answer<Void>) invocation -> null);
             main.when(() -> Main.main(null)).thenCallRealMethod();
 
             // execute the method under test...
             Main.main(null);
 
             // verify the mocked static method was called...
-            main.verify(() -> Main.startProgram(any(), any(), any(), any()),
+            main.verify(() -> Main.startProgram(any(), any(), any(), eq(System.out)),
                     times(1)
             );
 
