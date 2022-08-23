@@ -48,16 +48,4 @@ public class AccountServiceImpl extends BaseService<Passenger> implements Accoun
                 .forEach(this::addPassenger);
     }
 
-    @Override
-    public void removePassenger(Passenger passenger) {
-        passenger.getTickets().stream()
-                .filter(ticket -> ticket.getValidOn().isAfter(Now.localDate()))
-                .findFirst()
-                .ifPresent(ticket -> {
-                    throw new IllegalStateException(String.format("Passenger holds future ticket %s", ticket));
-                });
-        passengers.remove(passenger);
-    }
-
-
 }

@@ -23,7 +23,6 @@ public class AccountUI extends BaseUI {
         out.println("2. Add new passenger");
         out.println("3. Add concession to passenger");
         out.println("4. Load passenger list from file");
-        out.println("5. Remove passenger");
         out.println("x. Back to top menu");
         out.print("Option: ");
         String option = scanner.next();
@@ -39,9 +38,6 @@ public class AccountUI extends BaseUI {
                 break;
             case "4":
                 loadPassengers(scanner);
-                break;
-            case "5":
-                removePassenger(scanner);
                 break;
             default:
                 break;
@@ -105,21 +101,6 @@ public class AccountUI extends BaseUI {
 
         // confirm success to the user...
         out.format("Passenger file %s successfully loaded", filename);
-    }
-
-    private void removePassenger(Scanner scanner) {
-        scanner.nextLine();
-
-        // gather user input...
-        out.println("\nPlease enter passenger Id:");
-        Integer passengerId = scanner.nextInt();
-        Passenger passenger = system.getAccounts().getById(passengerId);
-
-        // perform the back end call...
-        system.getAccounts().removePassenger(passenger);
-
-        // confirm success to the user...
-        out.format("Passenger %s removed.%n%n", passenger);
     }
 
 }

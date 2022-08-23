@@ -93,37 +93,6 @@ class AccountServiceImplTest {
     }
 
     @Test
-    void shouldRemovePassenger() {
-        Passenger passenger = accounts.addPassenger("Alice", LocalDate.of(2000, 1, 1));
-        accounts.removePassenger(passenger);
-
-        assertThat(accounts.getPassengers()).isEmpty();
-    }
-
-    @Test
-    void shouldNotRemovePassengerWithFutureTicket() {
-        Passenger passenger = accounts.addPassenger("Alice", LocalDate.of(2000, 1, 1));
-
-        Ticket ticket = Ticket.builder()
-                .passenger(passenger)
-                .from(Station.builder().build())
-                .validOn(LocalDate.now().plusDays(1))
-                .build();
-
-        passenger.getTickets().add(ticket);
-
-        Exception exception = assertThrows(IllegalStateException.class, () ->
-                accounts.removePassenger(passenger)
-        );
-
-        String expected = "Passenger holds future ticket";
-        String actual = exception.getMessage();
-
-        assertThat(actual).startsWith(expected);
-        assertThat(accounts.getPassengers()).isNotEmpty();
-    }
-
-    @Test
     void shouldLoadPassengersFromFile() {
         accounts.loadPassengers("test-passengers.csv");
 

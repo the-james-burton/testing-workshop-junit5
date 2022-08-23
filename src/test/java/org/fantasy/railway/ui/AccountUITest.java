@@ -119,19 +119,4 @@ class AccountUITest extends BaseUITest {
         assertThat(inputString.getValue()).isEqualTo("filename.csv");
     }
 
-    @Test
-    void shouldRemovePassenger() {
-        ArgumentCaptor<Passenger> passengerCaptor = ArgumentCaptor.forClass(Passenger.class);
-        in = new ByteArrayInputStream("5\n2\n".getBytes());
-        Scanner scanner = new Scanner(in);
-
-        Passenger passenger = newYoungPerson();
-        when(accounts.getById(passenger.getId())).thenReturn(passenger);
-
-        accountUI.displayMenu(scanner);
-
-        verify(accounts).removePassenger(passengerCaptor.capture());
-        assertThat(passengerCaptor.getValue()).isEqualTo(passenger);
-    }
-
 }
