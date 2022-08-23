@@ -286,11 +286,15 @@ Open up the **BaseUITest** class which is written for you. Note the following...
 1. There is a **shouldDisplayMenu()** test. Although the class cannot be run directly, all its subclasses will run this test. This provides a guaranteed that all subclasses have implemented the require abstract method according to whatever contract is defined in the assertions.
 1. We don't need to use a real instance of **RailwaySystem**. We can use Mockito "deep stubbing" to bypass the RailwaySystem class. You can read more about this feature in [Mockito and Fluent APIs](https://www.baeldung.com/mockito-fluent-apis).
 
-Now go ahead and implement the test stubs in the **NetworkUITest** class.
+Now go ahead and implement the test stubs in the **NetworkUITest** and **RailwayUITest** classes.
 
 ## Exercise 13 : Capturing Arguments
 
-In the previous exercise, you may have noticed the difficulty in making assertions against the behaviour of the UI methods under test. Did they really call the back end service as expected? You may have been successful with mockito **verify()**, but what if there was a more complex object being created and used within the method? This is where [Using Mockito ArgumentCaptor](https://www.baeldung.com/mockito-argumentcaptor) can be a big help. Argument Captors allow us to "get hold" of whatever was send to one of our mocks as a method argument so that we can make assertions against it.
+In the previous exercise, you may have noticed the difficulty in making assertions against the behaviour of the UI methods under test. Did they really call the back end service as expected? You may have been successful with mockito **verify()**, but what if there was a more complex object being created and used within the method? At best, we are using the argument matching capability of the **verify()** feature (when it works) but this isn't letting us write assertions as we would like to.
+
+This is where [Using Mockito ArgumentCaptor](https://www.baeldung.com/mockito-argumentcaptor) can be a big help. Argument Captors allow us to "get hold" of whatever was send to one of our mocks as a method argument so that we can make assertions against it as normal, using AssertJ.
+
+Being aware of ArgumentMatchers you can now implement the remaining test stubs in **AccountUITest**, **BookingUITest** and **TimetableUITest**.
 
 
 
