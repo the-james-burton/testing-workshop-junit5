@@ -305,14 +305,3 @@ Normally, you would expect to see **LocalTime.now()** to retrieve the current ti
 We thus have two extra static methods in our system to retrieve the 'now'. These are **Now.localDate()** and **Now.localTime()**. Our static **Now** class can be injected with a **Clock** which provides an instance in time. So in our tests we can control the current time by simply updating the clock in the Now class. This solution is explained a little further in [this article](https://medium.com/agorapulse-stories/how-to-solve-now-problem-in-your-java-tests-7c7f4a6d703c), which suggests that having a clock injected everywhere in application code isn't a very clean solution.
 
 Open up the **TimetableServiceImplTest** and implement the **shouldDispatchServices()** test stub. You will need to setup a service with a route that stops at known times (perhaps something in TestUtils will help?) and then use the 'Now' class to advance time as you run the **dispatch()** method to test it. Make assertions about the contents of the 'dispatched' queue as you progress.
-
-
-ArgumentCaptor Write AccountUITest - use verify, 
-
-Testing main classes
-
-Testing time
-The "Now" class
-
-further learning
-jqwik
