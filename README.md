@@ -296,6 +296,15 @@ This is where [Using Mockito ArgumentCaptor](https://www.baeldung.com/mockito-ar
 
 Being aware of ArgumentMatchers you can now implement the remaining test stubs in **AccountUITest**, **BookingUITest** and **TimetableUITest**.
 
+## Exercise 14: Controlling time when testing
+
+In this fantasy railway system, there is a time based event processing to dispatch trains from stations as they continue on their journey. You can see this in the **TimetableServiceImpl**. There is a 'dispatcher' executor service which calls a 'dispatch' method every minute, storing the results in a 'dispatched' queue for future consumption. In the 'dispatch' method, you can see it is checking to see if the time of the train service's next stop is after the current time.
+
+Normally, you would expect to see **LocalTime.now()** to retrieve the current time, but this has a fundamental problem - we cannot inject the current time in tests to control execution. We certainly do not want our unit tests to wait the number of minutes required to simulate execution. Once solution is to mock the static method LocalTime.now(), but in this exercise we show you an alternative solution which again emphasises the need to make our systems testable.
+
+We thus have two extra static methods in our system to retrieve the 'now'. These are **Now.localDate()** and **Now.localTime()**. Our static **Now** class can be injected with a **Clock** which provides an instance in time. So in our tests we can control the current time by simply updating the clock in the Now class. This solution is explained a little further in [this article](https://medium.com/agorapulse-stories/how-to-solve-now-problem-in-your-java-tests-7c7f4a6d703c), which suggests that having a clock injected everywhere in application code isn't a very clean solution.
+
+Open up the **TimetableServiceImplTest** and implement the **shouldDispatchServices()** test stub. You will need to setup a service with a route that stops at known times (perhaps something in TestUtils will help?) and then use the 'Now' class to advance time as you run the **dispatch()** method to test it. Make assertions about the contents of the 'dispatched' queue as you progress.
 
 
 ArgumentCaptor Write AccountUITest - use verify, 

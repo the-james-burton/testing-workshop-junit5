@@ -20,6 +20,12 @@ public class Now {
 
     /**
      * Allow overriding the clock to assist in testing
+     *
+     * Example usage:
+     *
+     * Instant startTime = Instant.parse("2022-05-10T10:02:00Z");
+     * Now.setClock(fixed(startTime, ZoneOffset.UTC));
+     *
      * @param cloc the clock to use when providing dates and times
      */
     public static void setClock(Clock cloc) {
