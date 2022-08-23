@@ -51,9 +51,4 @@ class AccountUITest extends BaseUITest {
         // TODO EXERCISE 13
     }
 
-    @Test
-    void shouldRemovePassenger() {
-        // TODO EXERCISE 13
-    }
-
 }

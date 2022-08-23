@@ -29,11 +29,6 @@ public interface AccountService {
     void loadPassengers(String filename);
 
     /**
-     * @param passenger the passenger to remove from the system
-     */
-    void removePassenger(Passenger passenger);
-
-    /**
      * @return a List of all passengers
      */
     List<Passenger> getPassengers();

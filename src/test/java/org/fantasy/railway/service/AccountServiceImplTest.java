@@ -39,11 +39,6 @@ class AccountServiceImplTest {
     }
 
     @Test
-    void shouldRemovePassenger() {
-        // TODO EXERCISE 4
-    }
-
-    @Test
     void shouldNotRemovePassengerWithFutureTicket() {
         // TODO EXERCISE 4
     }

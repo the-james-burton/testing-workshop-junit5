@@ -2,7 +2,6 @@ package org.fantasy.railway.services;
 
 import lombok.Getter;
 import org.fantasy.railway.model.Passenger;
-import org.fantasy.railway.util.Now;
 import org.fantasy.railway.util.RailwayUtils;
 
 import java.time.LocalDate;
@@ -47,17 +46,5 @@ public class AccountServiceImpl extends BaseService<Passenger> implements Accoun
         RailwayUtils.parseFile(filename)
                 .forEach(this::addPassenger);
     }
-
-    @Override
-    public void removePassenger(Passenger passenger) {
-        passenger.getTickets().stream()
-                .filter(ticket -> ticket.getValidOn().isAfter(Now.localDate()))
-                .findFirst()
-                .ifPresent(ticket -> {
-                    throw new IllegalStateException(String.format("Passenger holds future ticket %s", ticket));
-                });
-        passengers.remove(passenger);
-    }
-
 
 }
