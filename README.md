@@ -219,7 +219,7 @@ In the previous exercise, the service we tested did not have any external depend
 
 However, when testing the BookingServiceImpl we only want to test that "unit" of code, not the NetworkService. In other words, we are trying to determine if the BookingServiceImpl works as expected not the NetworkService it uses. Thus, if the NetworkService breaks in some way, this should not fail the BookingServiceImpl tests. This is a core reason why mocking external dependencies is required at this point. Now we could simply implement a cut down test version of the NetworkService and wire that up when testing, but there is a popular library that can help: Mockito.  Mockito is already added to this project, so no need to add it to the pom.xml.
 
-You should now review the **BookingServiceImplTest** class and implement the remaining methods. Use Mockito **when** and **verify** features to mock calls to the external NetworkService dependency and verify that the calls were made by the Booking service under test.
+You should now review the **BookingServiceImplTest** class and implement the remaining methods. Use Mockito **when** and **verify** features to mock calls to the external NetworkService dependency and verify that the calls were made by the Booking service under test. Use [Mockito ArgumentMatchers](https://www.baeldung.com/mockito-argument-matchers) to help ensure your verifications are correct.
 
 ## Exercise 6 : Partial Mocks
 
@@ -279,7 +279,20 @@ As you have seen, the fantasy railway system contains a simple text based UI so 
 
 We can use basic object-oriented techniques here to both provide a good test setup for UI tests we will write shortly, plus a test to check the implementation of the abstract method **displayMenu()** is working as expected.
 
-Open up the **BaseUITest** class which is written for you. First, note that it is abstract - it cannot be run itself. Second, observe that it provides concrete instances of in/out classes so we can provide input to our UIs under test, and concrete instance of the Railway
+Open up the **BaseUITest** class which is written for you. Note the following...
+
+1. It is abstract - it cannot be run itself.
+1. It provides concrete instances of in/out classes so we can provide input to our UIs under test and assert the output from the UI. 
+1. There is a **shouldDisplayMenu()** test. Although the class cannot be run directly, all its subclasses will run this test. This provides a guaranteed that all subclasses have implemented the require abstract method according to whatever contract is defined in the assertions.
+1. We don't need to use a real instance of **RailwaySystem**. We can use Mockito "deep stubbing" to bypass the RailwaySystem class. You can read more about this feature in [Mockito and Fluent APIs](https://www.baeldung.com/mockito-fluent-apis).
+
+Now go ahead and implement the test stubs in the **NetworkUITest** class.
+
+## Exercise 13 : Capturing Arguments
+
+In the previous exercise, you may have noticed the difficulty in making assertions against the behaviour of the UI methods under test. Did they really call the back end service as expected? You may have been successful with mockito **verify()**, but what if there was a more complex object being created and used within the method? This is where [Using Mockito ArgumentCaptor](https://www.baeldung.com/mockito-argumentcaptor) can be a big help. Argument Captors allow us to "get hold" of whatever was send to one of our mocks as a method argument so that we can make assertions against it.
+
+
 
 ArgumentCaptor Write AccountUITest - use verify, 
 
