@@ -18,11 +18,11 @@ class BookingUITest extends BaseUITest {
 
     @Test
     void shouldViewTickets() {
-        // TODO EXERCISE 13
+        // TODO EXERCISE 14
     }
 
     @Test
     void shouldPurchaseNewTicket() {
-        // TODO EXERCISE 13
+        // TODO EXERCISE 14
     }
 }

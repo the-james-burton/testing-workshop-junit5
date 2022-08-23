@@ -53,11 +53,13 @@ Lombok is a very popular library which provides low-level support for writing le
 
 ## Pre-requisites
 
-You need to have installed...
+You need to...
 
-- JDK v8 or above : **java -version** must work at your command prompt.
-- Apache Maven and some familiarity with it : **mvn -version** must work at your command prompt.
-- A modern java IDE, such as Eclipse or IDEA (community edition is fine for this)
+- have JDK v8 or above : **java -version** must work at your command prompt.
+- have Apache Maven installed and some familiarity with it : **mvn -version** must work at your command prompt.
+- have A modern java IDE, such as Eclipse or IDEA (community edition is fine for this).
+- have this repo cloned and imported into your IDE.
+- be able to build and run this project as per instructions below.
 
 # The System
 
@@ -203,9 +205,15 @@ You may have noticed that some of the classes we have tested so far extend a bas
 
 There are also some model classes we have not yet tested. We will look at these when we cover some advanced testing scenarios.
 
-## Exercise 4 : Testing Services and Base class behaviour
+## Exercise 4 : Using External Data
 
-We now move onto looking at testing services, the **AccountServiceImpl**. These are fairly simple services and can be tested in a similar way to the POJOs you have already tested. The main thing that is new here is the base class **BaseService** contains two methods - one private and one public. Best practice outlined in [Unit Test Private Methods in Java](https://www.baeldung.com/java-unit-test-private-methods) means that we only need to test the public method. If the private method is not fully tested as we approach 100% test coverage, then it has dead code that should be removed. Bear this in mind when writing tests in the real world.
+It is very easy to provide sample data to your unit tests. Everything in the **src/test/resources** directory will be available on the classpath when your tests execute. We have static utility class **RailwayUtils** that has a public **parseFile()** method. Best practice outlined in [Unit Test Private Methods in Java](https://www.baeldung.com/java-unit-test-private-methods) means that we only need to test the public method. If the private method is not fully tested as we approach 100% test coverage, then it has dead code that should be removed. Bear this in mind when writing tests in the real world.
+
+Open up the **RailwayUtilsTest** class and implement the method stubs to test the methods in the **RailwayUtils** class. Test data files are available in the **src/test/resources** directory.
+
+## Exercise 5 : Testing Services and Base class behaviour
+
+We now move onto looking at testing services, the **AccountServiceImpl**. These are fairly simple services and can be tested in a similar way to the POJOs you have already tested. The main thing that is new here is the base class **BaseService** contains two methods - one private and one public. 
 
 When testing services it can be useful to use the JUnit 5 test lifecycle **@BeforeEach** annotation to ensure that you have a fresh service before each test runs. This guarantees that your tests are stateless and reduces code duplication. The test class skeleton is prepared in this way.
 
@@ -213,7 +221,7 @@ Now go ahead and implement the test stubs in **AccountServiceImplTest** and **Ne
 
 If you want to dive into alternative methods for testing abstract base classes, you can look at [Testing an Abstract Class With JUnit](https://www.baeldung.com/junit-test-abstract-class).
 
-## Exercise 5 : Mocking External Behaviour
+## Exercise 6 : Mocking External Behaviour
 
 In the previous exercise, the service we tested did not have any external dependencies (except for static function use). It did not use any other services to achieve its desired operation. In this exercise we now look at another service in this system, the **BookingServiceImpl** which you can see makes use of the **NetworkService**, specifically to calculate a route between two stations so a price can be determined.
 
@@ -221,7 +229,7 @@ However, when testing the BookingServiceImpl we only want to test that "unit" of
 
 You should now review the **BookingServiceImplTest** class and implement the remaining methods. Use Mockito **when** and **verify** features to mock calls to the external NetworkService dependency and verify that the calls were made by the Booking service under test. Use [Mockito ArgumentMatchers](https://www.baeldung.com/mockito-argument-matchers) to help ensure your verifications are correct.
 
-## Exercise 6 : Partial Mocks
+## Exercise 7 : Partial Mocks
 
 When testing certain methods in business service classes you may find that they use one or more other methods to achieve a high level operation. If these other methods are in different classes, you now know how to use Mockito to mock them and make asserions on the behaviour. However, what if these other methods are in the same class?
 
@@ -231,7 +239,7 @@ Now open the **TimetableServiceImplTest** class. Implement the methods indicated
 
 Using partial mocks can be very helpful with complex classes to isolate functionality in methods to ensure you testing remains focussed on the unit under test. This can help you build more resilient tests that are less prone to breaking when functionality they are dependent on has a problem.
 
-## Exercise 7 : Mocking Static Methods
+## Exercise 8 : Mocking Static Methods
 
 So far we have looked at how to mock instances of classes, but what happens if you need to mock a static method? In many cases, mocking a static method does not make sense. Static methods often come from third part libraries, such as the **Preconditions.checkArgument()** you see in this project. They can also be found in the JDK, for example **BigDecimal.valueOf()** also used here. It can _sometimes_ make sense to mock static methods when you own the implementation, it is complex, and you want to isolate the testing of it to it's own test class.
 
@@ -239,7 +247,8 @@ In our project we have a **RailwayUtils** class which provides static methods to
 
 Let's go ahead and implement the **shouldLoadServicesFromFileFullyMocked()** in the **TimetableServiceImplTest** class to test the **loadServices()** method. You can static mock the **RailwayUtils.parseFile()** function and also use your new partial mocking skills to mock other methods used in the same class, so isolate testing to just the functionality expressed in the method under test. 
 
-## Exercise 8 : Parameterized Tests - built in sources
+
+## Exercise 9 : Parameterized Tests - built in sources
 
 We will now take a look at JUnit's parameterized tests. You can read the [Guide to JUnit 5 Parameterized Tests](https://www.baeldung.com/parameterized-tests-junit-5) to familiarize yourself with the feature, which allows you to run a test multiple times with different data.
 

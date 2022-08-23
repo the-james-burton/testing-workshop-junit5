@@ -37,18 +37,18 @@ class BookingServiceImplTest {
 
     @Test
     void shouldPurchaseTicket() {
-        // TODO EXERCISE 5
+        // TODO EXERCISE 6
         // HINT: Use Mockito.when to mock the external call made to the NetworkService
     }
 
     @Test
     void shouldNotPurchaseTicketIfNoRoute() {
-        // TODO EXERCISE 5
+        // TODO EXERCISE 6
     }
 
     @Test
     void shouldApplyDiscount() {
-        // TODO EXERCISE 5
+        // TODO EXERCISE 6
     }
 
 }

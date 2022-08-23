@@ -28,7 +28,7 @@ class RailwayUITest extends BaseUITest {
 
     @Test
     void shouldInitialize() {
-        // TODO EXERCISE 12
+        // TODO EXERCISE 13
     }
 
     @Override
@@ -38,32 +38,32 @@ class RailwayUITest extends BaseUITest {
 
     @Test
     void shouldDisplayTopMenu() {
-        // TODO EXERCISE 12
+        // TODO EXERCISE 13
     }
 
     @Test
     void shouldSafelyHandleRuntimeException() {
-        // TODO EXERCISE 12
+        // TODO EXERCISE 13
         // hint : using a when().thenThrow() may help in this test
     }
 
     @Test
     void shouldNavigateToAccountMenu() {
-        // TODO EXERCISE 12
+        // TODO EXERCISE 13
     }
 
     @Test
     void shouldNavigateToBookingMenu() {
-        // TODO EXERCISE 12
+        // TODO EXERCISE 13
     }
 
     @Test
     void shouldNavigateToNetworkMenu() {
-        // TODO EXERCISE 12
+        // TODO EXERCISE 13
     }
 
     @Test
     void shouldNavigateToTimetableMenu() {
-        // TODO EXERCISE 12
+        // TODO EXERCISE 13
     }
 }

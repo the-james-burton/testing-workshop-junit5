@@ -20,16 +20,6 @@ class ServiceTest {
     }
 
     @Test
-    void shouldThrowExceptionInGetStartTimeIfNoRoute() {
-        // TODO EXERCISE 3
-    }
-
-    @Test
-    void shouldThrowExceptionInGetFinishTimeIfNoRoute() {
-        // TODO EXERCISE 3
-    }
-
-    @Test
     void shouldReturnCompletedMessageForCurrentNameIfEmptyRoute() {
         // TODO EXERCISE 2
     }
@@ -57,6 +47,16 @@ class ServiceTest {
     @Test
     void shouldNotHaveSameRouteAsIfDifferentStops() {
         // TODO EXERCISE 2
+    }
+
+    @Test
+    void shouldThrowExceptionInGetStartTimeIfNoRoute() {
+        // TODO EXERCISE 3
+    }
+
+    @Test
+    void shouldThrowExceptionInGetFinishTimeIfNoRoute() {
+        // TODO EXERCISE 3
     }
 
 }

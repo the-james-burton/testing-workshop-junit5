@@ -52,7 +52,7 @@ public class RailwayUtils {
      * @param line the CSV line to split
      * @return a queue of strings from the given line split by comma
      */
-    public static Queue<String> parseLine(String line) {
+    private static Queue<String> parseLine(String line) {
         Queue<String> values = new LinkedList<>();
         try (Scanner parser = new Scanner(line)) {
             parser.useDelimiter(",");

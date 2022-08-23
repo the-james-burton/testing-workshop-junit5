@@ -50,7 +50,7 @@ class GraphUtilsTest {
     }
 
     void shouldAlwaysCalculateRoute() {
-        // TODO EXERCISE 10
+        // TODO EXERCISE 11
     }
 
 

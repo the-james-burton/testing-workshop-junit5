@@ -21,32 +21,32 @@ class TimetableServiceImplTest {
 
     @Test
     void shouldCreateNewServices() {
-        // TODO EXERCISE 6
+        // TODO EXERCISE 7
     }
 
     @Test
     void shouldNotCreateNewServicesIfRouteExists() {
-        // TODO EXERCISE 6
-    }
-
-    @Test
-    void shouldLoadServicesFromFileFullyMocked() {
         // TODO EXERCISE 7
     }
 
     @Test
     void shouldSkipAndRemoveEmptyServiceWhenDispatching() {
-        // TODO EXERCISE 6
+        // TODO EXERCISE 7
     }
 
     @Test
     void shouldCreateNewServicesFromStringInput() {
-        // TODO EXERCISE 6
+        // TODO EXERCISE 7
     }
 
     @Test
     void shouldDispatchServices() {
-        // TODO EXERCISE 14
+        // TODO EXERCISE 15
+    }
+
+    @Test
+    void shouldLoadServicesFromFileFullyMocked() {
+        // TODO EXERCISE 8
     }
 
 }

@@ -9,25 +9,12 @@ class PassengerTest {
         // TODO EXERCISE 2
     }
 
-    @Test
-    void shouldNotAddConcessionIfPassengerDoesNotQualify() {
-        // TODO EXERCISE 3
-    }
-
-    @Test
-    void shouldNotAddConcessionIfPresent() {
-        // TODO EXERCISE 3
-    }
 
     @Test
     void shouldRemoveConcessionIfPresent() {
         // TODO EXERCISE 2
     }
 
-    @Test
-    void shouldNotRemoveConcessionIfNotPresent() {
-        // TODO EXERCISE 3
-    }
 
     @Test
     void shouldGiveNoDiscountWithNoConcessions() {
@@ -43,4 +30,20 @@ class PassengerTest {
     void shouldGiveDiscountWithTwoConcessions() {
         // TODO EXERCISE 2
     }
+
+    @Test
+    void shouldNotAddConcessionIfPassengerDoesNotQualify() {
+        // TODO EXERCISE 3
+    }
+
+    @Test
+    void shouldNotAddConcessionIfPresent() {
+        // TODO EXERCISE 3
+    }
+
+    @Test
+    void shouldNotRemoveConcessionIfNotPresent() {
+        // TODO EXERCISE 3
+    }
+
 }
